@@ -1,0 +1,22 @@
+apiVersion: research.ibm.com/v1alpha1
+kind: ResourceProtectionProfile
+metadata:
+  name: policy-open-cluster-management-rpp
+spec:
+  protectRules:
+  - match:
+    - apiVersion: policy.open-cluster-management.io/v1
+  ignoreRules:
+    rules:
+      - match:
+        - userName: "system:serviceaccount:open-cluster-management-agent:*"
+        - userName: "system:serviceaccount:open-cluster-management-agent-addon:*"
+  forceCheckRules:
+  - match:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+  kustomizePatterns:
+  - match:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+    namePrefix: "policies."
