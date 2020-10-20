@@ -7,10 +7,9 @@ spec:
   - match:
     - apiVersion: policy.open-cluster-management.io/v1
   ignoreRules:
-    rules:
-      - match:
-        - userName: "system:serviceaccount:open-cluster-management-agent:*"
-        - userName: "system:serviceaccount:open-cluster-management-agent-addon:*"
+  - match:
+    - userName: "system:serviceaccount:open-cluster-management-agent:*"
+    - userName: "system:serviceaccount:open-cluster-management-agent-addon:*"
   forceCheckRules:
   - match:
     - apiVersion: policy.open-cluster-management.io/v1
