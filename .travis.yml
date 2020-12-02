@@ -21,7 +21,7 @@ addons:
   sonarcloud:
     organization: "open-cluster-management"
     token:
-      secure: ${SONAR_ENCRYPTED_TOKEN}
+      secure: "qvA7NM3cEhj8fB+dCXpIJB26WzXHr+N5c4AdwC5m4o6ncbAztd5IoZq5tMbz07CoBqgeXYIro+5M1iLr16Yisl/lVUI8qylKlwxlHyS7ddvNDcH0p50KkMdFkazgfX2ujpQJPXEA6R5fkgTs8MyUOd0opmOt1Q0xrHEKYS3jF16tw1dkiNFi3sXiv7KKVd/WHdgCQzR+9kC4xILcV/2l9saoCaXMBfQFgAWx2jC5829w0ZjLSA2wkQXZrdBGAmU+CfsbsYey+i5vRHt8zTl9zKcWnlDtOlIeI0zUdf8eCNadmrexuVo9Ak0c/ViiFWDXaq/zNwaRO1WwbZ20ZZRZlZj1fzsWRz7lNnMPaS5q9+oCjkfeZtUhtPo2bpWHPc/LVfPQIYJ47a8+eZLVE+pzKDsCO0rGqLMZ4V8nJYK9DtKzLWhSlr+mOUSvVNwe17WhKSD2rNqoFQ3VkjJ3PVVhXzY1V6eRcaXPvBrLUcc+JJkkwHi7fC3KA4++2w/Ya2WpUDzbASF/oG+jDrQHG0CSYXhKBQLDj+xIruCt5md6aEBm18t+0NPC/sOWh5s9iV0mBAMiUC/8YMTrkMdmyNePRB5YUoVjBNDrWn1czn3j9/CzciieJbn3/xHm+wyAwMGX2KaY2DY/7/uu/r+xYDeenh527BNaz/iz+3tM+qgS1Dw="
   
 env:
   global:
@@ -67,8 +67,8 @@ jobs:
         - |
           make init
           make component/test/unit
-          #make sonar-go-test-iv
-          #make sonar-go-test-op
+          make sonar-go-test-iv
+          make sonar-go-test-op
           # make sonar/go enable it after resolving package references to upstream repo
     - stage: test-e2e
       name: "Deploy the image to a cluster and run e2e tests"
