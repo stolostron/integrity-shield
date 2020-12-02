@@ -89,7 +89,7 @@ else
 endif
 
 
-.PHONY: config int fmt lint test coverage build build-images
+.PHONY: config int fmt lint test coverage dependencies build build-images
 
 
 config:
@@ -141,6 +141,12 @@ lint-op-verify:
 	$(eval FAILURES=$(shell cat $(TMP_DIR)lint_results.txt | grep "FAIL:"))
 	cat $(TMP_DIR)lint_results.txt
 	@$(if $(strip $(FAILURES)), echo "One or more linters failed. Failures: $(FAILURES)"; exit 1, echo "All linters are passed successfully."; exit 0)
+
+dependencies:
+	curl -sL https://go.kubebuilder.io/dl/2.0.0-alpha.1/${GOOS}/${GOARCH} | tar -xz -C /tmp/
+	sudo mv /tmp/kubebuilder_2.0.0-alpha.1_${GOOS}_${GOARCH} /usr/local/kubebuilder
+	go mod tidy
+	go mod download	
 
 
 ############################################################

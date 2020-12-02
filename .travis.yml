@@ -67,6 +67,7 @@ jobs:
         - |
           make init
           make component/test/unit
+          make dependencies
           make sonar-go-test-iv
           make sonar-go-test-op
           # make sonar/go enable it after resolving package references to upstream repo
