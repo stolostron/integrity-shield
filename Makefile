@@ -92,7 +92,7 @@ endif
 ARCH = $(shell uname -m)
 ifeq ($(ARCH), x86_64)
     ARCH = amd64
-enif
+endif
 
 GOARCH = $(shell go env GOARCH)
 GOOS = $(shell go env GOOS)
