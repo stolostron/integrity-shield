@@ -154,8 +154,6 @@ lint-op-verify:
 dependencies:
 	curl -sL https://go.kubebuilder.io/dl/2.0.0-alpha.1/${GOOS}/${GOARCH} | tar -xz -C /tmp/
 	sudo mv /tmp/kubebuilder_2.0.0-alpha.1_${GOOS}_${GOARCH} /usr/local/kubebuilder
-	go mod tidy
-	go mod download	
 
 
 ############################################################
@@ -437,7 +435,7 @@ sonar-go-test-iv:
 	fi
 	@echo "-> Starting sonar-go-test"
 	@echo "--> Starting go test"
-	cd $(VERIFIER_DIR) && go test -coverprofile=coverage.out -json ./... | tee report.json | grep -v '"Action":"output"'
+	cd $(VERIFIER_DIR) && go mod tidy && go mod download && go test -coverprofile=coverage.out -json ./... | tee report.json | grep -v '"Action":"output"'
 	@echo "--> Running gosec"
 	gosec -fmt sonarqube -out gosec.json -no-fail ./...
 	@echo "---> gosec gosec.json"
@@ -454,7 +452,7 @@ sonar-go-test-op:
 	fi
 	@echo "-> Starting sonar-go-test"
 	@echo "--> Starting go test"
-	cd $(VERIFIER_OP_DIR) && go test -coverprofile=coverage.out -json ./... | tee report.json | grep -v '"Action":"output"'
+	cd $(VERIFIER_OP_DIR) && go mod tidy && go mod download && go test -coverprofile=coverage.out -json ./... | tee report.json | grep -v '"Action":"output"'
 	@echo "--> Running gosec"
 	gosec -fmt sonarqube -out gosec.json -no-fail ./...
 	@echo "---> gosec gosec.json"
