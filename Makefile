@@ -53,6 +53,15 @@ endif
 default::
 	@echo "Build Harness Bootstrapped"
 
+# Go build settings
+ARCH = $(shell uname -m)
+ifeq ($(ARCH), x86_64)
+	ARCH = amd64
+enif
+
+GOARCH = $(shell go env GOARCH)
+GOOS = $(shell go env GOOS)
+
 # Docker build flags
 DOCKER_BUILD_FLAGS := --build-arg VCS_REF=$(GIT_COMMIT) $(DOCKER_BUILD_FLAGS)
 
