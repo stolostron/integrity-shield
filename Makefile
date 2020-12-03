@@ -431,7 +431,8 @@ sec-scan:
 
 sonar-go-test-iv:
 	@if [ "$(IV_ENV)" = remote ]; then \
-		cd $(VERIFIER_DIR) && make sonar/go; \
+		cd $(VERIFIER_DIR); \
+		cd ../  && make sonar/go; \
 	else \
 		@echo "-> Starting sonar-go-test"; \
 		@echo "--> Starting go test"; \
