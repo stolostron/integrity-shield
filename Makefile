@@ -433,6 +433,9 @@ sonar-go-test-iv:
 	@echo "--> Running sonar-go-test-iv"
 	@if [ "$(IV_ENV)" = remote ]; then \
 		echo "-> TEST Starting sonar-go-test"; \
+		echo "-> BASE_DIR=$(BASE_DIR)"; \
+		make go/gosec-install; \
+		echo "-> VERIFIER_DIR=$(VERIFIER_DIR)"; \
 		cd $(VERIFIER_DIR) && make -C $(BASE_DIR) sonar/go; \
 	else \
 		echo "-> Starting sonar-go-test"; \
