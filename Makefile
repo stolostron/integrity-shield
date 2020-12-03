@@ -432,11 +432,16 @@ sec-scan:
 sonar-go-test-iv:
 	@echo "--> Running sonar-go-test-iv"
 	@if [ "$(IV_ENV)" = remote ]; then \
-		echo "-> TEST Starting sonar-go-test"; \
-		echo "-> PWD=$(PWD)"; \
 		make go/gosec-install; \
-		echo "-> VERIFIER_DIR=$(VERIFIER_DIR)"; \
-		cd $(VERIFIER_DIR) && make -C $(PWD) sonar/go; \
+		echo "-> Starting sonar/go"; \
+		echo "--> Starting go test"; \
+		go test -coverprofile=coverage.out -json ./... | tee report.json | grep -v '"Action":"output"'; \
+		echo "--> Running gosec"; \
+		gosec -fmt sonarqube -out gosec.json -no-fail ./...; \
+		echo "---> gosec gosec.json"; /
+		cat gosec.json; \
+		echo "--> Running sonar-scanner"; \
+		sonar-scanner --debug; \
 	else \
 		echo "-> Starting sonar-go-test"; \
 		echo "--> Starting go test"; \
