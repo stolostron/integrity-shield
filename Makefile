@@ -430,26 +430,20 @@ sec-scan:
 .PHONY: sonar-go-test-iv sonar-go-test-op
 
 sonar-go-test-iv:
-	@echo "--> Running sonar-go-test-iv"
 	@if [ "$(IV_ENV)" = remote ]; then \
 		make go/gosec-install; \
-		echo "-> Starting sonar/go"; \
-		echo "--> Starting go test"; \
-		go test -coverprofile=coverage.out -json ./... | tee report.json | grep -v '"Action":"output"'; \
-		echo "--> Running gosec"; \
-		gosec -fmt sonarqube -out gosec.json -no-fail ./...; \
-		echo "---> gosec gosec.json"; /
-		cat gosec.json; \
+	fi
+	@echo "-> Starting sonar-go-test"
+	@echo "--> Starting go test"
+	cd $(VERIFIER_DIR) && go test -coverprofile=coverage.out -json ./... | tee report.json | grep -v '"Action":"output"'
+	@echo "--> Running gosec"
+	gosec -fmt sonarqube -out gosec.json -no-fail ./...
+	@echo "---> gosec gosec.json"
+	@cat gosec.json
+	@if [ "$(IV_ENV)" = remote ]; then \
 		echo "--> Running sonar-scanner"; \
+		echo "--> Commented out: unset SONARQUBE_SCANNER_PARAMS"; \
 		sonar-scanner --debug; \
-	else \
-		echo "-> Starting sonar-go-test"; \
-		echo "--> Starting go test"; \
-		cd $(VERIFIER_DIR) && go mod tidy && go mod download && go test -coverprofile=coverage.out -json ./... | tee report.json | grep -v '"Action":"output"'; \
-		echo "--> Running gosec"; \
-		gosec -fmt sonarqube -out gosec.json -no-fail ./...; \
-		echo "---> gosec gosec.json"; \
-		cat gosec.json; \
 	fi
 
 sonar-go-test-op:
