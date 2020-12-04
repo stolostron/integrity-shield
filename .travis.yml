@@ -17,6 +17,7 @@ branches:
     - master
     - /^release-[0-9]+\..*$/
 
+
 addons:
   sonarcloud:
     organization: "open-cluster-management"
