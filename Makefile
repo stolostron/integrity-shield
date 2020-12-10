@@ -66,6 +66,8 @@ GIT_HOST ?= github.com/IBM
 
 PWD := $(shell pwd)
 BASE_DIR := $(shell basename $(PWD))
+SHIELD_BASE_DIR=$(PWD)/shield
+SHIELD_OP_BASE_DIR=$(PWD)/integrity-shield-operator
 
 # Keep an existing GOPATH, make a private one if it is undefined
 GOPATH_DEFAULT := $(PWD)/.go
@@ -422,7 +424,7 @@ sonar-go-test-ishield:
 	fi
 	@echo "-> Starting sonar-go-test"
 	@echo "--> Starting go test"
-	cd $(SHIELD_DIR) && go test -coverprofile=coverage.out -json ./... | tee report.json | grep -v '"Action":"output"'
+	cd $(SHIELD_DIR) && go test -coverprofile=$(SHIELD_BASE_DIR)/coverage.out -json ./... | tee $(SHIELD_BASE_DIR)/report.json | grep -v '"Action":"output"'
 	@echo "--> Running gosec"
 	gosec -fmt sonarqube -out gosec.json -no-fail ./...
 	@echo "---> gosec gosec.json"
@@ -438,7 +440,7 @@ sonar-go-test-op:
 	fi
 	@echo "-> Starting sonar-go-test"
 	@echo "--> Starting go test"
-	cd $(SHIELD_OP_DIR) && go test -coverprofile=coverage.out -json ./... | tee report.json | grep -v '"Action":"output"'
+	cd $(SHIELD_OP_DIR) && go test -coverprofile=$(SHIELD_OP_BASE_DIR)/coverage.out -json ./... | tee $(SHIELD_OP_BASE_DIR)/report.json | grep -v '"Action":"output"'
 	@echo "--> Running gosec"
 	gosec -fmt sonarqube -out gosec.json -no-fail ./...
 	@echo "---> gosec gosec.json"
