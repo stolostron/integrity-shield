@@ -66,8 +66,8 @@ GIT_HOST ?= github.com/IBM
 
 PWD := $(shell pwd)
 BASE_DIR := $(shell basename $(PWD))
-SHIELD_BASE_DIR=$(PWD)/shield
-SHIELD_OP_BASE_DIR=$(PWD)/integrity-shield-operator
+SHIELD_BASE_DIR=$(TRAVIS_BUILD_DIR)/shield
+SHIELD_OP_BASE_DIR=$(TRAVIS_BUILD_DIR)/integrity-shield-operator
 
 # Keep an existing GOPATH, make a private one if it is undefined
 GOPATH_DEFAULT := $(PWD)/.go
