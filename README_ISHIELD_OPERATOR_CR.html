@@ -1,0 +1,513 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Integrity Shield Custom Resource · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="style.css">
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="README_DEPLOY_ISHIELD_LOCAL.html" />
+    
+    
+    <link rel="prev" href="README_SECURITY.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="README_OVERVIEW.html">
+            
+                <a href="README_OVERVIEW.html">
+            
+                    
+                    Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="README_QUICK.html">
+            
+                <a href="README_QUICK.html">
+            
+                    
+                    Quick Start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                    
+                    Define Protected Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_SIGNER_CONFIG.html">
+            
+                <a href="README_SIGNER_CONFIG.html">
+            
+                    
+                    Signer Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
+            
+                <a href="README_RESOURCE_SIGNATURE.html">
+            
+                    
+                    How to Sign Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="README_SECURITY.html">
+            
+                <a href="README_SECURITY.html">
+            
+                    
+                    Security
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.8" data-path="README_ISHIELD_OPERATOR_CR.html">
+            
+                <a href="README_ISHIELD_OPERATOR_CR.html">
+            
+                    
+                    Integrity Shield Custom Resource
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                <a href="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                    
+                    Deploy Integrity Shield on Minikube
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="README_DEVELOPMENT.html">
+            
+                <a href="README_DEVELOPMENT.html">
+            
+                    
+                    Development
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="README_DEMO.html">
+            
+                <a href="README_DEMO.html">
+            
+                    
+                    Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Integrity Shield Custom Resource</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="custom-resource-integrityshield">Custom Resource: IntegrityShield</h1>
+<p>Integrity Shield can be deployed with operator. You can configure IntegrityShield custom resource to define the configuration of IShield.</p>
+<h2 id="type-of-signature-verification">Type of Signature Verification</h2>
+<p>Integrity Shield supports two modes of signature verification.</p>
+<ul>
+<li><code>pgp</code>: use <a href="https://www.gnupg.org/index.html" target="_blank">gpg key</a> for signing. certificate is not used.</li>
+<li><code>x509</code>: use signing key with X509 public key certificate.</li>
+</ul>
+<p><code>spec.verifyType</code> should be set either <code>pgp</code> (default) or <code>x509</code>.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">apiVersion:</span> apis.integrityshield.io/v1alpha1
+<span class="hljs-attr">kind:</span> IntegrityShield
+<span class="hljs-attr">metadata:</span>
+<span class="hljs-attr">  name:</span> integrity-shield-server
+<span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  shieldConfig:</span>
+<span class="hljs-attr">    verifyType:</span> pgp
+</code></pre>
+<!-- ## Enable Helm plugin
+
+You can enable Helm plugin to support verification of Helm provenance and integrity (https://helm.sh/docs/topics/provenance/). By enabling this, Helm package installation is verified with its provenance file.
+
+```yaml
+spec:
+  shieldConfig:
+    policy:
+      plugin:
+      - name: helm
+        enabled: false
+``` -->
+<h2 id="verification-key-and-signer-configuration">Verification Key and signer configuration</h2>
+<p>The list of verification key names should be set as <code>keyConfig</code> in this CR.
+The operator will start installing Integrity Shield when all key secrets listed here are ready.</p>
+<p>Also, you can set signer configuration here.
+This configuration defines signers that are allowed to create/update resources with their signature in some namespaces and the corresponding verification key (i.e. keyring-secret) under <code>keyConfig</code>.
+(see <a href="README_SIGNER_CONFIG.html">How to configure signer</a> for detail.)</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  signerConfig:</span>
+<span class="hljs-attr">    policies:</span>
+<span class="hljs-attr">    - namespaces:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;*&quot;</span>
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;SampleSigner&quot;</span>
+<span class="hljs-attr">    - scope:</span> <span class="hljs-string">&quot;Cluster&quot;</span>
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;SampleSigner&quot;</span>
+<span class="hljs-attr">    signers:</span>
+<span class="hljs-attr">    - name:</span> <span class="hljs-string">&quot;SampleSigner&quot;</span>
+<span class="hljs-attr">      keyConfig:</span> sample-signer-keyconfig
+<span class="hljs-attr">      subjects:</span>
+<span class="hljs-attr">      - email:</span> <span class="hljs-string">&quot;sample_signer@signer.com&quot;</span>
+<span class="hljs-attr">  keyConfig:</span>
+<span class="hljs-attr">  - name:</span> sample-signer-keyconfig
+<span class="hljs-attr">    secretName:</span> keyring-secret
+</code></pre>
+<h2 id="resource-signing-profile-configuration">Resource Signing Profile Configuration</h2>
+<p>You can define one or more ResourceSigningProfiles that are installed by this operator.
+This configuration is not set by default.
+(see <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html">How to configure ResourceSigningProfile</a> for detail.)</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  resourceSigningProfiles:</span>
+<span class="hljs-attr">  - name:</span> sample-rsp
+<span class="hljs-attr">    targetNamespaceSelector:</span>
+<span class="hljs-attr">      include:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;secure-ns&quot;</span>
+<span class="hljs-attr">    protectRules:</span>
+<span class="hljs-attr">    - match:</span>
+<span class="hljs-attr">      - kind:</span> <span class="hljs-string">&quot;ConfigMap&quot;</span>
+<span class="hljs-attr">        name:</span> <span class="hljs-string">&quot;*&quot;</span>
+</code></pre>
+<h2 id="define-in-scope-namespaces">Define In-scope Namespaces</h2>
+<p>You can define which namespace is not checked by Integrity Shield even if ResourceSigningProfile is there.
+Wildcard &quot;<em>&quot; can be used for this config. By default, Integrity Shield checks RSPs in all namespaces except ones in `kube-</em><code>and</code>openshift-*` namespaces.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  inScopeNamespaceSelector:</span>
+<span class="hljs-attr">    include:</span>
+<span class="hljs-bullet">    -</span> <span class="hljs-string">&quot;*&quot;</span>
+<span class="hljs-attr">    exclude:</span>
+<span class="hljs-bullet">    -</span> <span class="hljs-string">&quot;kube-*&quot;</span>
+<span class="hljs-bullet">    -</span> <span class="hljs-string">&quot;openshift-*&quot;</span>
+</code></pre>
+<h2 id="unprocessed-requests">Unprocessed Requests</h2>
+<p>Some resources are not relevant to the signature-based protection by Integrity Shield.
+The resources defined here are not processed in IShield admission controller (always returns <code>allowed</code>).</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  shieldConfig:</span>
+<span class="hljs-attr">    ignore:</span>
+<span class="hljs-attr">    - kind:</span> Event
+<span class="hljs-attr">    - kind:</span> Lease
+<span class="hljs-attr">    - kind:</span> Endpoints
+<span class="hljs-attr">    - kind:</span> TokenReview
+<span class="hljs-attr">    - kind:</span> SubjectAccessReview
+<span class="hljs-attr">    - kind:</span> SelfSubjectAccessReview
+</code></pre>
+<h2 id="ishield-run-mode">IShield Run mode</h2>
+<p>You can set run mode. Two modes are available. <code>enforce</code> mode is default. <code>detect</code> mode always allows any admission request, but signature verification is conducted and logged for all protected resources. <code>enforce</code> is set unless specified.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  shieldConfig:</span>
+<span class="hljs-attr">    mode:</span> <span class="hljs-string">&quot;detect&quot;</span>
+</code></pre>
+<!-- ## Install on OpenShift
+
+When deploying OpenShift cluster, this should be set `true` (default). Then, SecurityContextConstratint (SCC) will be deployed automatically during installation. For IKS or Minikube, this should be set to `false`.
+
+```yaml
+spec:
+  globalConfig:
+    openShift: true
+``` -->
+<h2 id="ishield-admin">IShield admin</h2>
+<p>Specify user group for IShield admin with comma separated strings like the following. The following <code>iShieldAdminUserGroup</code> is the default value.
+<code>iShieldAdminUserName</code> can be used in almost same way, but this is for concrete username such as service account name. By default, this value is empty.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  shieldConfig:</span>
+<span class="hljs-attr">    iShieldAdminUserGroup:</span> <span class="hljs-string">&quot;system:masters,system:cluster-admins&quot;</span>
+<span class="hljs-attr">    iShieldAdminUserName:</span> <span class="hljs-string">&quot;system:serviceaccount:sample-namespace:admin-sa&quot;</span>
+</code></pre>
+<p>Also, you can define IShield admin role. This role will be created automatically during installation when <code>autoIShieldAdminRoleCreationDisabled</code> is <code>false</code> (default).</p>
+<pre><code class="lang-yaml">spec
+  security
+<span class="hljs-attr">    iShieldAdminSubjects:</span>
+<span class="hljs-attr">      - apiGroup:</span> rbac.authorization.k8s.io
+<span class="hljs-attr">        kind:</span> Group
+<span class="hljs-attr">        name:</span> system:masters
+<span class="hljs-attr">    autoIShieldAdminRoleCreationDisabled:</span> <span class="hljs-literal">false</span>
+</code></pre>
+<!-- 
+## Webhook configuration
+
+You can specify webhook filter configuration for processing requests in IShield. As default, all requests for namespaced resources and selected cluster-scope resources are forwarded to IShield. If you want to protect a resource by IShield, it must be covered with this filter condition.
+
+```yaml
+spec:
+  webhookNamespacedResource:
+    apiGroups: ["*"]
+    apiVersions: ["*"]
+    resources: ["*"]
+  webhookClusterResource:
+    apiGroups: ["*"]
+    apiVersions: ["*"]
+    resources:
+    - podsecuritypolicies
+    - clusterrolebindings
+    - clusterroles
+``` -->
+<h2 id="logging">Logging</h2>
+<p>Console log includes stdout logging from IShield server. Context log includes admission control results. Both are enabled as default. You can define conditions to output logs here. For example, you can specify namespaces in scope. <code>&apos;*&apos;</code> is wildcard. <code>&apos;-&apos;</code> is empty stiring, which implies cluster-scope resource. You can also specify what Kind of resource should be logged like an example below.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  shieldConfig:</span>
+<span class="hljs-attr">    log:</span>
+<span class="hljs-attr">      consoleLog:</span>
+<span class="hljs-attr">        enabled:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">        inScope:</span>
+<span class="hljs-attr">        - namespace:</span> <span class="hljs-string">&apos;*&apos;</span>
+<span class="hljs-attr">        - namespace:</span> <span class="hljs-string">&apos;-&apos;</span>
+<span class="hljs-attr">      contextLog:</span>
+<span class="hljs-attr">        enabled:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">        inScope:</span>
+<span class="hljs-attr">        - kind:</span> <span class="hljs-string">&apos;ConfigMap&apos;</span>
+<span class="hljs-attr">        - kind:</span> <span class="hljs-string">&apos;Secret&apos;</span>
+<span class="hljs-attr">          namespace:</span> <span class="hljs-string">&apos;namespace-1&apos;</span>
+<span class="hljs-attr">      logLevel:</span> info
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="README_SECURITY.html" class="navigation navigation-prev " aria-label="Previous page: Security">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="README_DEPLOY_ISHIELD_LOCAL.html" class="navigation navigation-next " aria-label="Next page: Deploy Integrity Shield on Minikube">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"next":{"title":"Deploy Integrity Shield on Minikube","level":"1.9","depth":1,"path":"README_DEPLOY_ISHIELD_LOCAL.md","ref":"README_DEPLOY_ISHIELD_LOCAL.md","articles":[]},"previous":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_ISHIELD_OPERATOR_CR.md","mtime":"2021-01-12T04:46:32.067Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-03-11T01:58:05.187Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-hide-published-with/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

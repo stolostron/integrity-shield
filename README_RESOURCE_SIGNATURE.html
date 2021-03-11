@@ -1,0 +1,380 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>How to Sign Resources · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="style.css">
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="README_SECURITY.html" />
+    
+    
+    <link rel="prev" href="README_SIGNER_CONFIG.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="README_OVERVIEW.html">
+            
+                <a href="README_OVERVIEW.html">
+            
+                    
+                    Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="README_QUICK.html">
+            
+                <a href="README_QUICK.html">
+            
+                    
+                    Quick Start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                    
+                    Define Protected Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_SIGNER_CONFIG.html">
+            
+                <a href="README_SIGNER_CONFIG.html">
+            
+                    
+                    Signer Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
+            
+                <a href="README_RESOURCE_SIGNATURE.html">
+            
+                    
+                    How to Sign Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="README_SECURITY.html">
+            
+                <a href="README_SECURITY.html">
+            
+                    
+                    Security
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="README_ISHIELD_OPERATOR_CR.html">
+            
+                <a href="README_ISHIELD_OPERATOR_CR.html">
+            
+                    
+                    Integrity Shield Custom Resource
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                <a href="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                    
+                    Deploy Integrity Shield on Minikube
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="README_DEVELOPMENT.html">
+            
+                <a href="README_DEVELOPMENT.html">
+            
+                    
+                    Development
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="README_DEMO.html">
+            
+                <a href="README_DEMO.html">
+            
+                    
+                    Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >How to Sign Resources</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="how-to-sign-resources">How to Sign Resources</h1>
+<h2 id="sign-type">Sign Type</h2>
+<p>IShield supports two modes of signature verification.</p>
+<ul>
+<li><code>pgp</code>: use <a href="https://www.gnupg.org/index.html" target="_blank">gpg key</a> for signing. certificate is not used.</li>
+<li><code>x509</code>: use signing key with X509 public key certificate.</li>
+</ul>
+<p><code>spec.verifyType</code> should be set either <code>pgp</code> (default) or <code>x509</code>.</p>
+<pre><code>apiVersion: apis.integrityshield.io/v1alpha1
+kind: IntegrityShield
+metadata:
+  name: integrity-shield-server
+spec:
+  verifyType: pgp
+</code></pre><h2 id="setup">Setup</h2>
+<p>IShield requires a secret that includes a pubkey ring for verifying signatures of resources that need to be protected.  IShield supports X509 or PGP key for signing resources. For X509 mode, a certificate is supplied along with signature and CA certificate is used to verify the validiy of the given certificate. CA certifivate need to be registered to setup IShield. For PGP mode, no certificate is used. Instead, public keys for verifying signature need to be registered to setup IShield. The following steps show how you can import your keys or certificates to IShield.</p>
+<h3 id="pgp-mode">PGP mode</h3>
+<p>First, you need to export public key to a file. The following example shows a pubkey for a signer identified by an email <code>sample_signer@enterprise.com</code> is exported and stored in <code>/tmp/pubring.gpg</code>. (Use the filename <code>pubring.gpg</code>.)</p>
+<pre><code>$ gpg --export signer@enterprise.com &gt; /tmp/pubring.gpg
+</code></pre><p>If you do not have any PGP key or you want to use new key, generate new one and export it to a file. See <a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-gpg-key" target="_blank">this GitHub document</a>.</p>
+<p>Then, create a secret that includes a pubkey ring for verifying signatures of resources</p>
+<pre><code>oc create secret generic --save-config keyring-secret  -n integrity-shield-operator-system --from-file=/tmp/pubring.gpg
+</code></pre><p>You can run <code>scripts/gpg-annotation-sign.sh</code> script to generate signature annotations in YAML file which appends a signature for a Yaml file as annotations. For example,</p>
+<pre><code>$ ./scripts/gpg-annotation-sign.sh signer@enterprise.com /tmp/test-cm.yaml
+</code></pre><p>Note:  <code>gpg-annotation-sign.sh</code> would append the signature annotation to the original input file (e.g.  /tmp/test-cm.yaml), please back up the original file if needed.</p>
+<p>You can run <code>scripts/gpg-rs-sign.sh</code> script to generate ResourceSignature YAML file which includes signature for a Yaml file. For example,</p>
+<pre><code>$ ./scripts/gpg-rs-sign.sh signer@enterprise.com /tmp/test-cm.yaml /tmp/test-cm-rs.yaml
+</code></pre><p>The ResourceSignature resource must be created to allow admission with the YAML.</p>
+<p><code>ResourceSignature</code> resource has a <code>message</code> field which refers to the encoded content of a resource file to be signed. A resource file may include a specification for single resource or multiple resources. A signature is generated for the entire YAML file, but it is used to verify when any resources are verified with the signature if the resource is to be protected according to ResourceSigningProfile (RSP).</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="README_SIGNER_CONFIG.html" class="navigation navigation-prev " aria-label="Previous page: Signer Configuration">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="README_SECURITY.html" class="navigation navigation-next " aria-label="Next page: Security">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"How to Sign Resources","level":"1.6","depth":1,"next":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"previous":{"title":"Signer Configuration","level":"1.5","depth":1,"path":"README_SIGNER_CONFIG.md","ref":"README_SIGNER_CONFIG.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_RESOURCE_SIGNATURE.md","mtime":"2021-01-08T07:44:14.231Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-03-11T01:58:05.187Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-hide-published-with/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

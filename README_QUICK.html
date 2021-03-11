@@ -1,0 +1,519 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Quick Start · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="style.css">
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="README_FOR_RESOURCE_SIGNING_PROFILE.html" />
+    
+    
+    <link rel="prev" href="README_OVERVIEW.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="README_OVERVIEW.html">
+            
+                <a href="README_OVERVIEW.html">
+            
+                    
+                    Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3" data-path="README_QUICK.html">
+            
+                <a href="README_QUICK.html">
+            
+                    
+                    Quick Start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                    
+                    Define Protected Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_SIGNER_CONFIG.html">
+            
+                <a href="README_SIGNER_CONFIG.html">
+            
+                    
+                    Signer Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
+            
+                <a href="README_RESOURCE_SIGNATURE.html">
+            
+                    
+                    How to Sign Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="README_SECURITY.html">
+            
+                <a href="README_SECURITY.html">
+            
+                    
+                    Security
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="README_ISHIELD_OPERATOR_CR.html">
+            
+                <a href="README_ISHIELD_OPERATOR_CR.html">
+            
+                    
+                    Integrity Shield Custom Resource
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                <a href="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                    
+                    Deploy Integrity Shield on Minikube
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="README_DEVELOPMENT.html">
+            
+                <a href="README_DEVELOPMENT.html">
+            
+                    
+                    Development
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="README_DEMO.html">
+            
+                <a href="README_DEMO.html">
+            
+                    
+                    Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Quick Start</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="quick-start">Quick Start</h1>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>&#x200B;
+The following prerequisites must be satisfied to deploy Integrity Shield on a cluster.</p>
+<ul>
+<li>A Kubernetes cluster and cluster admin access to the cluster to use <code>oc</code> or <code>kubectl</code> command</li>
+</ul>
+<hr>
+<h2 id="install-integrity-shield">Install Integrity Shield</h2>
+<p>&#x200B;
+This section describe the steps for deploying Integrity Shield (IShield) on your cluster. We will use RedHat OpenShift cluster and so use <code>oc</code> commands for installation. (You can use <code>kubectl</code> for Minikube or IBM Kubernetes Service.)</p>
+<h3 id="retrive-the-source-from-integrity-enforcer-git-repository">Retrive the source from <code>integrity-enforcer</code> Git repository.</h3>
+<p>git clone this repository and moved to <code>integrity-enforcer</code> directory</p>
+<pre><code>$ git clone https://github.com/IBM/integrity-enforcer.git
+$ cd integrity-shield
+$ pwd /home/repo/integrity-enforcer
+</code></pre><p>In this document, we clone the code in <code>/home/repo/integrity-enforcer</code>.</p>
+<h3 id="prepare-namespace-for-installing-integrity-shield">Prepare namespace for installing Integrity Shield</h3>
+<p>You can deploy Integrity Shield to any namespace. In this document, we will use <code>integrity-shield-operator-system</code> to deploy Integrity Shield.</p>
+<pre><code>make create-ns
+</code></pre><p>We switch to <code>integrity-shield-operator-system</code> namespace.</p>
+<pre><code>oc project integrity-shield-operator-system
+</code></pre><p>All the commands are executed on the <code>integrity-shield-operator-system</code> namespace unless mentioned explicitly.</p>
+<h3 id="define-public-key-secret-in-integrity-shield">Define public key secret in Integrity Shield</h3>
+<p>Integrity Shield requires a secret that includes a pubkey ring for verifying signatures of resources that need to be protected.  Integrity Shield supports X509 or PGP key for signing resources. The following steps show how you can import your signature verification key to Integrity Shield.</p>
+<p>First, you need to export public key to a file. The following example shows a pubkey for a signer identified by an email <code>sample_signer@enterprise.com</code> is exported and stored in <code>/tmp/pubring.gpg</code>. (Use the filename <code>pubring.gpg</code>.)</p>
+<pre><code>$ gpg --export sample_signer@enterprise.com &gt; /tmp/pubring.gpg
+</code></pre><p>If you do not have any PGP key or you want to use new key, generate new one and export it to a file. See <a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-gpg-key" target="_blank">this GitHub document</a>.</p>
+<p>Then, create a secret that includes a pubkey ring for verifying signatures of resources</p>
+<pre><code>oc create secret generic --save-config keyring-secret  -n integrity-shield-operator-system --from-file=/tmp/pubring.gpg
+</code></pre><h3 id="define-signers-for-each-namespace">Define signers for each namespace</h3>
+<p>You can define signer who can provide signature for resources on each namespace. It can be configured when deploying the Integrity Shield. For that, configure signerConfig in the following Integrity Shield Custom Resource <a href="../integrity-shield-operator/config/samples/apis_v1alpha1_integrityshield.yaml">file</a>. Example below shows a signer <code>SampleSigner</code> identified by email <code>sample_signer@enterprise.com</code> is configured to sign rosources to be protected in any namespace and the corresponding verification key (i.e. keyring-secret) under <code>keyConfig</code></p>
+<pre><code class="lang-yaml"><span class="hljs-comment"># Edit integrity-shield-operator/config/samples/apis_v1alpha1_integrityshield.yaml</span>
+<span class="hljs-attr">apiVersion:</span> apis.integrityshield.io/v1alpha1
+<span class="hljs-attr">kind:</span> IntegrityShield
+<span class="hljs-attr">metadata:</span>
+<span class="hljs-attr">  name:</span> integrity-shield-server
+<span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  namespace:</span> integrity-shield-operator-system
+<span class="hljs-attr">  shieldConfig:</span>
+<span class="hljs-attr">    verifyType:</span> pgp <span class="hljs-comment"># x509</span>
+<span class="hljs-attr">    inScopeNamespaceSelector:</span>
+<span class="hljs-attr">      include:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;*&quot;</span>
+<span class="hljs-attr">      exclude:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;kube-*&quot;</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;openshift-*&quot;</span>
+<span class="hljs-attr">  signerConfig:</span>
+<span class="hljs-attr">    policies:</span>
+<span class="hljs-attr">    - namespaces:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;*&quot;</span>
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;SampleSigner&quot;</span>
+<span class="hljs-attr">    - scope:</span> <span class="hljs-string">&quot;Cluster&quot;</span>
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;SampleSigner&quot;</span>
+<span class="hljs-attr">    signers:</span>
+<span class="hljs-attr">    - name:</span> <span class="hljs-string">&quot;SampleSigner&quot;</span>
+<span class="hljs-attr">      keyConfig:</span> sample-signer-keyconfig
+<span class="hljs-attr">      subjects:</span>
+<span class="hljs-attr">      - email:</span> <span class="hljs-string">&quot;signer@enterprise.com&quot;</span>
+<span class="hljs-attr">  keyConfig:</span>
+<span class="hljs-attr">  - name:</span> sample-signer-keyconfig
+<span class="hljs-attr">    secretName:</span> keyring-secret
+</code></pre>
+<h3 id="install-integrity-shield-to-a-cluster">Install Integrity Shield to a cluster</h3>
+<p>Integrity Shield can be installed to a cluster using a series of steps which are bundled in a script called <a href="../scripts/install_shield.sh"><code>install_shield.sh</code></a>. Before executing the script <code>install_shield.sh</code>, setup local environment as follows:</p>
+<ul>
+<li><code>ISHIELD_ENV &lt;local: means that we deploy IShield to a local cluster like Minikube&gt;</code></li>
+<li><code>ISHIELD_REPO_ROOT=&lt;set absolute path of the root directory of cloned integrity-shield source repository</code></li>
+<li><code>KUBECONFIG=~/kube/config/minikube</code>  (for deploying IShield on minikube cluster)</li>
+</ul>
+<p><code>~/kube/config/minikube</code> is the Kuebernetes config file with credentials for accessing a cluster via <code>kubectl</code>.</p>
+<p>Example:</p>
+<pre><code>$ export ISHIELD_ENV=local
+$ export ISHIELD_REPO_ROOT=/home/repo/integrity-enforcer
+$ export KUBECONFIG=~/kube/config/minikube
+</code></pre><p>Prepare a private registry for hosting IShield container images, if not already exist.
+The following example create a private local container image registry to host the IShield container images.</p>
+<pre><code>$ cd integrity-shield
+$ make create-private-registry
+</code></pre><p>Execute the following make commands to build Integrity Shield images.</p>
+<pre><code>$ cd integrity-shield
+$ make build-images
+$ make push-images-to-local
+</code></pre><p>Then, execute the following script to deploy Integrity Shield in a cluster.</p>
+<pre><code>$ make install-crds
+$ make install-operator
+$ make make setup-tmp-cr
+$ make create-tmp-cr
+</code></pre><p>After successful installation, you should see two pods are running in the namespace <code>integrity-shield-operator-system</code>.</p>
+<pre><code>$ oc get pod -n integrity-shield-operator-system
+integrity-shield-operator-c4699c95c-4p8wp   1/1     Running   0          5m
+integrity-shield-server-85c787bf8c-h5bnj    2/2     Running   0          82m
+</code></pre><hr>
+<h2 id="protect-resources-with-integrity-shield">Protect Resources with Integrity Shield</h2>
+<p>&#x200B;
+Once Integrity Shield is deployed to a cluster, you are ready to put resources on the cluster into signature-based protection. To start actual protection, you need to define which resources should be protected specifically. This section describes the execution flow for protecting a specific resource (e.g. ConfigMap) in a specific namespace (e.g. <code>secure-ns</code>) on your cluster.</p>
+<p>The steps for protecting resources include:</p>
+<ul>
+<li>Define which reource(s) should be protected.</li>
+<li>Create a resource with signature.</li>
+</ul>
+<h3 id="define-which-reources-should-be-protected">Define which reource(s) should be protected</h3>
+<p>You can define which resources should be protected with signature in a cluster by Integrity Shield. A custom resource <code>ResourceSigningProfile</code> (RSP) includes the definition and it is created in the same namespace as resources. Example below illustrates how to define RSP to protect three resources ConfigMap, Deployment, and Service in a namespace <code>secure-ns</code>. After this, any resources specified here cannot be created/updated without valid signature.</p>
+<pre><code>$ cat &lt;&lt;EOF | oc apply -n secure-ns -f -
+apiVersion: apis.integrityshield.io/v1alpha1
+kind: ResourceSigningProfile
+metadata:
+  name: sample-rsp
+spec:
+  protectRules:
+  - match:
+    - kind: ConfigMap
+    - kind: Deployment
+    - kind: Service
+EOF
+
+resourcesigningprofile.apis.integrityshield.io/sample-rsp created
+</code></pre><p>See <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html">Define Protected Resources</a> for detail specs.</p>
+<h3 id="create-a-resource-with-signature">Create a resource with signature</h3>
+<p>Any configmap cannot be created without signature in <code>secure-ns</code> namespace. Run the following command to create a sample configmap.</p>
+<pre><code>cat &lt;&lt; EOF &gt; /tmp/test-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-cm
+data:
+  key1: val1
+  key2: val2
+  key4: val4
+EOF
+</code></pre><p>run the command below for trying to create the configmap in <code>secure-ns</code> namespace without signature. You will see it is blocked because no signature for this resource is stored in the cluster.</p>
+<pre><code>$ oc apply -f /tmp/test-cm.yaml -n secure-ns
+Error from server: error when creating &quot;test-cm.yaml&quot;: admission webhook &quot;ac-server.integrity-shield-operator-system.svc&quot; denied the request: Signature verification is required for this request, but no signature is found. Please attach a valid signature to the annotation or by a ResourceSignature, Request: {&quot;kind&quot;:&quot;ConfigMap&quot;,&quot;name&quot;:&quot;test-cm&quot;,&quot;namespace&quot;:&quot;secure-ns&quot;,&quot;operation&quot;:&quot;CREATE&quot;,&quot;request.uid&quot;:&quot;cfea7d34-0bf0-4e6a-9b59-e53290e02e67&quot;,&quot;scope&quot;:&quot;Namespaced&quot;,&quot;userName&quot;:&quot;kubernetes-admin&quot;}
+</code></pre><p>To generate a signature for a resource, you can use a <a href="../scripts/gpg-rs-sign.sh">utility script</a> (Use <a href="https://github.com/mikefarah/yq" target="_blank">yq</a> in the script)</p>
+<p>Run the following script to generate a signature</p>
+<pre><code>$ ./scripts/gpg-rs-sign.sh signer@enterprise.com /tmp/test-cm.yaml /tmp/test-cm-rs.yaml
+</code></pre><p>Then, output file <code>/tmp/test-cm-rs.yaml</code> is A custom resource <code>ResourceSignature</code> which includes signature of the input yaml.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">apiVersion:</span> apis.integrityshield.io/v1alpha1
+<span class="hljs-attr">kind:</span> ResourceSignature
+<span class="hljs-attr">metadata:</span>
+<span class="hljs-attr">  annotations:</span>
+    integrityshield.io/messageScope: spec
+    integrityshield.io/signature: LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0t
+<span class="hljs-attr">  name:</span> rsig-test-cm
+<span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  data:</span>
+<span class="hljs-attr">    - message:</span> YXBpVmVyc2lvbjogdjEKa2luZDogQ29u
+<span class="hljs-attr">      signature:</span> LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0t
+<span class="hljs-attr">      type:</span> resource
+</code></pre>
+<p>Create this resource.</p>
+<pre><code>$ oc create -f /tmp/test-cm-rs.yaml -n secure-ns
+resourcesignature.apis.integrityshield.io/rsig-test-cm created
+</code></pre><p>Then, run the same command again to create ConfigMap. It should be successful this time because a corresponding ResourceSignature is available in the cluster.</p>
+<pre><code>$ oc create -f /tmp/test-cm.yaml -n secure-ns
+configmap/test-cm created
+</code></pre><p>You can see all denied requests as Kubernetes Event like below.</p>
+<pre><code>$ oc get event -n secure-ns --field-selector type=IntegrityShield
+
+LAST SEEN   TYPE              REASON         OBJECT                MESSAGE
+27s         IntegrityShield   no-signature   configmap/test-cm   [IntegrityShieldEvent] Result: deny, Reason: &quot;Signature verification is required for this request, but no signature is found. Please attach a valid signature to the annotation or by a ResourceSignature.&quot;, Request: {&quot;kind&quot;:&quot;ConfigMap&quot;,&quot;name&quot;:&quot;test-cm&quot;,&quot;namespace&quot;:&quot;secure-ns&quot;,&quot;operation&quot;:&quot;CREATE&quot;,&quot;request.uid&quot;:&quot;cfea7d34-0bf0-4e6a-9b59-e53290e02e67&quot;,&quot;scope&quot;:&quot;Namespaced&quot;,&quot;userName&quot;:&quot;kubernetes-admin&quot;}
+</code></pre><h3 id="clean-up-integrity-shield-from-the-cluster">Clean up Integrity Shield from the cluster</h3>
+<p>When you want to remove Integrity Shield from a cluster, run the uninstaller script <a href="../scripts/delete_shield.sh"><code>delete_shield.sh</code></a>.</p>
+<pre><code>$ cd integrity-shield
+$ make delete-tmp-cr
+$ make delete-operator
+</code></pre>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="README_OVERVIEW.html" class="navigation navigation-prev " aria-label="Previous page: Overview">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html" class="navigation navigation-next " aria-label="Next page: Define Protected Resources">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Quick Start","level":"1.3","depth":1,"next":{"title":"Define Protected Resources","level":"1.4","depth":1,"path":"README_FOR_RESOURCE_SIGNING_PROFILE.md","ref":"README_FOR_RESOURCE_SIGNING_PROFILE.md","articles":[]},"previous":{"title":"Overview","level":"1.2","depth":1,"path":"README_OVERVIEW.md","ref":"README_OVERVIEW.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_QUICK.md","mtime":"2021-01-20T14:32:04.686Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-03-11T01:58:05.187Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-hide-published-with/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

@@ -1,0 +1,531 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Security · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="style.css">
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="README_ISHIELD_OPERATOR_CR.html" />
+    
+    
+    <link rel="prev" href="README_RESOURCE_SIGNATURE.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="README_OVERVIEW.html">
+            
+                <a href="README_OVERVIEW.html">
+            
+                    
+                    Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="README_QUICK.html">
+            
+                <a href="README_QUICK.html">
+            
+                    
+                    Quick Start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                    
+                    Define Protected Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_SIGNER_CONFIG.html">
+            
+                <a href="README_SIGNER_CONFIG.html">
+            
+                    
+                    Signer Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
+            
+                <a href="README_RESOURCE_SIGNATURE.html">
+            
+                    
+                    How to Sign Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.7" data-path="README_SECURITY.html">
+            
+                <a href="README_SECURITY.html">
+            
+                    
+                    Security
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="README_ISHIELD_OPERATOR_CR.html">
+            
+                <a href="README_ISHIELD_OPERATOR_CR.html">
+            
+                    
+                    Integrity Shield Custom Resource
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                <a href="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                    
+                    Deploy Integrity Shield on Minikube
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="README_DEVELOPMENT.html">
+            
+                <a href="README_DEVELOPMENT.html">
+            
+                    
+                    Development
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="README_DEMO.html">
+            
+                <a href="README_DEMO.html">
+            
+                    
+                    Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Security</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="security-in-integrity-shield">Security in Integrity Shield</h1>
+<ul>
+<li><p>Integrity Shield uses public key specified in Integrity Shield CR for signature verification. Public key only is deployed in cluster as Kubernetes secret, and no signing key is required on cluster.</p>
+</li>
+<li><p>The following table includes the list of resources created by Integrity Shield as default (assuming the IShield is deployed on  <code>integrity-shield-operator-system</code> namespace.) No user has direct access to resources managed by IShield operator. All those resources are created/updated by IShield operator according to IShield CR. All pods are running in runAsNonRoot, no runAsUser, and run with <code>restricted</code> <a href="https://docs.openshift.com/container-platform/4.6/authentication/managing-security-context-constraints.html" target="_blank">SCC</a>. </p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>kind</th>
+<th>name</th>
+<th>namespace</th>
+<th>owned-by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deployment</td>
+<td>integrity-shield-operator-controller-manager</td>
+<td>integrity-shield-operator-system</td>
+<td>-</td>
+</tr>
+<tr>
+<td>IntegrityShield</td>
+<td>integrity-shield-server</td>
+<td>integrity-shield-operator-system</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ShieldConfig</td>
+<td>ishield-config</td>
+<td>integrity-shield-operator-system</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>SignPolicy</td>
+<td>sign-policy</td>
+<td>integrity-shield-operator-system</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>Secret</td>
+<td>ishield-server-tls</td>
+<td>integrity-shield-operator-system</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>ServiceAccount</td>
+<td>ishield-sa</td>
+<td>integrity-shield-operator-system</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>Role</td>
+<td>ishield-cluster-role-sim</td>
+<td>integrity-shield-operator-system</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>RoleBinding</td>
+<td>ishield-cluster-role-binding-sim</td>
+<td>integrity-shield-operator-system</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>Role</td>
+<td>ishield-admin-role</td>
+<td>integrity-shield-operator-system</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>RoleBinding</td>
+<td>ishield-admin-rolebinding</td>
+<td>integrity-shield-operator-system</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>PodSecurityPolicy</td>
+<td>ishield-psp</td>
+<td>integrity-shield-operator-system</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>integrity-shield-server</td>
+<td>integrity-shield-operator-system</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>ServiceAccount</td>
+<td>integrity-shield-operator-manager</td>
+<td>integrity-shield-operator-system</td>
+<td>-</td>
+</tr>
+<tr>
+<td>CustomResourceDefinition</td>
+<td>integrityshields.apis.integrityshield.io</td>
+<td>(cluster scope)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>CustomResourceDefinition</td>
+<td>shieldconfigs.apis.integrityshield.io</td>
+<td>(cluster scope)</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>CustomResourceDefinition</td>
+<td>signpolicies.apis.integrityshield.io</td>
+<td>(cluster scope)</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>CustomResourceDefinition</td>
+<td>resourcesignatures.apis.integrityshield.io</td>
+<td>(cluster scope)</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>CustomResourceDefinition</td>
+<td>resourcesigningprofiles.apis.integrityshield.io</td>
+<td>(cluster scope)</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>CustomResourceDefinition</td>
+<td>helmreleasemetadatas.apis.integrityshield.io</td>
+<td>(cluster scope)</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>ClusterRole</td>
+<td>ishield-cluster-role</td>
+<td>(cluster scope)</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>ClusterRoleBinding</td>
+<td>ishield-cluster-role-binding</td>
+<td>(cluster scope)</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>ClusterRole</td>
+<td>ishield-admin-clusterrole</td>
+<td>(cluster scope)</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>ClusterRoleBinding</td>
+<td>ishield-admin-clusterrolebinding</td>
+<td>(cluster scope)</td>
+<td>IShield operator</td>
+</tr>
+<tr>
+<td>ClusterRole</td>
+<td>integrity-shield-operator-manager-role</td>
+<td>(cluster scope)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ClusterRoleBinding</td>
+<td>integrity-shield-operator-manager-rolebinding</td>
+<td>(cluster scope)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>WebhookConfiguration</td>
+<td>ishield-webhook-config</td>
+<td>(cluster scope)</td>
+<td>IShield operator</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>There are two ways to setup RSPs. RSP can be deployed by specifiying RSP in Integrity Shield CR. IShield operator creates RSP in IShield namespace (integrity-shield-operator-system). RSPs is applied to the namespaces specified in targetNamespace selector in the RSP. This RSP cannot be accessed directly, but managed by IShield operator. </li>
+<li>User can define custom RSPs for each namespace to protect specific resources on the same namespace. <strong>User needs to put proper protection to RSP (with RBAC or with RSP itself.)</strong> The RSP in a namespace cannot be applicable to the resources on other namespace. </li>
+<li>RSP can specify cluster scope resource for protection, but resource name of the protected resource must be specified explicitly.</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="README_RESOURCE_SIGNATURE.html" class="navigation navigation-prev " aria-label="Previous page: How to Sign Resources">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="README_ISHIELD_OPERATOR_CR.html" class="navigation navigation-next " aria-label="Next page: Integrity Shield Custom Resource">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Security","level":"1.7","depth":1,"next":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"path":"README_ISHIELD_OPERATOR_CR.md","ref":"README_ISHIELD_OPERATOR_CR.md","articles":[]},"previous":{"title":"How to Sign Resources","level":"1.6","depth":1,"path":"README_RESOURCE_SIGNATURE.md","ref":"README_RESOURCE_SIGNATURE.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_SECURITY.md","mtime":"2021-01-08T07:44:14.231Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-03-11T01:58:05.187Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-hide-published-with/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

@@ -1,0 +1,420 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Development · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="style.css">
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="README_DEMO.html" />
+    
+    
+    <link rel="prev" href="README_DEPLOY_ISHIELD_LOCAL.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="README_OVERVIEW.html">
+            
+                <a href="README_OVERVIEW.html">
+            
+                    
+                    Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="README_QUICK.html">
+            
+                <a href="README_QUICK.html">
+            
+                    
+                    Quick Start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                    
+                    Define Protected Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_SIGNER_CONFIG.html">
+            
+                <a href="README_SIGNER_CONFIG.html">
+            
+                    
+                    Signer Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
+            
+                <a href="README_RESOURCE_SIGNATURE.html">
+            
+                    
+                    How to Sign Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="README_SECURITY.html">
+            
+                <a href="README_SECURITY.html">
+            
+                    
+                    Security
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="README_ISHIELD_OPERATOR_CR.html">
+            
+                <a href="README_ISHIELD_OPERATOR_CR.html">
+            
+                    
+                    Integrity Shield Custom Resource
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                <a href="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                    
+                    Deploy Integrity Shield on Minikube
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.10" data-path="README_DEVELOPMENT.html">
+            
+                <a href="README_DEVELOPMENT.html">
+            
+                    
+                    Development
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="README_DEMO.html">
+            
+                <a href="README_DEMO.html">
+            
+                    
+                    Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Development</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="development">Development</h1>
+<h2 id="clone-repo">Clone Repo</h2>
+<pre><code>$ git clone git@github.com:IBM/integrity-enforcer.git
+$ cd integrity-shield
+</code></pre><h2 id="setup">Setup</h2>
+<p>Before executing the script, setup local environment as follows:</p>
+<ul>
+<li><code>ISHIELD_REPO_ROOT</code>: set absolute path of the root directory of cloned integrity-shield source repository</li>
+<li><code>KUBECONFIG=~/kube/config/minikube</code>  (for deploying IShield on minikube cluster)</li>
+</ul>
+<p><code>~/kube/config/minikube</code> is the Kuebernetes config file with credentials for accessing a cluster via <code>kubectl</code>.</p>
+<p>For example</p>
+<pre><code>$ export KUBECONFIG=~/kube/config/minikube
+$ export ISHIELD_REPO_ROOT=/repo/integrity-enforcer
+$ export ISHIELD_ENV=local
+</code></pre><h2 id="make-commands">Make commands</h2>
+<h3 id="create-private-registry-for-hosting-ishield-container-images">Create private registry for hosting IShield container images</h3>
+<p>The following example create a private local container image registry to host the IShield container images.</p>
+<pre><code>$ make create-private-registry
+</code></pre><h3 id="build-ishield-container-images">Build IShield container images</h3>
+<pre><code>$ make build-images
+$ make tag-images-to-local
+</code></pre><p>The make commands refer the steps for</p>
+<ul>
+<li>Building Integrity Shield container images</li>
+<li>Tagging Integrity Shield container images to be used locally.</li>
+</ul>
+<p>Three images are built.</p>
+<ul>
+<li><code>integrity-shield-operator</code> is image for operator which manages Integrity Shield</li>
+<li><code>integrity-shield-server</code> is image for IShield server</li>
+<li><code>integrity-shield-logging</code> is image for IShield logging side car</li>
+</ul>
+<h3 id="push-images">Push images</h3>
+<p>The following command pushes the built IShield images to local container image registry setup above.</p>
+<pre><code>$ make push-images-to-local
+</code></pre><p>Alternatively, you can push images to other container image registry as below.</p>
+<pre><code>$ make push-images
+</code></pre><p>You may need to setup image registry (e.g. dockerhub, quay.io etc.) and change the container images&apos; name and tag as needed.</p>
+<p>For example</p>
+<pre><code>$ export DOCKER_REGISTRY=docker.io
+$ export DOCKER_USER=integrityshield
+$ export DOCKER_PASS=&lt;password&gt;
+</code></pre><h3 id="install-ishield-to-a-cluster">Install IShield to a cluster</h3>
+<p>Create verification key as a secret.</p>
+<p>The following creates default key-ring secret required by IShield server.</p>
+<pre><code>make create-key-ring
+</code></pre><pre><code>$ make install-crds
+$ make install-operator
+$ make setup-tmp-cr
+$ make create-tmp-cr
+</code></pre><p>The make commands refer the steps for</p>
+<ul>
+<li>Create CRDs</li>
+<li>Install Integrity Shield operator</li>
+<li>Prepare Integrity Shield custom resource (operator installs IShield server automatically)</li>
+<li>Install Integrity Shield custom resource (operator installs IShield server automatically)</li>
+</ul>
+<h3 id="uninstall-ishield-from-cluster">Uninstall IShield from cluster</h3>
+<pre><code>$ make delete-tmp-cr
+$ make delete-keyring-secret
+$ make delete-operator
+</code></pre><p>The make command refers to the steps for</p>
+<ul>
+<li>Delete Integrity Shield custom resource (operator installs IShield server automatically)</li>
+<li>Delete Key-ring secret</li>
+<li>Delete Integrity Shield operator</li>
+<li>Delete CRDs</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="README_DEPLOY_ISHIELD_LOCAL.html" class="navigation navigation-prev " aria-label="Previous page: Deploy Integrity Shield on Minikube">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="README_DEMO.html" class="navigation navigation-next " aria-label="Next page: Demo">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Development","level":"1.10","depth":1,"next":{"title":"Demo","level":"1.11","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Deploy Integrity Shield on Minikube","level":"1.9","depth":1,"path":"README_DEPLOY_ISHIELD_LOCAL.md","ref":"README_DEPLOY_ISHIELD_LOCAL.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_DEVELOPMENT.md","mtime":"2021-01-08T07:44:14.228Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-03-11T01:58:05.187Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-hide-published-with/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

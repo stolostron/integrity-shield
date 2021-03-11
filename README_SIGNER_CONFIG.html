@@ -1,0 +1,491 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Signer Configuration · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="style.css">
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="README_RESOURCE_SIGNATURE.html" />
+    
+    
+    <link rel="prev" href="README_FOR_RESOURCE_SIGNING_PROFILE.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="README_OVERVIEW.html">
+            
+                <a href="README_OVERVIEW.html">
+            
+                    
+                    Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="README_QUICK.html">
+            
+                <a href="README_QUICK.html">
+            
+                    
+                    Quick Start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+            
+                    
+                    Define Protected Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5" data-path="README_SIGNER_CONFIG.html">
+            
+                <a href="README_SIGNER_CONFIG.html">
+            
+                    
+                    Signer Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
+            
+                <a href="README_RESOURCE_SIGNATURE.html">
+            
+                    
+                    How to Sign Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="README_SECURITY.html">
+            
+                <a href="README_SECURITY.html">
+            
+                    
+                    Security
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="README_ISHIELD_OPERATOR_CR.html">
+            
+                <a href="README_ISHIELD_OPERATOR_CR.html">
+            
+                    
+                    Integrity Shield Custom Resource
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                <a href="README_DEPLOY_ISHIELD_LOCAL.html">
+            
+                    
+                    Deploy Integrity Shield on Minikube
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="README_DEVELOPMENT.html">
+            
+                <a href="README_DEVELOPMENT.html">
+            
+                    
+                    Development
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="README_DEMO.html">
+            
+                <a href="README_DEMO.html">
+            
+                    
+                    Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Signer Configuration</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="signer-configuration">Signer Configuration</h2>
+<h3 id="this-cr-should-not-be-edited-directly">This CR should not be edited directly.</h3>
+<p>Usually, SignerConfig CR is automatically created/updated using <code>signerConfig</code> config in IntegrityShield CR.
+Please note that operator would reconcile the resource with the original one and it might remove your direct changes.</p>
+<h3 id="define-signer-for-each-namespaces">Define signer for each namespaces</h3>
+<p>SignerConfig is a custom resource to define who can be a valid signer for resources in a namespace or for cluster scope resources.
+Only a SignerConfig which is created in IShield namespace (<code>integrity-shield-operator-system</code> in this doc) by operator is valid and all other instances are not used by IShield.</p>
+<p>To update SignerConfig after IShield deployment, please update the <code>signerConfig</code> in IntegrityShield CR.</p>
+<p>Example below is to define</p>
+<ul>
+<li>signer <code>signer-a</code> is identified when email of subject of signature is <code>signer@enterprise.com</code> and the verification key for this subject is included in <code>keyring-secret</code> secret specified under <code>keyConfig</code></li>
+<li>signer <code>signer-a</code> is approved signer for the resources to be created in namespace <code>secure-ns</code>.</li>
+</ul>
+<p>For matching signer, you can use the following attributes: <code>email</code>, <code>uid</code>, <code>country</code>, <code>organization</code>, <code>organizationalUnit</code>, <code>locality</code>, <code>province</code>, <code>streetAddress</code>, <code>postalCode</code>, <code>commonName</code> and <code>serialNumber</code>.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">  signerConfig:</span>
+<span class="hljs-attr">    policies:</span>
+<span class="hljs-attr">    - namespaces:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;secure-ns&quot;</span>
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;signer-a&quot;</span>
+<span class="hljs-attr">    signers:</span>
+<span class="hljs-attr">    - name:</span> <span class="hljs-string">&quot;signer-a&quot;</span>
+<span class="hljs-attr">      keyConfig:</span> sample-signer-keyconfig
+<span class="hljs-attr">      subjects:</span>
+<span class="hljs-attr">      - email:</span> <span class="hljs-string">&quot;signer@enterprise.com&quot;</span>
+<span class="hljs-attr">  keyConfig:</span>
+<span class="hljs-attr">  - name:</span> sample-signer-keyconfig
+<span class="hljs-attr">    secretName:</span> keyring-secret
+</code></pre>
+<p>Updating IShield CR with the above block, the operator will update the SignerConfig resource.</p>
+<p>You can define namespace matcher by using <code>excludeNamespaces</code>.
+For example below, signer <code>signer-a</code> can sign resource in <code>secure-ns</code> namespace, and another signer <code>signer-b</code> can sign resource in all other namespaces except <code>secure-ns</code>.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  signerConfig:</span>
+<span class="hljs-attr">    policies:</span>
+<span class="hljs-attr">    - namespaces:</span>
+<span class="hljs-bullet">      -</span> secure-ns
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> signer-a
+<span class="hljs-attr">    - namespaces:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&apos;*&apos;</span>
+<span class="hljs-attr">      excludeNamespaces:</span>
+<span class="hljs-bullet">      -</span> secure-ns
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> signer-b
+<span class="hljs-attr">    - scope:</span> Cluster
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> signer-a
+<span class="hljs-bullet">      -</span> signer-b
+<span class="hljs-attr">    signers:</span> ...
+</code></pre>
+<h3 id="configure-verification-key">Configure Verification Key</h3>
+<p><code>secret</code> name must be specified for verifying signer subject configuration. This secret is also needed to be set in <code>keyConfig</code> in IShield CR. You can also specify public key filename (e.g. &quot;pubring-a.gpg&quot;, &quot;pubring-b.gpg&quot;) which contains exported public verification key. </p>
+<p>Here is the example to define multiple verification keys and multiple signers.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  signerConfig:</span>
+<span class="hljs-attr">    policies:</span>
+<span class="hljs-attr">    - namespaces:</span>
+<span class="hljs-bullet">      -</span> ns-a
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> signer-a
+<span class="hljs-attr">    - namespaces:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&apos;ns-b&apos;</span>
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> signer-b
+<span class="hljs-attr">    signers:</span>
+<span class="hljs-attr">    - name:</span> signer-a
+<span class="hljs-attr">      keyConfig:</span> sample-verification-key-a
+<span class="hljs-attr">      subjects:</span>
+<span class="hljs-attr">        email:</span> signer-a@enterprise.com
+<span class="hljs-attr">    - name:</span> signer-b
+<span class="hljs-attr">      keyConfig:</span> sample-verification-key-b
+<span class="hljs-attr">      subjects:</span>
+<span class="hljs-attr">        email:</span> signer-b@enterprise.com
+<span class="hljs-attr">  keyConfig:</span>
+<span class="hljs-attr">  - name:</span> sample-verification-key-a
+<span class="hljs-attr">    secretName:</span> keyring-secret-a
+<span class="hljs-attr">    fileName:</span> pubring-a.gpg
+<span class="hljs-attr">  - name:</span> sample-verification-key-b
+<span class="hljs-attr">    secretName:</span> keyring-secret-b
+<span class="hljs-attr">    fileName:</span> pubring-b.gpg
+</code></pre>
+<h3 id="define-signer-for-cluster-scope-resources">Define Signer for cluster-scope resources</h3>
+<p>You can define a signer for cluster-scope resources similarily. Signer <code>signer-a</code> and <code>signer-b</code> can sign cluster-scope resources in the example below.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  signerConfig:</span>
+<span class="hljs-attr">    policies:</span>
+<span class="hljs-attr">    - scope:</span> Cluster
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> signer-a
+<span class="hljs-bullet">      -</span> signer-b
+</code></pre>
+<h3 id="break-glass">Break Glass</h3>
+<p>When you need to disable blocking by signature verification in a certain namespace, you can enable break glass mode, which means the request to the namespace without valid signature is allowed during the break glass on. For example, break glass on <code>secure-ns</code> namespace can be set on by</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  signerConfig:</span>
+<span class="hljs-attr">    breakGlass:</span>
+<span class="hljs-attr">      - namespaces:</span>
+<span class="hljs-bullet">        -</span> secure-ns
+</code></pre>
+<p>Break glass on cluster-scope resources can be set on by</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  signerConfig:</span>
+<span class="hljs-attr">    breakGlass:</span>
+<span class="hljs-attr">      - scope:</span> Cluster
+</code></pre>
+<p>During break glass mode on, the request without signature will be allowed even if protected by RSP, and the label <code>integrityshield.io/resourceIntegrity: unverified</code> will be attached to the resource.</p>
+<h3 id="example-of-signer-configuration">Example of Signer Configuration</h3>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  signerConfig:</span>
+<span class="hljs-attr">    policies:</span>
+<span class="hljs-attr">    - namespaces:</span>
+<span class="hljs-bullet">      -</span> secure-ns
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> signer-a
+<span class="hljs-attr">    - namespaces:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">&apos;*&apos;</span>
+<span class="hljs-attr">      excludeNamespaces:</span>
+<span class="hljs-bullet">      -</span> secure-ns
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> signer-b
+<span class="hljs-attr">    - scope:</span> Cluster
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-bullet">      -</span> signer-a
+<span class="hljs-bullet">      -</span> signer-b
+<span class="hljs-attr">    signers:</span>
+<span class="hljs-attr">    - name:</span> signer-a
+<span class="hljs-attr">      keyConfig:</span> sample-signer-keyconfig-a
+<span class="hljs-attr">      subjects:</span>
+<span class="hljs-attr">      - email:</span> secure-ns-signer@enterprise.com
+<span class="hljs-attr">    - name:</span> signer-b
+<span class="hljs-attr">      keyConfig:</span> sample-signer-keyconfig-b
+<span class="hljs-attr">      subjects:</span>
+<span class="hljs-attr">      - email:</span> default-signer@enterprise.com
+<span class="hljs-attr">  keyConfig:</span>
+<span class="hljs-attr">  - name:</span> sample-signer-keyconfig-a
+<span class="hljs-attr">    secretName:</span> keyring-secret-a
+<span class="hljs-attr">  - name:</span> sample-signer-keyconfig-b
+<span class="hljs-attr">    secretName:</span> keyring-secret-b
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html" class="navigation navigation-prev " aria-label="Previous page: Define Protected Resources">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="README_RESOURCE_SIGNATURE.html" class="navigation navigation-next " aria-label="Next page: How to Sign Resources">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Signer Configuration","level":"1.5","depth":1,"next":{"title":"How to Sign Resources","level":"1.6","depth":1,"path":"README_RESOURCE_SIGNATURE.md","ref":"README_RESOURCE_SIGNATURE.md","articles":[]},"previous":{"title":"Define Protected Resources","level":"1.4","depth":1,"path":"README_FOR_RESOURCE_SIGNING_PROFILE.md","ref":"README_FOR_RESOURCE_SIGNING_PROFILE.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_SIGNER_CONFIG.md","mtime":"2021-01-15T17:59:33.739Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-03-11T01:58:05.187Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-hide-published-with/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
