@@ -69,7 +69,7 @@ jobs:
 #          make component/test/unit
 #          make test-gpg-annotation
           make sonar-go-test-ishield
-#          make sonar-go-test-op
+          make sonar-go-test-op
           # make sonar/go enable it after resolving package references to upstream repo
     - stage: test-e2e
       name: "Deploy the image to a cluster and run e2e tests"
