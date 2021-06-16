@@ -463,7 +463,7 @@ sonar-go-test-ishield:
 	@cat gosec.json
 	@if [ "$(ISHIELD_ENV)" = remote ]; then \
 		echo "--> Running sonar-scanner"; \
-		sonar-scanner --debug; \
+		sonar-scanner --debug || echo "Sonar scanner is not available"; \
 	fi
 
 sonar-go-test-op:
@@ -479,7 +479,7 @@ sonar-go-test-op:
 	@cat gosec.json
 	@if [ "$(ISHIELD_ENV)" = remote ]; then \
 		echo "--> Running sonar-scanner"; \
-		sonar-scanner --debug; \
+		sonar-scanner --debug || echo "Sonar scanner is not available"; \
 	fi
 
 .PHONY: publish
