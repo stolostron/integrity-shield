@@ -65,9 +65,9 @@ jobs:
       script:
         - set -e
         - |
-#          make init
-#          make component/test/unit
-#          make test-gpg-annotation
+          make init
+          make component/test/unit
+          make test-gpg-annotation
           make sonar-go-test-ishield
           make sonar-go-test-op
           # make sonar/go enable it after resolving package references to upstream repo
