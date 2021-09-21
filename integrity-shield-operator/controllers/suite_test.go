@@ -126,7 +126,7 @@ func embedRSP(cr *apisv1alpha1.IntegrityShield) *apisv1alpha1.IntegrityShield {
 }
 
 var _ = BeforeSuite(func(done Done) {
-	logf.SetLogger(zap.LoggerTo(GinkgoWriter, true))
+	logf.SetLogger(zap.New())
 
 	By("bootstrapping test environment")
 	testEnv = &envtest.Environment{
@@ -240,7 +240,7 @@ var _ = Describe("Test integrity shield", func() {
 		maxReconcileTrial := 600
 		deployFound := &appsv1.Deployment{}
 		for {
-			_, recError := r.Reconcile(req)
+			_, recError := r.Reconcile(context.Background(), req)
 			i++
 
 			if i%10 == 0 {
