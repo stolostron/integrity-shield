@@ -129,7 +129,7 @@ check: lint
 lint: lint-init  lint-verify lint-op-init lint-op-verify
 
 lint-init:
-	cd $(SHIELD_DIR) && golangci-lint run --timeout 5m -D errcheck,unused,gosimple,deadcode,staticcheck,structcheck,ineffassign,varcheck > $(TMP_DIR)lint_results_ishield.txt
+	cd $(SHIELD_DIR) && golangci-lint run --timeout 5m -D errcheck,unused,gosimple,deadcode,staticcheck,structcheck,ineffassign,varcheck | tee $(TMP_DIR)lint_results_ishield.txt
 
 lint-verify:
 	$(eval FAILURES=$(shell cat $(TMP_DIR)lint_results_ishield.txt | grep "FAIL:"))
@@ -137,7 +137,7 @@ lint-verify:
 	@$(if $(strip $(FAILURES)), echo "One or more linters failed. Failures: $(FAILURES)"; exit 1, echo "All linters are passed successfully."; exit 0)
 
 lint-op-init:
-	cd $(SHIELD_OP_DIR) && golangci-lint run --timeout 5m -D errcheck,unused,gosimple,deadcode,staticcheck,structcheck,ineffassign,varcheck,govet > $(TMP_DIR)lint_results.txt
+	cd $(SHIELD_OP_DIR) && golangci-lint run --timeout 5m -D errcheck,unused,gosimple,deadcode,staticcheck,structcheck,ineffassign,varcheck,govet | tee $(TMP_DIR)lint_results.txt
 
 lint-op-verify:
 	$(eval FAILURES=$(shell cat $(TMP_DIR)lint_results.txt | grep "FAIL:"))
