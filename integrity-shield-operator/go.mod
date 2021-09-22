@@ -7,9 +7,9 @@ go 1.13
 require (
 	cloud.google.com/go v0.70.0 // indirect
 	github.com/IBM/integrity-enforcer/shield v0.0.0-20201001024601-320551d946dc
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32
 	github.com/go-logr/logr v0.4.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/go-cmp v0.5.5
 	github.com/onsi/ginkgo v1.16.4
 	github.com/onsi/gomega v1.13.0
