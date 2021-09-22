@@ -25,8 +25,8 @@ import (
 	"strings"
 
 	apiv1alpha1 "github.com/IBM/integrity-enforcer/integrity-shield-operator/api/v1alpha1"
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/ghodss/yaml"
+	jwt "github.com/golang-jwt/jwt"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 )
