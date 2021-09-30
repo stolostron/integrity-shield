@@ -21,7 +21,7 @@ metadata:
             "observer": {
               "enabled": true,
               "exportDetailResult": true,
-              "image": "gcr.io/clean-resource-318209/integrity-shield-observer",
+              "image": "quay.io/open-cluster-management/integrity-shield-observer",
               "imagePullPolicy": "Always",
               "interval": "5",
               "logLevel": "info",
@@ -29,7 +29,7 @@ metadata:
               "provenanece": true,
               "resources": {
                 "limits": {
-                  "cpu": "300m",
+                  "cpu": "500m",
                   "memory": "512Mi"
                 }
               },
@@ -54,13 +54,13 @@ metadata:
               "serviceAccountName": "integrity-shield-sa"
             },
             "shieldApi": {
-              "image": "gcr.io/clean-resource-318209/integrity-shield-api",
+              "image": "quay.io/open-cluster-management/integrity-shield-api",
               "imagePullPolicy": "Always",
               "name": "integrity-shield-api",
               "port": 8080,
               "resources": {
                 "limits": {
-                  "cpu": "300m",
+                  "cpu": "500m",
                   "memory": "512Mi"
                 }
               },
@@ -422,7 +422,7 @@ spec:
                       periodSeconds: 10
                     resources:
                       limits:
-                        cpu: 300m
+                        cpu: 500m
                         memory: 500Mi
                       requests:
                         cpu: 200m

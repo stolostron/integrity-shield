@@ -396,10 +396,16 @@ setup-tmp-cr:
 	yq write -i $(TMP_CR_FILE) spec.shieldApi.imagePullPolicy Always
 	yq write -i $(TMP_CR_FILE) spec.observer.image $(TMP_OBSERVER_IMG)
 	yq write -i $(TMP_CR_FILE) spec.observer.imagePullPolicy Always
+	yq write -i $(TMP_CR_FILE) spec.observer.resources.limits.cpu 200m
+	yq write -i $(TMP_CR_FILE) spec.observer.resources.limits.memory 256Mi
 	yq write -i $(TMP_CR_AC_FILE) spec.admissionController.image $(TMP_ADMISSION_CONTROLLER_IMG)
 	yq write -i $(TMP_CR_AC_FILE) spec.admissionController.imagePullPolicy Always
+	yq write -i $(TMP_CR_AC_FILE) spec.admissionController.resources.limits.cpu 200m
+	yq write -i $(TMP_CR_AC_FILE) spec.admissionController.resources.limits.memory 256Mi
 	yq write -i $(TMP_CR_AC_FILE) spec.observer.image $(TMP_OBSERVER_IMG)
 	yq write -i $(TMP_CR_AC_FILE) spec.observer.imagePullPolicy Always
+	yq write -i $(TMP_CR_AC_FILE) spec.observer.resources.limits.cpu 200m
+	yq write -i $(TMP_CR_AC_FILE) spec.observer.resources.limits.memory 256Mi
 
 create-tmp-cr:
 	kubectl apply -f $(TMP_CR_FILE) -n $(ISHIELD_NS)
