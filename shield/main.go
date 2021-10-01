@@ -42,7 +42,7 @@ func init() {
 	log.SetFormatter(&log.JSONFormatter{})
 	log.Info("initialize cosign.")
 	cmd := cosign.Init()
-	cmd.Exec(context.Background(), []string{})
+	_ = cmd.Exec(context.Background(), []string{})
 	log.Info("Integrity Shield has been started.")
 }
 

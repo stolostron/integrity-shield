@@ -124,9 +124,13 @@ func LoadKeySecret(keySecretNamespace, keySecretName string) (string, error) {
 	sumErr := []string{}
 	keyPath := ""
 	for fname, keyData := range secret.Data {
-		os.MkdirAll(keyDir, os.ModePerm)
+		err := os.MkdirAll(keyDir, os.ModePerm)
+		if err != nil {
+			sumErr = append(sumErr, err.Error())
+			continue
+		}
 		fpath := filepath.Join(keyDir, fname)
-		err := ioutil.WriteFile(fpath, keyData, 0644)
+		err = ioutil.WriteFile(fpath, keyData, 0644)
 		if err != nil {
 			sumErr = append(sumErr, err.Error())
 			continue

@@ -93,7 +93,7 @@ type ImageProfile struct {
 }
 
 func (p *ParameterObject) DeepCopyInto(p2 *ParameterObject) {
-	copier.Copy(&p2, &p)
+	_ = copier.Copy(&p2, &p)
 }
 
 func (u ObjectUserBinding) Match(obj unstructured.Unstructured, username string) bool {

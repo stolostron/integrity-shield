@@ -922,7 +922,7 @@ func (r *IntegrityShieldReconciler) createOrUpdateWebhook(instance *apiv1.Integr
 		// Created successfully - return and requeue
 
 		reqLogger.Info("Webhook has been created.", "Name", instance.Name)
-		evtName := fmt.Sprintf("ishield-webhook-reconciled")
+		evtName := "ishield-webhook-reconciled"
 		_ = r.createOrUpdateWebhookEvent(instance, evtName, expected.Name)
 
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second * 1}, nil

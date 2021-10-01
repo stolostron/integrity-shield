@@ -230,20 +230,20 @@ func initFrameWork() *Framework {
 	}
 	kubeConfig, err := LoadConfig(framework.KubeConfig, framework.KubeContext)
 	if err != nil {
-		Fail(fmt.Sprintf("fail to set kubeconfig"))
+		Fail("fail to set kubeconfig")
 	}
 	framework.KubeClientSet, err = kubernetes.NewForConfig(kubeConfig)
 	if err != nil {
-		Fail(fmt.Sprintf("fail to set KubeClientSet"))
+		Fail("fail to set KubeClientSet")
 
 	}
 	framework.APIExtensionsClientSet, err = apiextcs.NewForConfig(kubeConfig)
 	if err != nil {
-		Fail(fmt.Sprintf("fail to set APIExtensionsClientSet"))
+		Fail("fail to set APIExtensionsClientSet")
 	}
 	framework.MIPClient, err = mipclient.NewForConfig(kubeConfig)
 	if err != nil {
-		Fail(fmt.Sprintf("fail to set MIPClient"))
+		Fail("fail to set MIPClient")
 	}
 
 	ns := &v1.Namespace{

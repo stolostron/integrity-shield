@@ -84,7 +84,7 @@ func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconf
 	result, err := k8smanifest.VerifyResource(resource, vo)
 	log.Debug("VerifyResource result: ", result)
 	if err != nil {
-		log.Warning("Signature verification is required for this request, but verifyResource return error ; %s", err.Error())
+		log.Warningf("Signature verification is required for this request, but verifyResource return error ; %s", err.Error())
 		return VerifyResultDetail{
 			Time:                 time.Now().Format(timeFormat),
 			Kind:                 resource.GroupVersionKind().Kind,

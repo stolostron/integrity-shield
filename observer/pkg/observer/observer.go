@@ -160,7 +160,7 @@ func (self *Observer) Init() error {
 
 	log.Info("initialize cosign.")
 	cmd := cosign.Init()
-	cmd.Exec(context.Background(), []string{})
+	_ = cmd.Exec(context.Background(), []string{})
 
 	return nil
 }
@@ -317,7 +317,6 @@ func (self *Observer) Run() {
 		Time:              time.Now().Format(timeFormat),
 	}
 	_ = exportResultDetail(res)
-	return
 }
 
 func exportVerifyResult(vrr vrc.ManifestIntegrityStateSpec, ignored bool, violated bool) error {
@@ -534,7 +533,11 @@ func LoadKeySecret(keySecertNamespace, keySecertName string) (string, error) {
 	sumErr := []string{}
 	keyPath := ""
 	for fname, keyData := range secret.Data {
-		os.MkdirAll(keyDir, os.ModePerm)
+		err = os.MkdirAll(keyDir, os.ModePerm)
+		if err != nil {
+			sumErr = append(sumErr, err.Error())
+			continue
+		}
 		fpath := filepath.Join(keyDir, fname)
 		err = ioutil.WriteFile(fpath, keyData, 0644)
 		if err != nil {
