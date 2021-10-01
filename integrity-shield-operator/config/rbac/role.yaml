@@ -21,22 +21,7 @@ rules:
 - apiGroups:
   - apis.integrityshield.io
   resources:
-  - integrityshieldren
   - integrityshields
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - apis.integrityshield.io
-  resources:
-  - integrityshields
-  - integrityshields/finalizers
-  - manifestintegrityprofiles
   verbs:
   - create
   - delete
@@ -72,16 +57,6 @@ rules:
   - update
   - watch
 - apiGroups:
-  - coordination.k8s.io
-  resources:
-  - leases
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - update
-- apiGroups:
   - ""
   resources:
   - configmaps
@@ -89,18 +64,6 @@ rules:
   - secrets
   - serviceaccounts
   - services
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - policy
-  resources:
-  - podsecuritypolicies
   verbs:
   - create
   - delete

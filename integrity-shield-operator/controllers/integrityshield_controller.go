@@ -38,17 +38,14 @@ type IntegrityShieldReconciler struct {
 
 var log = logf.Log.WithName("controller_integrityshield")
 
-//+kubebuilder:rbac:groups=apis.integrityshield.io,resources=integrityshields;integrityshieldren,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=apis.integrityshield.io,resources=integrityshields,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=apis.integrityshield.io,resources=integrityshields/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=apis.integrityshield.io,resources=integrityshields/finalizers,verbs=update
 // +kubebuilder:rbac:groups=core,resources=services;serviceaccounts;events;configmaps;secrets,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=apis.integrityshield.io,resources=integrityshields;integrityshields/finalizers;manifestintegrityprofiles,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=apiextensions.k8s.io,resources=customresourcedefinitions,verbs=*
 // +kubebuilder:rbac:groups=rbac.authorization.k8s.io,resources=clusterroles;clusterrolebindings;roles;rolebindings,verbs=*
-// +kubebuilder:rbac:groups=policy,resources=podsecuritypolicies,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=admissionregistration.k8s.io,resources=validatingwebhookconfigurations,verbs=*
-// +kubebuilder:rbac:groups=coordination.k8s.io,resources=leases,verbs=get;list;create;update;delete
 // +kubebuilder:rbac:groups=templates.gatekeeper.sh,resources=constrainttemplates,verbs=get;list;watch;create;update;delete
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to

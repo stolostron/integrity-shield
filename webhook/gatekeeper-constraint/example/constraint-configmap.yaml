@@ -11,7 +11,13 @@ spec:
     namespaces:
     - "sample-ns"
   parameters:
-    inScopeObjects:
+    constraintName: configmap-constraint
+    action:
+      admissionControl:
+        enforce: false
+      audit:
+        inform: true
+    objectSelector:
     - name: sample-cm
     signers:
     - signer@signer.com

@@ -34,16 +34,24 @@ spec:
           env:
             - name: POD_NAMESPACE
               value: integrity-shield-operator-system
-            - name: CONFIG_KEY
-              value: "config.yaml"
-            - name: TARGET_RESOURCE_CONFIG_NAME
-              value: "target-resource-config"
             - name: LOG_LEVEL
               value: info
+            - name: REQUEST_HANDLER_CONFIG_KEY
+              value: config.yaml
+            - name: REQUEST_HANDLER_CONFIG_NAME
+              value: request-handler-config
+            - name: ENABLE_DETAIL_RESULT
+              value: 'true'
+            - name: ENABLE_PROVENANCE_RESULT
+              value: 'true'
+            - name: OBSERVER_RESULT_CONFIG_NAME
+              value: verify-resource-result
+            - name: OBSERVER_RESULT_CONFIG_KEY
+              value: config.yaml
             - name: INTERVAL
-              value: "5"
+              value: '5'
           imagePullPolicy: Always
-          image: localhost:5000/k8s-manifest-integrity-shield-observer:0.1.0
+          image: localhost:5000/integrity-shield-observer:0.2.5
           volumeMounts:
           - name: tmp
             mountPath: /tmp

@@ -5,12 +5,12 @@ go 1.16
 require (
 	github.com/IBM/integrity-shield/shield v0.0.0-00010101000000-000000000000
 	github.com/pkg/errors v0.9.1
-	github.com/sigstore/cosign v1.1.0
-	github.com/sigstore/k8s-manifest-sigstore v0.0.0-20210909071548-2120192e4ff7
+	github.com/sigstore/cosign v1.2.0
+	github.com/sigstore/k8s-manifest-sigstore v0.1.0
 	github.com/sirupsen/logrus v1.8.1
-	k8s.io/api v0.21.3
-	k8s.io/apimachinery v0.21.3
-	k8s.io/client-go v0.21.3
+	k8s.io/api v0.22.1
+	k8s.io/apimachinery v0.22.1
+	k8s.io/client-go v0.22.1
 )
 
 replace (

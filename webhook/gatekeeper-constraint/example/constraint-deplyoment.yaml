@@ -12,7 +12,12 @@ spec:
     - "sample-ns"
   parameters:
     constraintName: deployment-constraint
-    inScopeObjects:
+    action:
+      admissionControl:
+        enforce: false
+      audit:
+        inform: true
+    objectSelector:
     - name: sample-deploy
     signers:
     - sample-signer@example.com
