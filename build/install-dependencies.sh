@@ -23,7 +23,7 @@ OS_NAME=$(uname -s)
 OPERATOR_SDK_VERSION=v1.1.0
 
 if ! [ -x "$(command -v operator-sdk)" ]; then
-
+	echo "installing operator-sdk"
 	if [[ "$OS_NAME" == "Linux" ]]; then
 		curl -L https://github.com/operator-framework/operator-sdk/releases/download/$OPERATOR_SDK_VERSION/operator-sdk-$OPERATOR_SDK_VERSION-x86_64-linux-gnu -o operator-sdk
 	elif [[ "$OS_NAME" == "Darwin" ]]; then
@@ -32,11 +32,13 @@ if ! [ -x "$(command -v operator-sdk)" ]; then
 	chmod +x operator-sdk
 	sudo mv operator-sdk /usr/local/bin/operator-sdk
 	operator-sdk version
+	echo "done"
 fi
 
 OPM_VERSION=v1.15.1
 
 if ! [ -x "$(command -v opm)" ]; then
+	echo "installing opm"
 	if [[ "$OS_NAME" == "Linux" ]]; then
 	    OPM_URL=https://github.com/operator-framework/operator-registry/releases/download/$OPM_VERSION/linux-amd64-opm
 	elif [[ "$OS_NAME" == "Darwin" ]]; then
@@ -47,9 +49,11 @@ if ! [ -x "$(command -v opm)" ]; then
 	sudo wget -nv $OPM_URL -O /usr/local/bin/opm
 	sudo chmod +x /usr/local/bin/opm
 	/usr/local/bin/opm version
+	echo "done"
 fi
 
 if ! [ -x "$(command -v kustomize)" ]; then
+	echo "installing kustomize"
 	if [[ "$OS_NAME" == "Linux" ]]; then
                 where=$PWD
                 if [ -f $where/kustomize ]; then
@@ -71,12 +75,15 @@ if ! [ -x "$(command -v kustomize)" ]; then
 	fi
 	chmod +x ./kustomize
 	sudo mv ./kustomize /usr/local/bin/kustomize
+	echo "done"
 fi
 
 
 if ! [ -x "$(command -v yq)" ]; then
+	echo "installing yq"
 	sudo wget https://github.com/mikefarah/yq/releases/download/3.3.2/yq_linux_amd64 -O /usr/bin/yq
 	sudo chmod +x /usr/bin/yq
+	echo "done"
 fi
 
 if ! [ -x "$(command -v jq)" ]; then
@@ -98,9 +105,9 @@ fi
 if ! [ -x "$(command -v kind)" ]; then
 	echo "installing kind"
 	if [[ "$OS_NAME" == "Linux" ]]; then
-		curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-linux-amd64
+		curl -k -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-linux-amd64
 	elif [[ "$OS_NAME" == "Darwin" ]]; then
-		curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-darwin-amd64
+		curl -k -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-darwin-amd64
 	fi
 
 	chmod +x ./kind
