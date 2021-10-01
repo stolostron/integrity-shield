@@ -84,29 +84,35 @@ if ! [ -x "$(command -v jq)" ]; then
 fi
 
 if ! [ -x "$(command -v kubectl)" ]; then
+	echo "installing kubectl"
 	if [[ "$OS_NAME" == "Linux" ]]; then
 		curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 	elif [[ "$OS_NAME" == "Darwin" ]]; then
 		curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl"
 	fi
-        chmod +x ./kubectl
-        sudo mv ./kubectl /usr/local/bin/kubectl
+	chmod +x ./kubectl
+	sudo mv ./kubectl /usr/local/bin/kubectl
+	echo "done"
 fi
 
 if ! [ -x "$(command -v kind)" ]; then
-        if [[ "$OS_NAME" == "Linux" ]]; then
+	echo "installing kind"
+	if [[ "$OS_NAME" == "Linux" ]]; then
 		curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-linux-amd64
 	elif [[ "$OS_NAME" == "Darwin" ]]; then
 		curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-darwin-amd64
 	fi
 
-        chmod +x ./kind
-        sudo mv ./kind /usr/local/bin/kind
+	chmod +x ./kind
+	sudo mv ./kind /usr/local/bin/kind
+	echo "done"
 fi
 
 # Install golangci-lint
 if ! [ -x "$(command -v golangci-lint)" ]; then
+	echo "installing golangci-lint"
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$(go env GOPATH)"/bin v1.32.0
+	echo "done"
 fi
 
 echo "Finished setting up dependencies."
