@@ -17,8 +17,4 @@ replace (
 	github.com/IBM/integrity-shield/observer => ./
 	github.com/IBM/integrity-shield/shield => ../shield
 	github.com/IBM/integrity-shield/webhook/admission-controller => ../webhook/admission-controller
-	k8s.io/kubectl => k8s.io/kubectl v0.21.2
-
 )
-
-// replace github.com/docker/docker => github.com/moby/moby v0.7.3-0.20190826074503-38ab9da00309 // Required by Helm

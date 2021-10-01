@@ -23,5 +23,4 @@ replace (
 	github.com/IBM/integrity-shield/integrity-shield-operator => ./
 	github.com/IBM/integrity-shield/shield => ../shield
 	github.com/IBM/integrity-shield/webhook/admission-controller => ../webhook/admission-controller
-	k8s.io/kubectl => k8s.io/kubectl v0.21.2
 )

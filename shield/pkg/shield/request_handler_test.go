@@ -36,16 +36,16 @@ const (
 
 func TestMutationCheck(t *testing.T) {
 	testIgnoredFields := k8smanifest.ObjectFieldBindingList{
-		{
+		k8smanifest.ObjectFieldBinding{
 			Fields: []string{
 				"data.key2",
 			},
 			Objects: k8smanifest.ObjectReferenceList{
-				{
+				k8smanifest.ObjectReference{
 					Kind: "ConfigMap",
 					Name: "test-update-cm",
 				},
-				{
+				k8smanifest.ObjectReference{
 					Kind: "ConfigMap",
 					Name: "sample-cm",
 				},
