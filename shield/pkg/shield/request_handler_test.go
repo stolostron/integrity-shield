@@ -21,7 +21,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	k8smnfconfig "github.com/IBM/integrity-shield/shield/pkg/config"
+	k8smnfconfig "github.com/IBM/integrity-enforcer/shield/pkg/config"
 	"github.com/ghodss/yaml"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"

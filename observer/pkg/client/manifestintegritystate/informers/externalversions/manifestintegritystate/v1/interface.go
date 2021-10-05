@@ -19,7 +19,7 @@ limitations under the License.
 package v1
 
 import (
-	internalinterfaces "github.com/IBM/integrity-shield/observer/pkg/client/manifestintegritystate/informers/externalversions/internalinterfaces"
+	internalinterfaces "github.com/IBM/integrity-enforcer/observer/pkg/client/manifestintegritystate/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to all the informers in this group version.

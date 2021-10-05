@@ -23,9 +23,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/IBM/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned"
-	internalinterfaces "github.com/IBM/integrity-shield/observer/pkg/client/manifestintegritystate/informers/externalversions/internalinterfaces"
-	manifestintegritystate "github.com/IBM/integrity-shield/observer/pkg/client/manifestintegritystate/informers/externalversions/manifestintegritystate"
+	versioned "github.com/IBM/integrity-enforcer/observer/pkg/client/manifestintegritystate/clientset/versioned"
+	internalinterfaces "github.com/IBM/integrity-enforcer/observer/pkg/client/manifestintegritystate/informers/externalversions/internalinterfaces"
+	manifestintegritystate "github.com/IBM/integrity-enforcer/observer/pkg/client/manifestintegritystate/informers/externalversions/manifestintegritystate"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

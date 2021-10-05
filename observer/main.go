@@ -20,7 +20,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/IBM/integrity-shield/observer/pkg/observer"
+	"github.com/IBM/integrity-enforcer/observer/pkg/observer"
 )
 
 func main() {

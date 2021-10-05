@@ -24,7 +24,7 @@ import (
 	"strconv"
 	"strings"
 
-	apiv1 "github.com/IBM/integrity-shield/integrity-shield-operator/api/v1"
+	apiv1 "github.com/IBM/integrity-enforcer/integrity-shield-operator/api/v1"
 	"github.com/ghodss/yaml"
 
 	appsv1 "k8s.io/api/apps/v1"

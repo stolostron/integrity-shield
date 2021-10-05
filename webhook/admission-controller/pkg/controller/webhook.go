@@ -23,8 +23,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/IBM/integrity-shield/shield/pkg/shield"
-	acconfig "github.com/IBM/integrity-shield/webhook/admission-controller/pkg/config"
+	"github.com/IBM/integrity-enforcer/shield/pkg/shield"
+	acconfig "github.com/IBM/integrity-enforcer/webhook/admission-controller/pkg/config"
 	"github.com/ghodss/yaml"
 	"github.com/pkg/errors"
 	cosign "github.com/sigstore/cosign/cmd/cosign/cli"

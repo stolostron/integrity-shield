@@ -22,8 +22,8 @@ import (
 	"context"
 	"time"
 
-	v1alpha1 "github.com/IBM/integrity-shield/webhook/admission-controller/pkg/apis/manifestintegrityprofile/v1"
-	scheme "github.com/IBM/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/clientset/versioned/scheme"
+	v1alpha1 "github.com/IBM/integrity-enforcer/webhook/admission-controller/pkg/apis/manifestintegrityprofile/v1"
+	scheme "github.com/IBM/integrity-enforcer/webhook/admission-controller/pkg/client/manifestintegrityprofile/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"

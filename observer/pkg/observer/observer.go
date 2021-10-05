@@ -27,9 +27,9 @@ import (
 	"strings"
 	"time"
 
-	vrc "github.com/IBM/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
-	vrcclient "github.com/IBM/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
-	k8smnfconfig "github.com/IBM/integrity-shield/shield/pkg/config"
+	vrc "github.com/IBM/integrity-enforcer/observer/pkg/apis/manifestintegritystate/v1"
+	vrcclient "github.com/IBM/integrity-enforcer/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
+	k8smnfconfig "github.com/IBM/integrity-enforcer/shield/pkg/config"
 	"github.com/pkg/errors"
 	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"

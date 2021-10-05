@@ -20,7 +20,7 @@ import (
 	"context"
 	"time"
 
-	apiv1 "github.com/IBM/integrity-shield/integrity-shield-operator/api/v1"
+	apiv1 "github.com/IBM/integrity-enforcer/integrity-shield-operator/api/v1"
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"

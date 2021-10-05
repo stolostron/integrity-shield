@@ -19,7 +19,7 @@ limitations under the License.
 package scheme
 
 import (
-	apisv1 "github.com/IBM/integrity-shield/webhook/admission-controller/pkg/apis/manifestintegrityprofile/v1"
+	apisv1 "github.com/IBM/integrity-enforcer/webhook/admission-controller/pkg/apis/manifestintegrityprofile/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

@@ -19,7 +19,7 @@ package resources
 import (
 	"fmt"
 
-	apiv1 "github.com/IBM/integrity-shield/integrity-shield-operator/api/v1"
+	apiv1 "github.com/IBM/integrity-enforcer/integrity-shield-operator/api/v1"
 	admregv1 "k8s.io/api/admissionregistration/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

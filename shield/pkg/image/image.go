@@ -27,7 +27,7 @@ import (
 	"github.com/ghodss/yaml"
 	"github.com/pkg/errors"
 
-	ishieldconfig "github.com/IBM/integrity-shield/shield/pkg/config"
+	ishieldconfig "github.com/IBM/integrity-enforcer/shield/pkg/config"
 	cosigncli "github.com/sigstore/cosign/cmd/cosign/cli"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )

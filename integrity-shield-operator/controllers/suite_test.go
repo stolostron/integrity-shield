@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	apiv1 "github.com/IBM/integrity-shield/integrity-shield-operator/api/v1"
+	apiv1 "github.com/IBM/integrity-enforcer/integrity-shield-operator/api/v1"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"k8s.io/client-go/kubernetes/scheme"
