@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi7/ubi-minimal:latest
+FROM registry.access.redhat.com/ubi7/ubi-minimal:7.9
 
 RUN mkdir /ishield-app && mkdir /ishield-app/resources
 

@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-FROM registry.access.redhat.com/ubi7/ubi-minimal:7.8
+FROM registry.access.redhat.com/ubi7/ubi-minimal:7.9
 
 # RUN yum install -y tar
 
