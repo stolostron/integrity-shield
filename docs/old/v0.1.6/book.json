@@ -1,0 +1,11 @@
+{
+  "root": ".",
+  "structure": {
+      "readme": "readme.md",
+      "summary": "summary.md"
+  },
+  "styles": {
+      "website": "style.css"
+  },
+  "plugins": ["-sharing","hide-published-with"]
+}
