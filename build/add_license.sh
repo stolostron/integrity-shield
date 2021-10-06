@@ -20,8 +20,8 @@ if [ $# -ne 2 ]; then
   exit 1
 fi
 
-if [ -z "$SHIELD_OP_DIR" ]; then
-    echo "SHIELD_OP_DIR is empty. Please set env."
+if [ -z "$ISHIELD_REPO_ROOT" ]; then
+    echo "ISHIELD_REPO_ROOT is empty. Please set env."
     exit 1
 fi
 
@@ -32,4 +32,4 @@ LICENSELEN=$(wc -l ${licenseFile} | cut -f1 -d ' ')
 
 echo $LICENSELEN
 
-head -$LICENSELEN ${targetFile} | diff ${licenseFile} - || ( ( cat ${licenseFile}; echo; cat ${targetFile}) > ${SHIELD_OP_DIR}/file; mv ${SHIELD_OP_DIR}/file ${targetFile})
+head -$LICENSELEN ${targetFile} | diff ${licenseFile} - || ( ( cat ${licenseFile}; echo; cat ${targetFile}) > ${ISHIELD_REPO_ROOT}/file; mv ${ISHIELD_REPO_ROOT}/file ${targetFile})
