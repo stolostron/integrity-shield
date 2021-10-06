@@ -17,7 +17,7 @@
 package v1
 
 import (
-	miprofile "github.com/IBM/integrity-enforcer/webhook/admission-controller/pkg/apis/manifestintegrityprofile"
+	miprofile "github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/apis/manifestintegrityprofile"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"

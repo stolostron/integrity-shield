@@ -19,8 +19,8 @@ limitations under the License.
 package v1
 
 import (
-	v1 "github.com/IBM/integrity-enforcer/observer/pkg/apis/manifestintegritystate/v1"
-	"github.com/IBM/integrity-enforcer/observer/pkg/client/manifestintegritystate/clientset/versioned/scheme"
+	v1 "github.com/open-cluster-management/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
+	"github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 

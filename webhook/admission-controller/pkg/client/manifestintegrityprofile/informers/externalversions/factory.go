@@ -23,9 +23,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/IBM/integrity-enforcer/webhook/admission-controller/pkg/client/manifestintegrityprofile/clientset/versioned"
-	internalinterfaces "github.com/IBM/integrity-enforcer/webhook/admission-controller/pkg/client/manifestintegrityprofile/informers/externalversions/internalinterfaces"
-	manifestintegrityprofile "github.com/IBM/integrity-enforcer/webhook/admission-controller/pkg/client/manifestintegrityprofile/informers/externalversions/manifestintegrityprofile"
+	versioned "github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/clientset/versioned"
+	internalinterfaces "github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/informers/externalversions/internalinterfaces"
+	manifestintegrityprofile "github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/informers/externalversions/manifestintegrityprofile"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

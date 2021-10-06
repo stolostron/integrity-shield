@@ -19,8 +19,8 @@ limitations under the License.
 package manifestintegrityprofile
 
 import (
-	internalinterfaces "github.com/IBM/integrity-enforcer/webhook/admission-controller/pkg/client/manifestintegrityprofile/informers/externalversions/internalinterfaces"
-	v1 "github.com/IBM/integrity-enforcer/webhook/admission-controller/pkg/client/manifestintegrityprofile/informers/externalversions/manifestintegrityprofile/v1"
+	internalinterfaces "github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/informers/externalversions/internalinterfaces"
+	v1 "github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/informers/externalversions/manifestintegrityprofile/v1"
 )
 
 // Interface provides access to each of this group's versions.

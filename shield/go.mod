@@ -1,4 +1,4 @@
-module github.com/IBM/integrity-enforcer/shield
+module github.com/open-cluster-management/integrity-shield/shield
 
 go 1.16
 
@@ -15,4 +15,4 @@ require (
 	sigs.k8s.io/controller-runtime v0.9.0
 )
 
-replace github.com/IBM/integrity-enforcer/shield => ./
+replace github.com/open-cluster-management/integrity-shield/shield => ./

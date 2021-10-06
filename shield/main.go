@@ -25,8 +25,8 @@ import (
 	"net/http"
 	"path"
 
-	k8smnfconfig "github.com/IBM/integrity-enforcer/shield/pkg/config"
-	"github.com/IBM/integrity-enforcer/shield/pkg/shield"
+	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
+	"github.com/open-cluster-management/integrity-shield/shield/pkg/shield"
 	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	log "github.com/sirupsen/logrus"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"

@@ -26,8 +26,8 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	k8smnfconfig "github.com/IBM/integrity-enforcer/shield/pkg/config"
-	ishieldimage "github.com/IBM/integrity-enforcer/shield/pkg/image"
+	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
+	ishieldimage "github.com/open-cluster-management/integrity-shield/shield/pkg/image"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/kubeutil"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/mapnode"
