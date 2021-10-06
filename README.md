@@ -51,7 +51,7 @@ In this case, you can decide which resources to be protected in the custom resou
 
 The following snippet is an example of `ManifestIntegrityProfile`.
 ```
-apiVersion: apis.integrityshield.io/v1alpha1
+apiVersion: apis.integrityshield.io/v1
 kind: ManifestIntegrityProfile
 metadata:
   name: profile-configmap

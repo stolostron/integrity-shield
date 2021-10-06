@@ -57,7 +57,7 @@ To enable checking requests by integrity shield, `ManifestIntegrityProfile` shou
 In this example, we installed the following profile to protect ConfigMap in sample-ns.
 
 ```
-apiVersion: apis.integrityshield.io/v1alpha1
+apiVersion: apis.integrityshield.io/v1
 kind: ManifestIntegrityProfile
 metadata:
   name: constraint-configmap
