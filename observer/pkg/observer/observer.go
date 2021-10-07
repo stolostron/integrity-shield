@@ -460,7 +460,6 @@ func (self *Observer) getAPIResources(kubeconfig *rest.Config) error {
 	if err != nil {
 		return err
 	}
-
 	resources := []groupResource{}
 	for _, apiResourceList := range apiResourceLists {
 		if len(apiResourceList.APIResources) == 0 {
@@ -616,7 +615,6 @@ func (self *Observer) getPossibleProtectedGVKs(match MatchCondition) []groupReso
 		matched, tmpGvks := checkIfRuleMatchWithGVK(match, apiResource)
 		if matched {
 			possibleProtectedGVKs = append(possibleProtectedGVKs, tmpGvks...)
-			break
 		}
 	}
 	return possibleProtectedGVKs
@@ -625,6 +623,8 @@ func (self *Observer) getPossibleProtectedGVKs(match MatchCondition) []groupReso
 // TODO: check logic
 func checkIfRuleMatchWithGVK(match MatchCondition, apiResource groupResource) (bool, []groupResourceWithTargetNS) {
 	possibleProtectedGVKs := []groupResourceWithTargetNS{}
+
+	log.Debug("apiResource ", apiResource)
 	// TODO: support "LabelSelector"
 	if len(match.Kinds) == 0 {
 		return false, nil
@@ -635,6 +635,7 @@ func checkIfRuleMatchWithGVK(match MatchCondition, apiResource groupResource) (b
 		agmatch := false
 		if len(kinds.ApiGroups) != 0 {
 			agmatch = Contains(kinds.ApiGroups, apiResource.APIGroup)
+			log.Debug(fmt.Sprintf("check apiGroup condition: rule %s, apiResource.APIGroup %s, matched %s", kinds.ApiGroups, apiResource.APIGroup, strconv.FormatBool(agmatch)))
 		} else {
 			agmatch = true
 		}
