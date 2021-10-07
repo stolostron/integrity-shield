@@ -98,9 +98,12 @@ func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconf
 			VerifyResourceResult: nil,
 		}
 	}
+
 	message := ""
+	violation := true
 	if result.InScope {
 		if result.Verified {
+			violation = false
 			message = fmt.Sprintf("singed by a valid signer: %s", result.Signer)
 		} else {
 			message = "no signature found"
@@ -111,6 +114,7 @@ func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconf
 			}
 		}
 	} else {
+		violation = false
 		message = "not protected"
 	}
 
@@ -118,11 +122,6 @@ func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconf
 	resultMsg := ""
 	if len(tmpMsg) > 0 {
 		resultMsg = tmpMsg[0]
-	}
-
-	violation := true
-	if result.Verified {
-		violation = false
 	}
 
 	return VerifyResultDetail{
