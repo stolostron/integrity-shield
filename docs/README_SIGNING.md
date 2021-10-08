@@ -26,7 +26,7 @@ You can verify a signed YAML manfiest file by the following script. It will show
 ```
 $ ./scripts/gpg-annotation-verify.sh sample-configmap.yaml path/to/public-keyring-file
 
-Signature is invalid.
+Signature is successfully verified.
 Verification: Success
 ```
 
@@ -46,7 +46,7 @@ You can verify a signed YAML manfiest file by the following script. It will show
 ```
 $ ./scripts/x509-annotation-verify.sh sample-configmap.yaml path/to/CA-certificate-file
 
-Signature is invalid.
+Signature is successfully verified.
 Verification: Success
 ```
 
@@ -64,6 +64,7 @@ Verification command is something like this.
 
 ```
 $ kubectl sigstore verify -f sample-configmap.yaml.signed -k cosign.pub
+INFO[0000] verifed: true
 ```
 
 About a detail description of this command, you can refer to [k8s-manifest-sigstore document](https://github.com/sigstore/k8s-manifest-sigstore/blob/main/docs/LATEST_RELEASE.md#whats-new-in-v010).

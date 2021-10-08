@@ -149,19 +149,19 @@ if [ -z ${msg} ] || [ -z ${sign} ] ; then
    echo $result
    exit 1
 else
-   echo $msg | ${base_decode} >  ${ISHIELD_MSG_FILE}
+   echo $msg | ${base_decode} | ${gzip_decode} >  ${ISHIELD_MSG_FILE}
    echo $sign | ${base_decode} > ${ISHIELD_SIGN_FILE}
 
-   status=$(gpg --no-default-keyring --keyring ${PUBRING_KEY} --dry-run --verify ${ISHIELD_SIGN_FILE}  ${ISHIELD_MSG_FILE} 2>&1)
+   gpg --no-default-keyring --keyring ${PUBRING_KEY} --dry-run --verify ${ISHIELD_SIGN_FILE} ${ISHIELD_MSG_FILE}  > /dev/null 2>&1 
+   sigstatus=$?
 
    if [ -d ${ISHIELD_TMP_DIR} ]; then
      rm -rf ${ISHIELD_TMP_DIR}
    fi
 
-   result=$(echo $status | grep "Good" | wc -c)
    return_msg=""
    exit_status=1
-   if [ ${result} -gt 0 ]; then
+   if [ ${sigstatus} == 0 ]; then
       return_msg="Signature is successfully verified."
       exit_status=0
    else
@@ -170,7 +170,7 @@ else
    fi
 
    result="${RED}Verification: Failure${NC}"
-   if [ $exit_status ]; then
+   if [ $exit_status == 0 ]; then
       result="${CYAN}Verification: Success${NC}"
    fi
 

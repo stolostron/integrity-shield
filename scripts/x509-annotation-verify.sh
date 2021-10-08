@@ -162,16 +162,16 @@ else
    # get pubkey from certificate
    openssl x509 -pubkey -noout -in ${ISHIELD_CERT_FILE} > ${ISHIELD_PUBKEY_FILE}
 
-   openssl dgst -sha256 -verify ${ISHIELD_PUBKEY_FILE} -signature ${ISHIELD_SIGN_FILE} ${ISHIELD_MSG_FILE}  2>&1 > /dev/null
+   openssl dgst -sha256 -verify ${ISHIELD_PUBKEY_FILE} -signature ${ISHIELD_SIGN_FILE} ${ISHIELD_MSG_FILE}  > /dev/null 2>&1 
    sigstatus=$?
 
    return_msg=""
    exit_status=1
    if [[ $sigstatus ]]; then
-      openssl verify -CAfile ${CA_CERT_FILE} ${ISHIELD_CERT_FILE} 2>&1 > /dev/null
+      openssl verify -CAfile ${CA_CERT_FILE} ${ISHIELD_CERT_FILE}  > /dev/null 2>&1 
       certstatus=$?
       if [[ $certstatus ]]; then
-         return_msg="Signature is valid."
+         return_msg="Signature is successfully verified."
          exit_status=0
       else
          return_msg="Certificate verification failed."
@@ -181,7 +181,7 @@ else
    fi
 
    result="${RED}Verification: Failure${NC}"
-   if [ $exit_status ]; then
+   if [ $exit_status == 0 ]; then
       result="${CYAN}Verification: Success${NC}"
    fi
 
