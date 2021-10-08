@@ -11,7 +11,7 @@ Integrity Shield supports three types of signing and verification.
 
 To sign a YAML manifest with gpg key, you need to specify signer email in your gpg signing key.
 
-If you do not have any gpg key or you want to use a new key, generate a new one and export it to a file. See [this GitHub document](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/
+If you do not have any gpg key or you want to use a new key, generate a new one and export it to a file. See [this GitHub document](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/)
 
 You can run `scripts/gpg-annotation-sign.sh` script to generate signature annotations in YAML file which appends a signature for a Yaml file as annotations. For example,
 
