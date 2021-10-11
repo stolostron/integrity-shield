@@ -127,5 +127,5 @@ Integrity shield with is own admission controller can be installed by this opera
 
 IShield can be deployed with operator. We have verified the feasibility on the following platforms:
 
-RedHat OpenShift 4.7.1 and 4.9.0  
-Kind Cluster v1.19.7 and v1.21.1
+[RedHat OpenShift 4.7.1 and 4.9.0](https://www.openshift.com)  
+[Kind Cluster v1.19.7 and v1.21.1](https://kind.sigs.k8s.io)
