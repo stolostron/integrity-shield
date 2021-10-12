@@ -56,6 +56,4 @@ jobs:
           export ISHIELD_REPO_ROOT=$(pwd)
           export ISHIELD_ENV="local"
           export ISHIELD_TEST_ENV="local"
-
-          make create-kind-cluster
-          make test-e2e-kind
+          make test-e2e
