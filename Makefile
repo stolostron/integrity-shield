@@ -395,22 +395,42 @@ setup-tmp-cr:
 	cp $(SHIELD_OP_DIR)config/samples/apis_v1_integrityshield_local.yaml $(TMP_CR_FILE)
 	cp $(SHIELD_OP_DIR)config/samples/apis_v1_integrityshield_ac.yaml $(TMP_CR_AC_FILE)
 	@echo insert image
-	yq write -i $(TMP_CR_FILE) spec.shieldApi.image $(TMP_ISHIELD_IMG)
-	yq write -i $(TMP_CR_FILE) spec.shieldApi.imagePullPolicy Always
-	yq write -i $(TMP_CR_FILE) spec.shieldApi.resources.limits.cpu 200m
-	yq write -i $(TMP_CR_FILE) spec.shieldApi.resources.limits.memory 256Mi
-	yq write -i $(TMP_CR_FILE) spec.observer.image $(TMP_OBSERVER_IMG)
-	yq write -i $(TMP_CR_FILE) spec.observer.imagePullPolicy Always
-	yq write -i $(TMP_CR_FILE) spec.observer.resources.limits.cpu 200m
-	yq write -i $(TMP_CR_FILE) spec.observer.resources.limits.memory 256Mi
-	yq write -i $(TMP_CR_AC_FILE) spec.admissionController.image $(TMP_ADMISSION_CONTROLLER_IMG)
-	yq write -i $(TMP_CR_AC_FILE) spec.admissionController.imagePullPolicy Always
-	yq write -i $(TMP_CR_AC_FILE) spec.admissionController.resources.limits.cpu 200m
-	yq write -i $(TMP_CR_AC_FILE) spec.admissionController.resources.limits.memory 256Mi
-	yq write -i $(TMP_CR_AC_FILE) spec.observer.image $(TMP_OBSERVER_IMG)
-	yq write -i $(TMP_CR_AC_FILE) spec.observer.imagePullPolicy Always
-	yq write -i $(TMP_CR_AC_FILE) spec.observer.resources.limits.cpu 200m
-	yq write -i $(TMP_CR_AC_FILE) spec.observer.resources.limits.memory 256Mi
+	YQ_VERSION=$(yq --version 2>&1 | awk '{print $3}' | cut -c 1 ); \
+	if [[ $$YQ_VERSION == "3" ]]; then \
+		yq write -i $(TMP_CR_FILE) spec.shieldApi.image $(TMP_ISHIELD_IMG) ; \
+		yq write -i $(TMP_CR_FILE) spec.shieldApi.imagePullPolicy Always ; \
+		yq write -i $(TMP_CR_FILE) spec.shieldApi.resources.limits.cpu 200m ; \
+		yq write -i $(TMP_CR_FILE) spec.shieldApi.resources.limits.memory 256Mi ; \
+		yq write -i $(TMP_CR_FILE) spec.observer.image $(TMP_OBSERVER_IMG) ; \
+		yq write -i $(TMP_CR_FILE) spec.observer.imagePullPolicy Always ; \
+		yq write -i $(TMP_CR_FILE) spec.observer.resources.limits.cpu 200m ; \
+		yq write -i $(TMP_CR_FILE) spec.observer.resources.limits.memory 256Mi ; \
+		yq write -i $(TMP_CR_AC_FILE) spec.admissionController.image $(TMP_ADMISSION_CONTROLLER_IMG) ; \
+		yq write -i $(TMP_CR_AC_FILE) spec.admissionController.imagePullPolicy Always ; \
+		yq write -i $(TMP_CR_AC_FILE) spec.admissionController.resources.limits.cpu 200m ; \
+		yq write -i $(TMP_CR_AC_FILE) spec.admissionController.resources.limits.memory 256Mi ; \
+		yq write -i $(TMP_CR_AC_FILE) spec.observer.image $(TMP_OBSERVER_IMG) ; \
+		yq write -i $(TMP_CR_AC_FILE) spec.observer.imagePullPolicy Always ; \
+		yq write -i $(TMP_CR_AC_FILE) spec.observer.resources.limits.cpu 200m ; \
+		yq write -i $(TMP_CR_AC_FILE) spec.observer.resources.limits.memory 256Mi ; \
+	elif [[ $$YQ_VERSION == "4" ]]; then \
+		yq eval -i $(TMP_CR_FILE) ".spec.shieldApi.image = $(TMP_ISHIELD_IMG)" ; \
+		yq eval -i $(TMP_CR_FILE) ".spec.shieldApi.imagePullPolicy = Always" ; \
+		yq eval -i $(TMP_CR_FILE) ".spec.shieldApi.resources.limits.cpu = 200m" ; \
+		yq eval -i $(TMP_CR_FILE) ".spec.shieldApi.resources.limits.memory = 256Mi" ; \
+		yq eval -i $(TMP_CR_FILE) ".spec.observer.image = $(TMP_OBSERVER_IMG)" ; \
+		yq eval -i $(TMP_CR_FILE) ".spec.observer.imagePullPolicy = Always" ; \
+		yq eval -i $(TMP_CR_FILE) ".spec.observer.resources.limits.cpu = 200m" ; \
+		yq eval -i $(TMP_CR_FILE) ".spec.observer.resources.limits.memory = 256Mi" ; \
+		yq eval -i $(TMP_CR_AC_FILE) ".spec.admissionController.image = $(TMP_ADMISSION_CONTROLLER_IMG)" ; \
+		yq eval -i $(TMP_CR_AC_FILE) ".spec.admissionController.imagePullPolicy = Always" ; \
+		yq eval -i $(TMP_CR_AC_FILE) ".spec.admissionController.resources.limits.cpu = 200m" ; \
+		yq eval -i $(TMP_CR_AC_FILE) ".spec.admissionController.resources.limits.memory = 256Mi" ; \
+		yq eval -i $(TMP_CR_AC_FILE) ".spec.observer.image = $(TMP_OBSERVER_IMG)" ; \
+		yq eval -i $(TMP_CR_AC_FILE) ".spec.observer.imagePullPolicy = Always" ; \
+		yq eval -i $(TMP_CR_AC_FILE) ".spec.observer.resources.limits.cpu = 200m" ; \
+		yq eval -i $(TMP_CR_AC_FILE) ".spec.observer.resources.limits.memory = 256Mi" ; \
+	fi
 
 create-tmp-cr:
 	kubectl apply -f $(TMP_CR_FILE) -n $(ISHIELD_NS)
