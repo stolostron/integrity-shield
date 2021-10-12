@@ -1,0 +1,17 @@
+name: Lint
+
+on: [pull_request]
+
+jobs:
+  lint:
+    name: Run lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Lint
+        # the following 3 env variables are required for lint/tests
+        run: |
+          export ISHIELD_REPO_ROOT=$(pwd)
+          export ISHIELD_ENV="local"
+          export ISHIELD_TEST_ENV="local"
+          make lint
