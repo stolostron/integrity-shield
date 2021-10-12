@@ -416,22 +416,22 @@ setup-tmp-cr:
 		yq write -i $(TMP_CR_AC_FILE) spec.observer.resources.limits.cpu 200m ; \
 		yq write -i $(TMP_CR_AC_FILE) spec.observer.resources.limits.memory 256Mi ; \
 	elif [[ $$YQ_VERSION == "4" ]]; then \
-		yq eval -i ".spec.shieldApi.image = $(TMP_ISHIELD_IMG)" $(TMP_CR_FILE) ; \
-		yq eval -i ".spec.shieldApi.imagePullPolicy = Always" $(TMP_CR_FILE) ; \
-		yq eval -i ".spec.shieldApi.resources.limits.cpu = 200m" $(TMP_CR_FILE) ; \
-		yq eval -i ".spec.shieldApi.resources.limits.memory = 256Mi" $(TMP_CR_FILE) ; \
-		yq eval -i ".spec.observer.image = $(TMP_OBSERVER_IMG)" $(TMP_CR_FILE) ; \
-		yq eval -i ".spec.observer.imagePullPolicy = Always" $(TMP_CR_FILE) ; \
-		yq eval -i ".spec.observer.resources.limits.cpu = 200m" $(TMP_CR_FILE) ; \
-		yq eval -i ".spec.observer.resources.limits.memory = 256Mi" $(TMP_CR_FILE) ; \
-		yq eval -i ".spec.admissionController.image = $(TMP_ADMISSION_CONTROLLER_IMG)" $(TMP_CR_AC_FILE) ; \
-		yq eval -i ".spec.admissionController.imagePullPolicy = Always" $(TMP_CR_AC_FILE) ; \
-		yq eval -i ".spec.admissionController.resources.limits.cpu = 200m" $(TMP_CR_AC_FILE) ; \
-		yq eval -i ".spec.admissionController.resources.limits.memory = 256Mi" $(TMP_CR_AC_FILE) ; \
-		yq eval -i ".spec.observer.image = $(TMP_OBSERVER_IMG)" $(TMP_CR_AC_FILE) ; \
-		yq eval -i ".spec.observer.imagePullPolicy = Always" $(TMP_CR_AC_FILE) ; \
-		yq eval -i ".spec.observer.resources.limits.cpu = 200m" $(TMP_CR_AC_FILE) ; \
-		yq eval -i ".spec.observer.resources.limits.memory = 256Mi" $(TMP_CR_AC_FILE) ; \
+		yq eval -i ".spec.shieldApi.image = \"$(TMP_ISHIELD_IMG)\"" $(TMP_CR_FILE) ; \
+		yq eval -i ".spec.shieldApi.imagePullPolicy = \"Always\"" $(TMP_CR_FILE) ; \
+		yq eval -i ".spec.shieldApi.resources.limits.cpu = \"200m\"" $(TMP_CR_FILE) ; \
+		yq eval -i ".spec.shieldApi.resources.limits.memory = \"256Mi\"" $(TMP_CR_FILE) ; \
+		yq eval -i ".spec.observer.image = \"$(TMP_OBSERVER_IMG)\"" $(TMP_CR_FILE) ; \
+		yq eval -i ".spec.observer.imagePullPolicy = \"Always\"" $(TMP_CR_FILE) ; \
+		yq eval -i ".spec.observer.resources.limits.cpu = \"200m\"" $(TMP_CR_FILE) ; \
+		yq eval -i ".spec.observer.resources.limits.memory = \"256Mi\"" $(TMP_CR_FILE) ; \
+		yq eval -i ".spec.admissionController.image = \"$(TMP_ADMISSION_CONTROLLER_IMG)\"" $(TMP_CR_AC_FILE) ; \
+		yq eval -i ".spec.admissionController.imagePullPolicy = \"Always\"" $(TMP_CR_AC_FILE) ; \
+		yq eval -i ".spec.admissionController.resources.limits.cpu = \"200m\"" $(TMP_CR_AC_FILE) ; \
+		yq eval -i ".spec.admissionController.resources.limits.memory = \"256Mi\"" $(TMP_CR_AC_FILE) ; \
+		yq eval -i ".spec.observer.image = \"$(TMP_OBSERVER_IMG)\"" $(TMP_CR_AC_FILE) ; \
+		yq eval -i ".spec.observer.imagePullPolicy = \"Always\"" $(TMP_CR_AC_FILE) ; \
+		yq eval -i ".spec.observer.resources.limits.cpu = \"200m\"" $(TMP_CR_AC_FILE) ; \
+		yq eval -i ".spec.observer.resources.limits.memory = \"256Mi\"" $(TMP_CR_AC_FILE) ; \
 	else \
 		echo "yq major version must be 3 or 4, but \"$$YQ_VERSION\"." ; \
 		exit 1 ; \
