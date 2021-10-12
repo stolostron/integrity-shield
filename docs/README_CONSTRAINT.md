@@ -151,9 +151,9 @@ You can also set rules to allow some changes in the resource even without valid 
 ```yaml
   parameters:
     ignoreAttrs:
-    - attrs:
+    - fields:
       - data.comment1
-      match:
+      objects:
       - name: protected-cm
         kind: ConfigMap
 ```
