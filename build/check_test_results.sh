@@ -22,6 +22,8 @@ FAILURES=$(cat /tmp/e2e_results.txt | grep "FAIL:" | wc -c)
 if [ ${FAILURES} -gt 0 ]; then
     cat /tmp/e2e_results.txt
     echo "One or more e2e tests failed. Failures: ${FAILURES}"
+    echo "K8s events in ${TEST_NS}:"
+    kubectl get event -n ${TEST_NS}
     exit 1
 else
     echo "All e2e tests passed successfully."
