@@ -395,7 +395,7 @@ setup-tmp-cr:
 	cp $(SHIELD_OP_DIR)config/samples/apis_v1_integrityshield_local.yaml $(TMP_CR_FILE)
 	cp $(SHIELD_OP_DIR)config/samples/apis_v1_integrityshield_ac.yaml $(TMP_CR_AC_FILE)
 	@echo insert image
-	YQ_VERSION=$(yq --version 2>&1 | awk '{print $3}' | cut -c 1 ); \
+	YQ_VERSION=$$(yq --version 2>&1 | awk '{print $$3}' | cut -c 1 ); \
 	if [[ $$YQ_VERSION == "3" ]]; then \
 		yq write -i $(TMP_CR_FILE) spec.shieldApi.image $(TMP_ISHIELD_IMG) ; \
 		yq write -i $(TMP_CR_FILE) spec.shieldApi.imagePullPolicy Always ; \
