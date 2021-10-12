@@ -395,7 +395,7 @@ setup-tmp-cr:
 	cp $(SHIELD_OP_DIR)config/samples/apis_v1_integrityshield_local.yaml $(TMP_CR_FILE)
 	cp $(SHIELD_OP_DIR)config/samples/apis_v1_integrityshield_ac.yaml $(TMP_CR_AC_FILE)
 	@echo insert image
-	YQ_VERSION=$$(yq --version 2>&1 | awk '{print $$3}' | cut -c 1 ); \
+	YQ_VERSION=$$(yq --version | cut -d ' ' -f 3 | cut -d '.' -f 1); \
 	echo $$YQ_VERSION; \
 	if [[ $$YQ_VERSION == "3" ]]; then \
 		yq write -i $(TMP_CR_FILE) spec.shieldApi.image $(TMP_ISHIELD_IMG) ; \
@@ -431,6 +431,9 @@ setup-tmp-cr:
 		yq eval -i $(TMP_CR_AC_FILE) ".spec.observer.imagePullPolicy = Always" ; \
 		yq eval -i $(TMP_CR_AC_FILE) ".spec.observer.resources.limits.cpu = 200m" ; \
 		yq eval -i $(TMP_CR_AC_FILE) ".spec.observer.resources.limits.memory = 256Mi" ; \
+	else \
+		echo "yq major version must be 3 or 4, but $$YQ_VERSION." ; \
+		exit 1 ; \
 	fi
 
 create-tmp-cr:
