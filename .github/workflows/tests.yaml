@@ -52,7 +52,7 @@ jobs:
       - name: Run E2e Test
         run: |
           set -e
-          /build/install-dependencies.sh
+          ./build/install-dependencies.sh
           export ISHIELD_REPO_ROOT=$(pwd)
           export ISHIELD_ENV="local"
           export ISHIELD_TEST_ENV="local"
