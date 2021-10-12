@@ -19,7 +19,6 @@ jobs:
           export ISHIELD_REPO_ROOT=$(pwd)
           export ISHIELD_ENV="local"
           export ISHIELD_TEST_ENV="local"
-
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.42.1
           make lint
 
