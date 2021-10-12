@@ -95,7 +95,7 @@ spec:
 
 
 ### Admission Controller
-You can use the [admission controller](./webhook/admission-controller/README.md) instead of OPA/Gatekeeper.  
+You can use an admission controller instead of OPA/Gatekeeper.  
 In this case, you can decide which resources to be protected in the custom resource called `ManifestIntegrityProfile` instead of OPA/Gatekeeper constraint.
 
 The following snippet is an example of `ManifestIntegrityProfile`.
@@ -121,7 +121,10 @@ spec:
     signers:
     - signer@signer.com
 ```
-Integrity shield with is own admission controller can be installed by this operator cr [apis_v1_integrityshield_ac.yaml](https://github.com/open-cluster-management/integrity-shield/blob/master/integrity-shield-operator/config/samples/apis_v1_integrityshield_ac.yaml).
+Integrity shield with its own admission controller can be installed by this operator cr [apis_v1_integrityshield_ac.yaml](https://github.com/open-cluster-management/integrity-shield/blob/master/integrity-shield-operator/config/samples/apis_v1_integrityshield_ac.yaml).
+
+### Quick Start
+See [Quick Start](docs/README_QUICK.md)
 
 ## Supported Platforms
 
