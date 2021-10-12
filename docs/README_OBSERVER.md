@@ -54,13 +54,16 @@ spec:
 ```
 $ kubectl get mis --show-labels -n integrity-shield-operator-system
 ```
-You can see whether each constraint has violations by checking `integrityshield.io/verifyResourceViolation` label.
-In this case, you can see that some resources defined in configmap-constraint are in invalid state because `integrityshield.io/verifyResourceViolation` label is true.
+
 ```
 NAME                        AGE   LABELS
 configmap-constraint        4d    integrityshield.io/verifyResourceIgnored=false,integrityshield.io/verifyResourceViolation=true
 deployment-constraint       17h   integrityshield.io/verifyResourceIgnored=false,integrityshield.io/verifyResourceViolation=false
 ```
+
+You can see whether each constraint has violations by checking `integrityshield.io/verifyResourceViolation` label.
+In this case, you can see that some resources defined in configmap-constraint are in invalid state because `integrityshield.io/verifyResourceViolation` label is true.
+
 2. Check verification result on per constraint
 You can see which resources are violated from ManifestIntegrityState.
 
