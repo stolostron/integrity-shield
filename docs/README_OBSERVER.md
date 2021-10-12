@@ -1,12 +1,12 @@
-# Howo to check Kubernetes resource integrity on cluster
+# How to check Kubernetes resource integrity on cluster
 
-Integrity shield observer continuously monitors Kubernetes manifest integrity on cluster. 
+Integrity shield observer continuously monitors Kubernetes resource integrity on cluster. 
 Observer verifies resources according to constraints and exports the results to ManifestIntegrityState resources.
 
 ## Create Manifest Integrity Constraint
 Please see [Manifest Integrity Constraint](README_CONSTRAINT.md)
 
-In this example, we created the constraint below.
+Here, we use the constraint below.
 
 ```
 $ kubectl get constraint configmap-constraint -o yaml
@@ -62,9 +62,9 @@ configmap-constraint        4d    integrityshield.io/verifyResourceIgnored=false
 deployment-constraint       17h   integrityshield.io/verifyResourceIgnored=false,integrityshield.io/verifyResourceViolation=false
 ```
 2. Check verification result on per constraint
-You can see which resources are violated from ManifestIntegrityState.  
-For example, you can see that there are four configmaps in sample-ns and sample-cm is not signed.
-The totalViolations field indicates that there is one violation in configmap-constraint.
+You can see which resources are violated from ManifestIntegrityState.
+
+In this example, there are four configmaps in sample-ns and sample-cm is not signed. The totalViolations field indicates that there is one violation in configmap-constraint.
 
 ```
 $ kubectl get mis -n integrity-shield-operator-system configmap-constraint -o yaml
