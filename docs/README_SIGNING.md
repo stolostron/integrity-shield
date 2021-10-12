@@ -19,7 +19,7 @@ You can run `scripts/gpg-annotation-sign.sh` script to generate signature annota
 $ ./scripts/gpg-annotation-sign.sh sample-signer@example.com sample-configmap.yaml
 ```
 
-Note:  `gpg-annotation-sign.sh` would append the signature annotation to the input YAML file, please back up the original file if necessary.
+Note:  `gpg-annotation-sign.sh` will append the signature annotation to the input YAML file, please back up the original file if necessary.
 
 You can verify a signed YAML manfiest file by the following script. It will show a message like this in case of success.
 
@@ -39,7 +39,7 @@ To sign a YAML manifest with x509 signing key, you can run `scripts/gpg-annotati
 $ ./scripts/x509-annotation-sign.sh path/to/key-file path/to/certificate-file sample-configmap.yaml
 ```
 
-Note:  `x509-annotation-sign.sh` would append the signature annotation to the input YAML file, please back up the original file if necessary.
+Note:  `x509-annotation-sign.sh` will append the signature annotation to the input YAML file, please back up the original file if necessary.
 
 You can verify a signed YAML manfiest file by the following script. It will show a message like this in case of success.
 
