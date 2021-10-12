@@ -68,6 +68,12 @@ When you want to use your own images, you can set images like this.
   observer: 
     image: quay.io/open-cluster-management/integrity-shield-observer
 ```
+Image version will automatically be set to the same version as Integrity Shield. If you want to use a different tag, you can define the tag as follows.
+```yaml
+  shieldApi:
+    image: sample-image-registry/integrity-shield-api
+    tag: 0.1.0
+```
 
 ## Observer configuration
 ### Enable observer
