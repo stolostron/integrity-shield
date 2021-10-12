@@ -1,7 +1,7 @@
 # integrity-shield
 Integrity Shield is a tool for built-in preventive integrity control for regulated cloud workloads. It provides signature-based assurance of integrity for Kubernetes resources at cluster side.  
 
-Integrity Shield works with OPA/Gatekeeper, verifies if the requests attached a signature, and blocks any unauthorized requests according to the constraint before actually persisting in etcd. 
+Integrity Shield works with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper), verifies if the requests attached a signature, and blocks any unauthorized requests according to the constraint before actually persisting in etcd. 
 
 Integrity Shield's capabilities are
 - Allow to deploy authorized Kubernetes manifests only
@@ -19,7 +19,7 @@ Integrity shield api receives a k8s resource from OPA/Gatekeeper, validates the 
 Integrity shield api uses [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore) internally to verify k8s manifest.
 
 You can define which resource to be protected in `ManifestIntegrityConstraint` which is a custom resource based on [constraint framework](https://open-policy-agent.github.io/gatekeeper/website/docs/howto/#constraints) of OPA/Gatekeeper.
-For example, the following snippet shows an example definition of protected resources in a namespace. `ManifestIntegrityConstraint` includes the parameters field. In the parameters field, you can configure the profile for verifying resources such as ignoreFields, signers, and so on.
+For example, the following snippet shows an example definition of protected resources in a namespace. 
 ```yaml
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: ManifestIntegrityConstraint
@@ -52,9 +52,9 @@ spec:
 
 
 ### Monitor Kubernetes resource integrity on cluster
-Integrity shield observer continuously monitors Kubernetes resource integrity on cluster according ManifestIntegrityConstraint resources and exports results to resources called ManifestIntegrityState.
+Integrity shield observer continuously verifies Kubernetes resource on cluster according ManifestIntegrityConstraint resources and exports the results to resources called ManifestIntegrityState.
 
-For example, the following snippet shows an example of audit result based on deployment-constraint. You can see there is one invalid deployment resource in sample-ns.
+For example, the following snippet shows an example of verify result based on deployment-constraint. You can see there is one invalid deployment resource in sample-ns.
 
 ```yaml
 apiVersion: apis.integrityshield.io/v1
