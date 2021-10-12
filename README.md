@@ -10,7 +10,7 @@ Integrity Shield's capabilities are
 - Handle variations in application packaging and deployment (Helm /Operator /YAML / OLM Channel) with no modification in app installer
 - Continuous resource monitoring
 
-![Scenario](./docs/new-ishield-scenario2.png)
+![Scenario](./docs/new-ishield-scenario.png)
 
 ## How Integrity Shield works
 
