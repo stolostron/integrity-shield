@@ -1,94 +1,143 @@
-# Define Protected Resources
+# Configuring Integrity Shield Protection
+Custom resource `ManifesetIntegrityConstraint`(constraint) is created to enable the protection.
 
+## Define resources to be protected
 
-## Create Resource Signing Profile
-You can define which resources should be protected with signature by Integrity Shield.
-For resources in a namespace, custom resource `ResourceSigningProfile` (RSP) is created in the same namespace.
-The example below shows a definition to protect ConfigMap and Service resource in `secure-ns` namespace.
-
-```yaml
-apiVersion: apis.integrityshield.io/v1alpha1
-kind: ResourceSigningProfile
-metadata:
-  name: sample-rsp
-  namespace: secure-ns
-spec:
-  protectRules:
-  - match:
-    - kind: ConfigMap
-    - kind: Service
-```
-
-You can create these resource by
-
-```
-oc apply -f sample-rsp.yaml -n secure-ns
-```
-
-This profile become available instantly after creation, and any further incoming admission requests that match this profile will be evaluated by signature verification in IShield.
-
-
-## Rule Syntax
-You can list rules to define protect resources.
-Rule has `match` and `exclude` fields.
-The rules can be defined with the fields `name, operation, apiVersion, apiGroup, kind, username`.
-In each field, values can be listed with "__,__" and "__*__" can be used as a wildcard.
-
-If you want to exclude some resources from matched resources, you can set rules in `exclude` field.
-
-For example, the rule below covers any ConfigMap except name `unprotected-cm` and any resources in apiGroup `rbac.authorization.k8s.io` in the same namespace.
+You can define which resources should be protected with signature by Integrity Shield in `match` field.
+ManifesetIntegrityConstraint is based on gatekeeper framework so `match` field should be defined according to [gatekeeper framework](https://open-policy-agent.github.io/gatekeeper/website/docs/howto/).
+The example below shows a definition to protect ConfigMap resource in `sample-ns` namespace.
 
 ```yaml
-protectRules:
-- match:
-  - kind: ConfigMap
-  exclude:
-  - kind: ConfigMap
-    name: unprotected-cm
-- match:
-  - apiGroup: rbac.authorization.k8s.io
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["ConfigMap"] 
+    namespaces:
+    - "sample-ns"
 ```
 
-Another example below is the rule covers any resources in the same namespace.
+## Define signers
+Signer should be defined in each constraints.  
+For example, by the below constraint, the resources defined in the match field in constraint must have signature of "sample@signer.com."
+```yaml
+  parameters:
+    signers:
+    - sample@signer.com
+```
+
+## Define signature used to verify resource.
+If K8s manifest is signed using a bundled OCI image, you can specify the image signature as follows.
+```yaml
+  parameters:
+    signatureRef:
+      imageRef: sample-image-registry/sample-configmap-signature:0.1.0
+```
+
+## Define verification key used to verify resource
+If you use PGP, x509 or cosign keyed signing type, 
+a secret resource which contains public key and certificates should be setup in a cluster and secret name should be specified in this key configuration. 
 
 ```yaml
-protectRules:
-- match:
-  - kind: "*"
+  parameters:
+    keyConfigs:
+    - keySecretName: signer-pubkey
+      keySecretNamespace: integrity-shield-operator-system
 ```
 
 
-## Define allow patterns
+## Define run mode
+You can change behavior when Integrity Shield verify resources defined in the constraint by changing action field.
+- **admissionControl**: If enforce is true, the admission requests for the resource defined in the constraint are enforced, so the admission request is blocked if the resource is invalid. If enforce is false, the admission request is allowed even if the resource is not valid.
+- **audit**:  If inform is true, the audit results for the constraint is exported to ManifestIntegrityStatus resource as usual. If inform is false, the results will be exported, but the ManifestIntegrityStatus resource will be labeled with ignored=true.
+```yaml
+  parameters:
+    action:
+      admissionControl:
+        enforce: false
+      audit:
+        inform: true
+```
 
+## Define target object scope
+You can define resources should be protected with signature by Integrity Shield **in detail** by using objectSelector field.
+For example, by the below constraint, a ConfigMap resource named `sample-cm` in sample-ns is protected.
+```yaml
+  match:
+    kinds:
+    - apiGroups: [""]
+      kinds: ["ConfigMap"] 
+    namespaces:
+    - "sample-ns"
+  parameters:
+    objectSelector:
+    - name: sample-cm
+```
+## Define object to be allowed without signature
 The resources covered by the rule above cannot be created/updated without signature, but you may want to define cases for allowing requests in certain situations.
 
-You can use `ignoreRules` to define a condition for allowing some requests that match this rule.
-For example, by the below RSP, all namespaced requests are protected in this namespace, but only requests by `secure-operator` ServiceAccount is allowed without signature.
+You can use `skipObjects` to define a condition for allowing some requests that match this rule.  
+For example, by the below constraint, all ConfigMap resources are protected in this namespace, but a ConfigMap named ignored-cm is allowed without signature.
 
 ```yaml
-protectRules:
-- match:
-  - kind: "*"
-ignoreRules:
-- match:
-  - username: "system:serviceaccount:secure-ns:secure-operator"
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["ConfigMap"] 
+    namespaces:
+    - "sample-ns"
+  parameters:
+    skipObjects:
+    - kind: ConfigMap
+      name: ignored-cm
 ```
 
-## Define force check patterns (override allow pattern)
+## Define force check ServiceAccount
 You can also set rules to override allow patterns.
-For example, the following RSP will protect all requests in the namespace except ones by `secure-operator` ServiceAccount, but only the requests that are Secret kind will be protected with signature because it is specified in `forceCheckRules`.
-
-
+For example, by the below rule, all requests for ConfigMap in sample-ns created/updated by `system:admin` ServiceAccount are verified with signature even if system:admin is whitelisted in default rule.
 ```yaml
-protectRules:
-- match:
-  - kind: "*"
-ignoreRules:
-- match:
-  - username: "system:serviceaccount:secure-ns:secure-operator"
-forceCheckRules:
-- match:
-  - kind: "Secret"
+  match:
+    kinds:
+    - apiGroups: [""]
+      kinds: ["ConfigMap"] 
+    namespaces:
+    - "sample-ns"
+  parameters:
+    inScopeUsers:
+    - users:
+      - system:admin
+```
+
+## Define allow ServiceAccount
+The resources defined in match field cannot be created/updated without signature, but you may want to define cases for allowing requests in certain situations.
+
+You can use skipUsers to define a condition for allowing some requests that match this rule.  
+For example, by the below constraint, all requests of Policy are protected, but only requests created/updated by "system:serviceaccount:open-cluster-management-agent:*" ServiceAccount is allowed without signature.
+```yaml
+  match:
+    kinds:
+    - apiGroups:
+      - policy.open-cluster-management.io
+      kinds:
+      - Policy
+  parameters:
+    skipUsers:
+    - users:
+      - system:serviceaccount:open-cluster-management-agent:*
+```
+
+### Define image to be protected
+By setting the imageProfile field as follows, images referenced in K8s manifests such as Deployment can be protected with a signature.
+```yaml
+  match:
+    kinds:
+      - apiGroups: ["apps"]
+        kinds: ["Deployment"] 
+    namespaces:
+    - "sample-ns"
+  parameters:
+   imageProfile:
+       match:
+       - "sample-registry/sample-image:*"
 ```
 
 ## Define allow change patterns
@@ -96,130 +145,40 @@ forceCheckRules:
 You can also set rules to allow some changes in the resource even without valid signature. For example, changes in attribute `data.comment1` in a ConfigMap `protected-cm` is allowed.
 
 ```yaml
-ignoreAttrs:
-- attrs:
-  - data.comment1
+  parameters:
+    ignoreAttrs:
+    - fields:
+      - data.comment1
+      objects:
+      - name: protected-cm
+        kind: ConfigMap
+```
+
+### Example of ManifesetIntegrityConstraint
+The whole ManifesetIntegrityConstraint is like this.
+
+```yaml
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: ManifestIntegrityConstraint
+metadata:
+  name: configmap-constraint
+spec:
   match:
-  - name: protected-cm
-    kind: ConfigMap
-```
-
-
-## Cluster scope
-Also for cluster-scope resources, you can use RSP to define protection rules.
-The only difference between "Namespaced" and "Cluster" scope in RSP is name condition.
-To avoid conflict of rules defined in multiple RSPs in different NS, a rule for Cluster scope resource must be set with concrete resource name condition.
-The example below shows how to protect ClusterRoleBinding with its name.
-
-```yaml
-apiVersion: apis.integrityshield.io/v1alpha1
-kind: ResourceSigningProfile
-metadata:
-  name: sample-rsp
-spec:
-  protectRules:
-  - match:
-    - kind: ClusterRoleBinding
-      name: sample-crb
-```
-
-if the `name` is not specified or value for `name` has any wildcard "*", then the rule does not match with any requests.
-
-## Two types of RSP
-
-There are two types in RSP.
-  1. per-namespace RSP
-  2. IShield namespace RSP
-1, per-namespace RSP will be created and managed by user, and it has different lifecycle from the one of IShield itself. 
-2, IShield namespace RSP, this is managed by IShield operator. It is defined in IShield CR, and operator will reconcile it.
-
-All syntax around rules are exactly same between these 2 types, but the namespace scope is different.
-
-per-NS RSP, is basically used only for requests in the same namespace.
-If per-NS RSP is created in `secure-ns`, then this profile is available only in `secure-ns`.
-
-IShield NS RSP, is created in IShield namespace, but it will be evaluated with some other namespaced requests. 
-This target namespace is defined in `targetNamespaceSelector` in RSP spec.
-
-The following is an example of IShield NS RSP definition in IShield CR.
-It is available for requests in `secure-ns` and `test-ns`.
-
-```yaml
-spec:
-  resourceSigningProfiles:
-  - name: multi-ns-rsp
-    targetNamespaceSelector:
-      include:
-      - secure-ns
-      - test-ns
-    protectRules:
-    - match:
-      - kind: ConfigMap
-```
-
-for this `targetNamespaceSelector`, label selector also can be used instead of namespace list, like below.
-This RSP will protect ConfgiMap in all namespaces that have `sampleNamespaceLabel: foo` or `sampleNamespaceLabel: bar` labels.
-
-```yaml
-spec:
-  resourceSigningProfiles:
-  - name: multi-ns-rsp
-    targetNamespaceSelector:
-      labelSelector:
-        matchExpressions:
-        - key: "sampleNamespaceLabel"
-          operator: In
-          value: ["foo", "bar"]
-    protectRules:
-    - match:
-      - kind: ConfigMap
-```
-
-
-<!-- ## Delete/Disable RSP
-
-RSP and CRSP have two lifecycle flags `disabled` and `delete`. Those fields are `false` by default.
-
-If `disabled` is set to `true`, the RSP (CRSP) becomes invalid and ignored when checking signature (This implies no RSP is defined in the namespace). When you set it to `false` back, the RSP will become effective again.
-
-When you want to delete RSP, set `delete` to `true`, then IShield will delete RSP (CRSP). RSP and CRSP cannot be deleted directly, so need to set this flag when you want to delete then.
-
-```
-apiVersion: apis.integrityshield.io/v1alpha1
-kind: ResourceSigningProfile
-metadata:
-  name: sample-rsp
-  namespace: secure-ns
-spec:
-  disabled: false
-  delete: false
-``` -->
-
-## Example of RSP
-
-The whole RSP is represented like this. (this is example of per-namespace RSP.)
-```yaml
-apiVersion: apis.integrityshield.io/v1alpha1
-kind: ResourceSigningProfile
-metadata:
-  name: sample-rsp
-  namespace: secure-ns
-spec:
-  protectRules:
-  - match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["ConfigMap"] 
+    namespaces:
+    - "sample-ns"
+  parameters:
+    constraintName: configmap-constraint
+    action:
+      admissionControl:
+        enforce: false
+      audit:
+        inform: true
+    signers:
+    - sample@signer.com
+    skipObjects:
     - kind: ConfigMap
-    - kins: Secret
-    exclude:
-    - kind: ConfigMap
-      name: unprotected-cm
-  - match:
-    - apiGroup: rbac.authorization.k8s.io
-  ignoreRules:
-  - username: system:serviceaccount:secure-ns:secure-operator
-  ignoreAttrs:
-  - match:
-    - name: protected-cm
-      kind: ConfigMap
-    attrs:
-    - data.comment1
+      name: ignored-cm
 ```
