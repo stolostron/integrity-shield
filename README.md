@@ -10,23 +10,16 @@ Integrity Shield's capabilities are
 - Handle variations in application packaging and deployment (Helm /Operator /YAML / OLM Channel) with no modification in app installer
 - Continuous resource monitoring
 
-![Scenario](./docs/new-ishield-scenario.png)
+![Scenario](./docs/new-ishield-scenario2.png)
 
+## How Integrity Shield works
 
-### Integrity Shield API
-
-Integrity shield api includes the main logic to verify admission requests. 
-Integrity shield api receives a k8s resource from OPA/Gatekeeper, validates the resource which is included in the admission request based on the profile and sends the verification result to OPA/Gatekeeper.
+### Protect Resources on cluster
+Integrity shield api receives a k8s resource from OPA/Gatekeeper, validates the resource which is included in the admission request and sends the verification result to OPA/Gatekeeper.
 Integrity shield api uses [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore) internally to verify k8s manifest.
 
-You can enable the protection by integrity shield with a few simple steps.
-Please see [Usage](./shield/README.md).
-
-### Gatekeeper Constraint
-Integrity shield works with OPA/Gatekeeper by installing ConstraintTemplate(`template-manifestintegrityconstraint.yaml` ).
-We use [constraint framework](https://open-policy-agent.github.io/gatekeeper/website/docs/howto/#constraints) of OPA/Gatekeeper to define the resources to be protected.
-
-For example, the following snippet shows an example definition of protected resources in a namespace. 
+You can define which resource to be protected in `ManifestIntegrityConstraint` which is a custom resource based on [constraint framework](https://open-policy-agent.github.io/gatekeeper/website/docs/howto/#constraints) of OPA/Gatekeeper.
+For example, the following snippet shows an example definition of protected resources in a namespace. `ManifestIntegrityConstraint` includes the parameters field. In the parameters field, you can configure the profile for verifying resources such as ignoreFields, signers, and so on.
 ```yaml
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: ManifestIntegrityConstraint
@@ -56,12 +49,12 @@ spec:
       fields:
       - spec.replicas
 ```
-`ManifestIntegrityConstraint` resource includes the parameters field. In the parameters field, you can configure the profile for verifying resources such as ignoreFields, signers, and so on.
 
-### Observer 
-Integrity shield observer continuously monitors Kubernetes manifest integrity.
-It periodically verifies resources on the cluster using [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore) internally and exports results to ManifestIntegrityState resources.  
-For example, the following snippet shows an example of audit result based on one ManifestIntegrityConstraint resource. You can see there is one invalid deployment resource in sample-ns.
+
+### Monitor Kubernetes resource integrity on cluster
+Integrity shield observer continuously monitors Kubernetes resource integrity on cluster according ManifestIntegrityConstraint resources and exports results to resources called ManifestIntegrityState.
+
+For example, the following snippet shows an example of audit result based on deployment-constraint. You can see there is one invalid deployment resource in sample-ns.
 
 ```yaml
 apiVersion: apis.integrityshield.io/v1
@@ -86,49 +79,16 @@ spec:
       kind: Deployment
       name: sample-app
       namespace: sample-ns
-      result: >-
-        failed to verify signature: signature verification failed: error occured
-        while verifying image
-        `sample-image-registry/sample-app-deploy-signature:0.0.1`; no
-        matching signatures:
+      result: 'failed to verify signature: failed to get signature: `cosign.sigstore.dev/message`
+      is not found in the annotations'
 ```
-
-
-### Admission Controller
-You can use an admission controller instead of OPA/Gatekeeper.  
-In this case, you can decide which resources to be protected in the custom resource called `ManifestIntegrityProfile` instead of OPA/Gatekeeper constraint.
-
-The following snippet is an example of `ManifestIntegrityProfile`.
-```yaml
-apiVersion: apis.integrityshield.io/v1alpha1
-kind: ManifestIntegrityProfile
-metadata:
-  name: profile-configmap
-spec:
-  match:
-    kinds:
-    - kinds:
-      - ConfigMap
-    namespaces:
-    - sample-ns
-  parameters:
-    constraintName: deployment-constraint
-    ignoreFields:
-    - fields:
-      - data.comment
-      objects:
-      - kind: ConfigMap
-    signers:
-    - signer@signer.com
-```
-Integrity shield with its own admission controller can be installed by this operator cr [apis_v1_integrityshield_ac.yaml](https://github.com/open-cluster-management/integrity-shield/blob/master/integrity-shield-operator/config/samples/apis_v1_integrityshield_ac.yaml).
 
 ### Quick Start
 See [Quick Start](docs/README_QUICK.md)
 
 ## Supported Platforms
 
-IShield can be deployed with operator. We have verified the feasibility on the following platforms:
+Integrity Shield can be deployed with operator. We have verified the feasibility on the following platforms:
 
 [RedHat OpenShift 4.7.1 and 4.9.0](https://www.openshift.com)  
 [Kind Cluster v1.19.7 and v1.21.1](https://kind.sigs.k8s.io)
