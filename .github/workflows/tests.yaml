@@ -14,7 +14,6 @@ jobs:
         with:
           go-version: '1.17.x'
       - name: Run Lint
-        # the following 3 env variables are required for lint/tests
         run: |
           set -e
           export ISHIELD_REPO_ROOT=$(pwd)
@@ -34,7 +33,6 @@ jobs:
         with:
           go-version: '1.17.x'
       - name: Run Unit Test
-        # the following 3 env variables are required for lint/tests
         run: |
           set -e
           export ISHIELD_REPO_ROOT=$(pwd)
@@ -52,9 +50,9 @@ jobs:
         with:
           go-version: '1.17.x'
       - name: Run E2e Test
-        # the following 3 env variables are required for lint/tests
         run: |
           set -e
+          /build/install-dependencies.sh
           export ISHIELD_REPO_ROOT=$(pwd)
           export ISHIELD_ENV="local"
           export ISHIELD_TEST_ENV="local"
