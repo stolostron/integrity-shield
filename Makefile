@@ -395,6 +395,7 @@ setup-tmp-cr:
 	cp $(SHIELD_OP_DIR)config/samples/apis_v1_integrityshield_local.yaml $(TMP_CR_FILE)
 	cp $(SHIELD_OP_DIR)config/samples/apis_v1_integrityshield_ac.yaml $(TMP_CR_AC_FILE)
 	@echo insert image
+	yq --version; \
 	YQ_VERSION=$$(yq --version | cut -d ' ' -f 3 | cut -d '.' -f 1); \
 	echo $$YQ_VERSION; \
 	if [[ $$YQ_VERSION == "3" ]]; then \
