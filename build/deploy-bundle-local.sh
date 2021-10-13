@@ -50,33 +50,6 @@ echo "-------------------------------------------------"
 echo "Install bundle catalogsource"
 
 cat <<EOF | kubectl create -f -
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ${ISHIELD_NS}
----
-apiVersion: operators.coreos.com/v1
-kind: OperatorGroup
-metadata:
-  name: operatorgroup
-  namespace: ${ISHIELD_NS}
-spec:
-  targetNamespaces:
-  - ${ISHIELD_NS}
----
-apiVersion: operators.coreos.com/v1alpha1
-kind: Subscription
-metadata:
-  name: integrity-shield-operator
-  namespace: ${ISHIELD_NS}
-spec:
-  channel: ${CHANNELS}
-  installPlanApproval: Automatic
-  name: integrity-shield-operator
-  source: integrity-shield-operator-catalog
-  sourceNamespace: olm
-  startingCSV: ${STARTING_CSV}
----
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
@@ -90,4 +63,55 @@ spec:
   updateStrategy:
     registryPoll:
       interval: 15m
+EOF
+
+echo ""
+echo "-------------------------------------------------"
+echo "Check if integrity-shield-operator-catalog is deployed correctly."
+echo "Let's wait for integrity-shield-operator-catalog to be deployed..."
+while true; do
+   ISHIELD_STATUS=$(kubectl get pod -n olm 2>/dev/null | grep integrity-shield-operator-catalog | awk '{print $3}')
+   READY_STATUS=$(kubectl get pod -n olm 2>/dev/null | grep integrity-shield-operator-catalog | awk '{print $2}')
+   if [[ "$ISHIELD_STATUS" == "Running"  && "$READY_STATUS" == "1/1" ]]; then
+      echo
+      echo -n "===== Integrity Shield operator catalog has started, let's continue with installing subscription. ====="
+      echo
+      break
+   else
+      printf "."
+      sleep 2
+   fi
+done
+
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${ISHIELD_NS}
+EOF
+
+cat <<EOF | kubectl create -f -
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: operatorgroup
+  namespace: ${ISHIELD_NS}
+spec:
+  targetNamespaces:
+  - ${ISHIELD_NS}
+EOF
+
+cat <<EOF | kubectl create -f -
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: integrity-shield-operator
+  namespace: ${ISHIELD_NS}
+spec:
+  channel: ${ISHIELD_DEFAULT_CHANNEL}
+  installPlanApproval: Automatic
+  name: integrity-shield-operator
+  source: integrity-shield-operator-catalog
+  sourceNamespace: olm
+  startingCSV: ${STARTING_CSV}
 EOF

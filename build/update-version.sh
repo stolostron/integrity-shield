@@ -35,9 +35,9 @@ else
    sedi=(-i)
 fi
 
-echo $SED
+
 sed "${sedi[@]}" "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/docs/ACM/README_DISABLE_ISHIELD_PROTECTION_ACM_ENV.md
-$SED -i  "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/scripts/install_shield.sh
-$SED -i  "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/COMPONENT_VERSION
-$SED -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}Makefile
-$SED -i  "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}config/manifests/bases/integrity-shield-operator.clusterserviceversion.yaml
+sed "${sedi[@]}" "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/scripts/install_shield.sh
+sed "${sedi[@]}" "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/COMPONENT_VERSION
+sed "${sedi[@]}" "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}Makefile
+sed "${sedi[@]}" "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}config/manifests/bases/integrity-shield-operator.clusterserviceversion.yaml
