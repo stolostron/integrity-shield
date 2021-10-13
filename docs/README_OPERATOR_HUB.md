@@ -1,139 +1,46 @@
 # k8s Integrity Shield
 
-K8s Integrity Shield is a tool for built-in preventive integrity control for regulated cloud workloads. It includes signature based configuration drift prevention based on Admission Webhook on Kubernetes cluster.
+Kubernetes resources are represented as YAML files, which are applied to clusters when you create and update the resource. The YAML content is designed carefully to achieve the application desired state and should not be tampered with. If the YAML content is modified maliciously or accidentally, and applied to a cluster without notice, the cluster moves to an unexpected state.
 
-K8s Integrity Shield's capabilities are
+[K8s Integrity Shield](https://github.com/open-cluster-management/integrity-shield) provides preventive control for enforcing signature verification for any requests to create or update resources. This operator supports the installation and management of K8s Integrity Shield on cluster. 
 
-- Allow to deploy authorized application pakcages only
-- Allow to use signed deployment params only
-- Zero-drift in resource configuration unless whitelisted
-- Perform all integrity verification on cluster (admission controller, not in client side)
-- Handle variations in application packaging and deployment (Helm /Operator /YAML / OLM Channel) with no modification in app installer
+Two modes are selectively enabled on your cluster. 
+- Enforce (Admission Control): Block to deploy unauthorized Kubernetes resources. K8s Integrity Shield works with OPA/Gatekeeper to enable admission control based on signature verification for Kubernetes resources.
+- Detect (Continuous Monitoring): monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster
+
+X509, PGP and Sigstore signing are supported for singing Kubernetes manifest YAML. K8s Integrity Shield supports Sigstore signing by using [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore).
 
 ## Preparations before installation
 
-Two preparations on cluster below must be completed before installation.
-
-1. Create a namespace `integrity-shield-operator-system`.
-
-2. Create secret to register signature verification key.
+OPA/Gatekeeper should be deployed before installing K8s Integrity Shield.
+The installation instructions to deploy OPA/Gatekeeper components is [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/).
 
 
-See the following example to register public verification key from your signing host. As default, export public verification key to file "pubring.gpg" and create secret "keyring-secret" on cluster by the following command. (You can define any other name in CR if you want. See [doc](README_SIGNER_CONFIG.md))
+## Installation
+Install K8s Integrity Shield Operator by following the instruction after clicking Install button at the top right. Then you can create the operator Custom Resource `IntegrityShield` to complete installation.
 
+If you want to change the settings such as default run mode (detection/enforcement) or audit interval,  please check [here](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).
+
+To verify that installation was completed successfully,
+run the following command.
+The following three pods will be installed with default CR.
 ```
-# export key to file
-$ gpg --export signer@enterprise.com > /tmp/pubring.gpg
-
-# create a secret on cluster
-$ oc create secret generic --save-config keyring-secret -n integrity-shield-operator-system --from-file=/tmp/pubring.gpg
-```
-
-Default CR already includes signer configuration with filename "pubring.gpg" and secret name "keyring-secret", so all you need is to create a secret resource.
-
-
-## How to protect resources with signature
-
-After installation, you can configure cluster to protect resources from creation and changes without signature.
-
-For enabling protection, create a custom resource `ResourceSigningProfile` (RSP) that defines which resource(s) should be protected, in the same namespace as resources.
-
-Here is an example of creating RSP for protecting resources in a namespace `secure-ns`.
-
-```
-$ cat <<EOF | oc apply -n secure-ns -f -
-apiVersion: apis.integrityshield.io/v1alpha1
-kind: ResourceSigningProfile
-metadata:
-  name: sample-rsp
-spec:
-  protectRules:
-  - match:
-    - kind: ConfigMap
-    - kind: Deployment
-    - kind: Service
-EOF
-
-resourcesigningprofile.apis.integrityshield.io/sample-rsp created
+$ kubectl get pod -n integrity-shield-operator-system                                                                                                                  
+NAME                                                            READY   STATUS    RESTARTS   AGE
+integrity-shield-api-7b7f768bf7-fhrpg                           1/1     Running   0          20s
+integrity-shield-observer-5bc66f75f7-tn8fw                      1/1     Running   0          25s
+integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running   0          3h5m
 ```
 
-After creating the RSP above, any resources of kinds configmap, deployment, and service can not be created or modified without valid signature.
+After installation, you can protect Kubernetes resources by following this [document](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md).
 
-For example, let's see what happens when creating configmap below without signature.
+## Supported Versions
+### Platform
+K8s Integrity Shield can be deployed with the operator. We have verified the feasibility on the following platforms:
 
-```
-cat << EOF > /tmp/test-cm.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: test-cm
-data:
-  key1: val1
-  key2: val2
-  key4: val4
-EOF
-```
+- [RedHat OpenShift 4.7.1 and 4.9.0](https://www.openshift.com)  
+- [Kuberenetes v1.19.7 and v1.21.1](https://kubernetes.io)
 
-Creation of configmap is blocked, since no signature is attached to it.
-
-```
-$ oc apply -f /tmp/test-cm.yaml -n secure-ns
-Error from server: error when creating "/tmp/test-cm.yaml": admission webhook "ac-server.integrity-shield-operator-system.svc" denied the request: Signature verification is required for this request, but no signature is found. Please attach a valid signature to the annotation or by a ResourceSignature. (Request: {"kind":"ConfigMap","name":"test-cm","namespace":"secure-ns","operation":"CREATE","request.uid":"61f4aabd-df4b-4d12-90e7-11a46ee28cb0","scope":"Namespaced","userName":"IAM#cluser-user"})
-```
-
-Event is reported.
-
-```
-$ oc get event -n secure-ns --field-selector type=IntegrityShield
-LAST SEEN   TYPE              REASON         OBJECT              MESSAGE
-65s         IntegrityShield   no-signature   configmap/test-cm   [IntegrityShieldEvent] Result: deny, Reason: "Signature verification is required for this request, but no signature is found. Please attach a valid signature to the annotation or by a ResourceSignature.", Request: {"kind":"ConfigMap","name":"test-cm","namespace":"secure-ns","operation":"CREATE","request.uid":"46cf5fde-2b46-4819-b876-a2998043c8ef","scope":"Namespaced","userName":"IAM#cluser-user"}
-
-```
-
-### How to sign a resource
-
-You can sign resources with the utility script, which is available from our repository. Two prerequisites for using the script on your host.
-
-- [yq](https://github.com/mikefarah/yq) command is available.
-- you can sign file with GPG signing key of the signer registered in preparations.
-
-For example of singing a YAML file `/tmp/test-cm.yaml` as `signer@enterprise.com`, use the utility script as shown below. This script would modify the original input file (`/tmp/test-cm.yaml`) by adding signature, message annotations to it.
-
-```
-$ curl -s https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
-  signer@enterprise.com \
-  /tmp/test-cm.yaml
-```
-
-Below is the sample YAML file (`/tmp/test-cm.yaml`) with signature, message annotations.
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: test-cm
-  annotations:
-    integrityshield.io/message: YXBpVmVyc2lvbjogdjEKa2luZDogQ29uZmlnTW...
-    integrityshield.io/signature: LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0t...
-data:
-  key1: val1
-  key2: val2
-  key4: val4
-```
-
-Creating configmap with this YAML file should be successful because signature in annotation is valid.
-
-```
-$ oc create -f /tmp/test-cm.yaml -n secure-ns
-configmap/test-cm created
-```
-
-## Supported Platforms
-
-K8s Integrity Shield works as Kubernetes Admission Controller using Mutating Admission Webhook, and it can run on any Kubernetes cluster by design.
-We have verified the feasibility on the following platforms:
-
-- [RedHat OpenShift 4.5 and 4.6](https://www.openshift.com/)
-- [RedHat OpenShift 4.5 on IBM Cloud (ROKS)](https://www.openshift.com/products/openshift-ibm-cloud)
-- [IBM Kuberenetes Service (IKS)](https://www.ibm.com/cloud/container-service/) 1.17.14
-- [Minikube v1.19.1](https://kubernetes.io/docs/setup/learning-environment/minikube/)
+### OPA/Gatekeeper
+- [gatekeeper-operator v0.2.0](https://github.com/open-policy-agent/gatekeeper)
+- [gatekeeper v3.5.2 and v3.6.0](https://github.com/open-policy-agent/gatekeeper)

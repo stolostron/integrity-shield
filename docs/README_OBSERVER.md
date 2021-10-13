@@ -65,6 +65,7 @@ You can see whether each constraint has violations by checking `integrityshield.
 In this case, you can see that some resources defined in configmap-constraint are in invalid state because `integrityshield.io/verifyResourceViolation` label is true.
 
 2. Check verification result on per constraint
+
 You can see which resources are violated from ManifestIntegrityState.
 
 In this example, there are four configmaps in sample-ns and sample-cm is not signed. The totalViolations field indicates that there is one violation in configmap-constraint.
