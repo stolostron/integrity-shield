@@ -5,7 +5,7 @@
 Current features:
 - Work with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enforce admission requests.
 - Block to deploy unauthorized Kubernetes manifests in enforcement mode.
-- Monitor Kubernetes resource integrity and alert if unauthorized Kubernetes manifests are deployed on the cluster. 
+- Monitor Kubernetes resource integrity and reports if unauthorized Kubernetes manifests are deployed on the cluster. 
 - Support x509, PGP and [Sigstore](https://www.sigstore.dev) signing
 - Use [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore) internally to verify Kubernetes manifest
 
@@ -13,14 +13,14 @@ This operator supports the installation and upgrade of Integrity Shield.
 
 ## Preparations before installation
 
-Default CR includes the configuration which enable linkage with gatekeeper,  
-so OPA/Gatekeeper should be deployed before installing Integrity Shield.
+Default CR includes the configuration which enable linkage with gatekeeper, so OPA/Gatekeeper should be deployed before installing Integrity Shield.
 The installation instructions to deploy Gatekeeper components is [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/).
 
-If you want to change the settings such as default run mode (detection/enforcement) or audit interval,  please check [here](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).
 
 ## Installation
 Install Integrity Shield operator by following instructions in top right button Install. After installing the operator, create an instance of the IntegrityShield resource to install the Integrity Shield.
+
+If you want to change the settings such as default run mode (detection/enforcement) or audit interval,  please check [here](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).
 
 To verify that installation was completed successfully,
 run the following command.
