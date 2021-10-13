@@ -71,7 +71,7 @@ func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconf
 	}
 	// secret
 	for _, s := range secrets {
-		if s.KeySecretNamespace == resource.GetNamespace() {
+		if s.KeySecretName != "" {
 			pubkey, err := LoadKeySecret(s.KeySecretNamespace, s.KeySecretName)
 			if err != nil {
 				fmt.Println("Failed to load pubkey; err: ", err.Error())
