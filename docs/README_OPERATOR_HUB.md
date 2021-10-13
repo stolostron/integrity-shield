@@ -9,8 +9,7 @@ Current features:
 - Support x509, PGP and [Sigstore](https://www.sigstore.dev) signing
 - Use [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore) internally to verify Kubernetes resources
 
-This operator supports the installation and upgrade of Integrity Shield.
-
+This operator supports the installation and management of Integrity Shield.
 ## Preparations before installation
 
 Default CR includes the configuration which enable linkage with gatekeeper, so OPA/Gatekeeper should be deployed before installing Integrity Shield.
