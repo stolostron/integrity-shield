@@ -73,14 +73,14 @@ spec:
   channel: ${CHANNELS}
   installPlanApproval: Automatic
   name: integrity-shield-operator
-  source: new-integrity-shield-operator-catalog
+  source: integrity-shield-operator-catalog
   sourceNamespace: olm
   startingCSV: ${STARTING_CSV}
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
-  name: new-integrity-shield-operator-catalog
+  name: integrity-shield-operator-catalog
   namespace: olm
 spec:
   displayName: Integrity Ishield Operator

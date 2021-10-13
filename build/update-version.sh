@@ -26,16 +26,19 @@ if [ -z "$SHIELD_OP_DIR" ]; then
     exit 1
 fi
 
-if [[ "$OS_NAME" == "Linux" ]]; then
-    sed -i "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/docs/ACM/README_DISABLE_ISHIELD_PROTECTION_ACM_ENV.md
-    sed -i "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/scripts/install_shield.sh
-    sed -i "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/COMPONENT_VERSION
-    sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}Makefile
-    sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}config/manifests/bases/integrity-shield-operator.clusterserviceversion.yaml
-elif [[ "$OS_NAME" == "Darwin" ]]; then
-    sed -i '' "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/docs/ACM/README_DISABLE_ISHIELD_PROTECTION_ACM_ENV.md
-    sed -i '' "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/scripts/install_shield.sh
-    sed -i '' "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/COMPONENT_VERSION
-    sed -i '' "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}Makefile
-    sed -i '' "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}config/manifests/bases/integrity-shield-operator.clusterserviceversion.yaml
+OS_NAME=$(uname -s)
+
+SED=sed    
+if [[ "$OS_NAME" == "Darwin" ]]; then
+    SED=gsed
+    type $SED >/dev/null 2>&1 || {
+        echo >&2 "$SED it's not installed. Try: brew install gnu-sed" ;
+        exit 1;
+    }
 fi
+
+$SED -i  "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/docs/ACM/README_DISABLE_ISHIELD_PROTECTION_ACM_ENV.md
+$SED -i  "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/scripts/install_shield.sh
+$SED -i  "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/COMPONENT_VERSION
+$SED -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}Makefile
+$SED -i  "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}config/manifests/bases/integrity-shield-operator.clusterserviceversion.yaml

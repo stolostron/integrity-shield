@@ -53,9 +53,9 @@ echo -----------------------------
 echo ""
 
 
-# Push integrity-shield-logging image
+# Push integrity-shield-admission-controller image
 echo -----------------------------
-echo [2/3] Pulling integrity-shield-logging image.
+echo [2/3] Pulling integrity-shield-admission-controller image.
 docker pull ${ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION}
 echo done.
 echo -----------------------------
