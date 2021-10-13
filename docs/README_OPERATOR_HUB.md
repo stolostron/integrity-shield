@@ -3,9 +3,9 @@
 [Integrity Shield](https://github.com/open-cluster-management/integrity-shield) provides signature-based assurance of integrity for Kubernetes resources at cluster side.  
 
 Current features:
-- Work with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable signature verification for Kubernetes resources.
-- Block to deploy unauthorized Kubernetes resources in enforcement mode.
-- Monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster. 
+- Work with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable signature verification for Kubernetes resources
+- Block to deploy unauthorized Kubernetes resources in enforcement mode
+- Monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster
 - Support x509, PGP and [Sigstore](https://www.sigstore.dev) signing
 - Use [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore) internally to verify Kubernetes resources
 
@@ -40,5 +40,5 @@ Integrity Shield can be deployed with operator. We have verified the feasibility
 - [Kuberenetes v1.19.7 and v1.21.1](https://kubernetes.io)
 
 ### OPA/Gatekeeper
-- [gatekeeper-operator.v0.2.0](https://github.com/open-policy-agent/gatekeeper)
-- [gatekeeper v3.5](https://github.com/open-policy-agent/gatekeeper)
+- [gatekeeper-operator v0.2.0](https://github.com/open-policy-agent/gatekeeper)
+- [gatekeeper v3.5.2 and v3.6.0](https://github.com/open-policy-agent/gatekeeper)
