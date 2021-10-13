@@ -5,7 +5,7 @@
 Current features:
 - Work with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable signature verification for Kubernetes resources.
 - Block to deploy unauthorized Kubernetes resources in enforcement mode.
-- Monitor Kubernetes resource integrity and reports if unauthorized Kubernetes resources are deployed on the cluster. 
+- Monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster. 
 - Support x509, PGP and [Sigstore](https://www.sigstore.dev) signing
 - Use [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore) internally to verify Kubernetes resources
 
