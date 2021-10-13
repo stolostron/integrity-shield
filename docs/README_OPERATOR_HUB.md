@@ -1,18 +1,18 @@
 # k8s Integrity Shield
 
-[Integrity Shield](https://github.com/open-cluster-management/integrity-shield) provides signature-based assurance of integrity for Kubernetes resources at cluster side.  
+Kubernetes resources are represented as YAML files, which are applied to clusters when you create and update the resource. The YAML content is designed carefully to achieve application desired state and should not be tampered with. If the YAML content is modified maliciously or accidentally, and applied to a cluster without notice, the cluster moves to an unexpected state.
 
-Current features:
-- Work with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable signature verification for Kubernetes resources
-- Block to deploy unauthorized Kubernetes resources in enforcement mode
-- Monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster
-- Support x509, PGP and [Sigstore](https://www.sigstore.dev) signing
-- Use [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore) internally to verify Kubernetes resources
+[K8s Integrity Shield](https://github.com/open-cluster-management/integrity-shield) provides preventive control for enforcing signature verification for any requests to create or update resources. This operator supports the installation and management of K8s Integrity Shield on cluster. 
 
-This operator supports the installation and management of Integrity Shield.
+Two modes are selectively enabled on your cluster. 
+- Enforce (Admission Control): Block to deploy unauthorized Kubernetes resources. Integrity Shield works with OPA/Gatekeeper to enable admission control based on signature verification for Kubernetes resources.
+- Detect (Continuous Monitoring): monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster
+
+X509, PGP and Sigstore signing are supperted for singing Kubernetes manifest YAML. K8s Integrity Shield supports Sigstore signing by using [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore).
+
 ## Preparations before installation
 
-Default CR includes the configuration which enable linkage with OPA/Gatekeeper, so OPA/Gatekeeper should be deployed before installing Integrity Shield.
+OPA/Gatekeeper should be deployed before installing Integrity Shield.
 The installation instructions to deploy OPA/Gatekeeper components is [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/).
 
 
@@ -31,6 +31,8 @@ integrity-shield-api-7b7f768bf7-fhrpg                           1/1     Running 
 integrity-shield-observer-5bc66f75f7-tn8fw                      1/1     Running   0          25s
 integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running   0          3h5m
 ```
+
+After installation, you can protect to Kubernetes resources by following this [document](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_QUICK.md).
 
 ## Supported Versions
 ### Platform
