@@ -12,8 +12,8 @@ Current features:
 This operator supports the installation and management of Integrity Shield.
 ## Preparations before installation
 
-Default CR includes the configuration which enable linkage with gatekeeper, so OPA/Gatekeeper should be deployed before installing Integrity Shield.
-The installation instructions to deploy Gatekeeper components is [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/).
+Default CR includes the configuration which enable linkage with OPA/Gatekeeper, so OPA/Gatekeeper should be deployed before installing Integrity Shield.
+The installation instructions to deploy OPA/Gatekeeper components is [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/).
 
 
 ## Installation
@@ -33,7 +33,7 @@ integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running 
 ```
 
 ## Supported Versions
-### Platforms
+### Platform
 Integrity Shield can be deployed with operator. We have verified the feasibility on the following platforms:
 
 - [RedHat OpenShift 4.7.1 and 4.9.0](https://www.openshift.com)  
