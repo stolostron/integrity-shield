@@ -26,15 +26,16 @@ if [ -z "$SHIELD_OP_DIR" ]; then
     exit 1
 fi
 
-sed -i "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/docs/ACM/README_DISABLE_ISHIELD_PROTECTION_ACM_ENV.md
-sed -i "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/scripts/install_shield.sh
-sed -i "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/COMPONENT_VERSION
-sed -i "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/develop/local-deploy/operator_local.yaml
-sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}Makefile
-sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}resources/testdata/deploymentForIShield.yaml
-sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}resources/testdata/integrityShieldCRForTest.yaml
-sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}resources/testdata/integrityShieldCR.yaml
-sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}resources/default-ishield-cr.yaml
-sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}config/manifests/bases/integrity-shield-operator.clusterserviceversion.yaml
-sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_DIR}version/version.go
-sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_DIR}pkg/util/mapnode/node_test.go
+if [[ "$OS_NAME" == "Linux" ]]; then
+    sed -i "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/docs/ACM/README_DISABLE_ISHIELD_PROTECTION_ACM_ENV.md
+    sed -i "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/scripts/install_shield.sh
+    sed -i "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/COMPONENT_VERSION
+    sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}Makefile
+    sed -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}config/manifests/bases/integrity-shield-operator.clusterserviceversion.yaml
+elif [[ "$OS_NAME" == "Darwin" ]]; then
+    sed -i '' "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/docs/ACM/README_DISABLE_ISHIELD_PROTECTION_ACM_ENV.md
+    sed -i '' "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/scripts/install_shield.sh
+    sed -i '' "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/COMPONENT_VERSION
+    sed -i '' "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}Makefile
+    sed -i '' "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}config/manifests/bases/integrity-shield-operator.clusterserviceversion.yaml
+fi

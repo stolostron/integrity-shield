@@ -39,9 +39,9 @@ You will use `policy-integrity-shield` to disable Integrity Shield protection in
                   name: integrity-shield-server
                 spec:
                   logger:
-                    image: quay.io/open-cluster-management/integrity-shield-logging:0.2.0
+                    image: quay.io/open-cluster-management/integrity-shield-logging:0.3.0
                   server:
-                    image: quay.io/open-cluster-management/integrity-shield-server:0.2.0
+                    image: quay.io/open-cluster-management/integrity-shield-server:0.3.0
       ```
 3.  Create signature annotation in `policy-integrity-shield.yaml` as below.
 

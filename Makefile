@@ -349,9 +349,13 @@ install-ishield: check-kubeconfig install-crds install-operator create-cr
 uninstall-ishield: delete-cr delete-operator
 
 create-ns:
-	@echo
-	@echo creating namespace
-	kubectl create ns $(ISHIELD_NS)
+	@if [ "$(shell kubectl get ns integrity-shield-operator-system | sed -n '2 p' | awk '{print$$1}')" = integrity-shield-operator-system ]; then \
+		echo namespace already exists !;  \
+	else  \
+		echo; \
+		echo creating namespace; \
+		kubectl create ns $(ISHIELD_NS); \
+	fi
 
 install-crds:
 	@echo installing crds
@@ -545,7 +549,6 @@ setup-olm-local:
 	$(ISHIELD_REPO_ROOT)/build/setup-olm-local.sh
 
 bundle-test-local:
-	make create-keyring-secret
 	make setup-tmp-cr
 	make setup-test-env
 	make e2e-test

@@ -70,17 +70,17 @@ metadata:
   name: integrity-shield-operator
   namespace: ${ISHIELD_NS}
 spec:
-  channel: alpha
+  channel: ${CHANNELS}
   installPlanApproval: Automatic
   name: integrity-shield-operator
-  source: integrity-shield-operator-catalog
+  source: new-integrity-shield-operator-catalog
   sourceNamespace: olm
   startingCSV: ${STARTING_CSV}
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
-  name: integrity-shield-operator-catalog
+  name: new-integrity-shield-operator-catalog
   namespace: olm
 spec:
   displayName: Integrity Ishield Operator
