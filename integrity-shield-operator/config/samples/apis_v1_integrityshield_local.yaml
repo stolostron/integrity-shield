@@ -411,7 +411,7 @@ spec:
     image: localhost:5000/integrity-shield-observer
     selector:     
       app: integrity-shield-observer
-    logLevel: trace
+    logLevel: info
     interval: "5"
     exportDetailResult: true
     resultDetailConfigName: verify-resource-result
