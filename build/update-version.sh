@@ -28,16 +28,15 @@ fi
 
 OS_NAME=$(uname -s)
 
-SED=sed    
+
 if [[ "$OS_NAME" == "Darwin" ]]; then
-    SED=gsed
-    type $SED >/dev/null 2>&1 || {
-        echo >&2 "$SED it's not installed. Try: brew install gnu-sed" ;
-        exit 1;
-    }
+   sedi=(-i "")
+else
+   sedi=(-i)
 fi
 
-$SED -i  "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/docs/ACM/README_DISABLE_ISHIELD_PROTECTION_ACM_ENV.md
+echo $SED
+sed "${sedi[@]}" "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/docs/ACM/README_DISABLE_ISHIELD_PROTECTION_ACM_ENV.md
 $SED -i  "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/scripts/install_shield.sh
 $SED -i  "s|$PREV_VERSION|$VERSION|" ${ISHIELD_REPO_ROOT}/COMPONENT_VERSION
 $SED -i "s|$PREV_VERSION|$VERSION|" ${SHIELD_OP_DIR}Makefile

@@ -349,7 +349,7 @@ install-ishield: check-kubeconfig install-crds install-operator create-cr
 uninstall-ishield: delete-cr delete-operator
 
 create-ns:
-	@if [ "$(shell kubectl get ns integrity-shield-operator-system | sed -n '2 p' | awk '{print$$1}')" = integrity-shield-operator-system ]; then \
+	@if [ "$(shell kubectl get ns $(ISHIELD_NS) | sed -n '2 p' | awk '{print$$1}')" = $(ISHIELD_NS) ]; then \
 		echo namespace already exists !;  \
 	else  \
 		echo; \
