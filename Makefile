@@ -21,9 +21,11 @@ SHELL=/bin/bash
 ifeq ($(ISHIELD_REPO_ROOT),)
 $(error ISHIELD_REPO_ROOT is not set)
 endif
+# used to switch Travis and local environments.
 ifeq ($(ISHIELD_ENV),)
-$(error "ISHIELD_ENV is empty. Please set local or remote.")
+ISHIELD_ENV=local
 endif
+# used to switch test environments and image registry
 ifeq ($(ISHIELD_TEST_ENV),)
 $(error "ISHIELD_TEST_ENV is empty. Please set local or remote.")
 endif
@@ -368,16 +370,25 @@ delete-crds:
 install-operator:
 	@echo
 	@echo setting image
-	cp $(SHIELD_OP_DIR)config/manager/kustomization.yaml $(TMP_DIR)kustomization.yaml  #copy original file to tmp dir.
+	cp $(SHIELD_OP_DIR)config/manager/kustomization.yaml $(TMP_DIR)manager-kustomization.yaml  #copy original file to tmp dir.
 	cd $(SHIELD_OP_DIR)config/manager && kustomize edit set image controller=$(OPERATOR_IMG)
+	@echo setting namespace
+	cp $(SHIELD_OP_DIR)config/default/kustomization.yaml $(TMP_DIR)default-kustomization.yaml  
+	cd $(SHIELD_OP_DIR)config/default && kustomize edit set namespace $(ISHIELD_NS)
 	@echo installing operator
 	kustomize build $(SHIELD_OP_DIR)config/default | kubectl apply --validate=false -f -
-	cp $(TMP_DIR)kustomization.yaml $(SHIELD_OP_DIR)config/manager/kustomization.yaml  #put back the original file from tmp dir.
+	cp $(TMP_DIR)manager-kustomization.yaml $(SHIELD_OP_DIR)config/manager/kustomization.yaml  #put back the original file from tmp dir.
+	cp $(TMP_DIR)default-kustomization.yaml $(SHIELD_OP_DIR)config/default/kustomization.yaml  
+
 
 delete-operator:
 	@echo
+	@echo setting namespace
+	cp $(SHIELD_OP_DIR)config/default/kustomization.yaml $(TMP_DIR)default-kustomization.yaml  
+	cd $(SHIELD_OP_DIR)config/default && kustomize edit set namespace $(ISHIELD_NS)
 	@echo deleting operator
 	kustomize build $(SHIELD_OP_DIR)config/default | kubectl delete -f -
+	cp $(TMP_DIR)default-kustomization.yaml $(SHIELD_OP_DIR)config/default/kustomization.yaml  
 
 create-cr:
 	kubectl apply -f ${SHIELD_OP_DIR}config/samples/apis_v1_integrityshield.yaml -n $(ISHIELD_NS)
