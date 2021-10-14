@@ -19,8 +19,8 @@ limitations under the License.
 package manifestintegritystate
 
 import (
-	internalinterfaces "github.com/IBM/integrity-enforcer/observer/pkg/client/manifestintegritystate/informers/externalversions/internalinterfaces"
-	v1 "github.com/IBM/integrity-enforcer/observer/pkg/client/manifestintegritystate/informers/externalversions/manifestintegritystate/v1"
+	internalinterfaces "github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/informers/externalversions/internalinterfaces"
+	v1 "github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/informers/externalversions/manifestintegritystate/v1"
 )
 
 // Interface provides access to each of this group's versions.

@@ -76,7 +76,7 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    operators.operatorframework.io/builder: operator-sdk-v1.12.0
+    operators.operatorframework.io/builder: operator-sdk-v1.10.0+git
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
     containerImage: quay.io/open-cluster-management/integrity-shield-operator:0.3.0
   name: integrity-shield-operator.v0.3.0
@@ -253,22 +253,7 @@ spec:
             - apiGroups:
                 - apis.integrityshield.io
               resources:
-                - integrityshieldren
                 - integrityshields
-              verbs:
-                - create
-                - delete
-                - get
-                - list
-                - patch
-                - update
-                - watch
-            - apiGroups:
-                - apis.integrityshield.io
-              resources:
-                - integrityshields
-                - integrityshields/finalizers
-                - manifestintegrityprofiles
               verbs:
                 - create
                 - delete
@@ -304,16 +289,6 @@ spec:
                 - update
                 - watch
             - apiGroups:
-                - coordination.k8s.io
-              resources:
-                - leases
-              verbs:
-                - create
-                - delete
-                - get
-                - list
-                - update
-            - apiGroups:
                 - ""
               resources:
                 - configmaps
@@ -321,18 +296,6 @@ spec:
                 - secrets
                 - serviceaccounts
                 - services
-              verbs:
-                - create
-                - delete
-                - get
-                - list
-                - patch
-                - update
-                - watch
-            - apiGroups:
-                - policy
-              resources:
-                - podsecuritypolicies
               verbs:
                 - create
                 - delete
@@ -476,4 +439,5 @@ spec:
   maturity: alpha
   provider:
     name: Community
+  replaces: integrity-shield-operator.v0.1.6
   version: 0.3.0

@@ -10,8 +10,8 @@ You can decide which resources to be protected in the custom resource called `Ma
 The following snippet is an example of `ManifestIntegrityProfile`.
 In this example, we installed the following profile to protect ConfigMap in sample-ns.
 
-```yaml
-apiVersion: apis.integrityshield.io/v1alpha1
+```
+apiVersion: apis.integrityshield.io/v1
 kind: ManifestIntegrityProfile
 metadata:
   name: profile-configmap

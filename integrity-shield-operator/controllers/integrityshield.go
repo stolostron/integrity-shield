@@ -22,7 +22,7 @@ import (
 	"reflect"
 	"time"
 
-	apiv1 "github.com/IBM/integrity-enforcer/integrity-shield-operator/api/v1"
+	apiv1 "github.com/open-cluster-management/integrity-shield/integrity-shield-operator/api/v1"
 	extv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -30,8 +30,8 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
-	cert "github.com/IBM/integrity-enforcer/integrity-shield-operator/cert"
-	res "github.com/IBM/integrity-enforcer/integrity-shield-operator/resources"
+	cert "github.com/open-cluster-management/integrity-shield/integrity-shield-operator/cert"
+	res "github.com/open-cluster-management/integrity-shield/integrity-shield-operator/resources"
 	templatev1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1beta1"
 	admregv1 "k8s.io/api/admissionregistration/v1"
 	appsv1 "k8s.io/api/apps/v1"

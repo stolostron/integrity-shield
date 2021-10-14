@@ -23,8 +23,8 @@ import (
 	"strings"
 	"time"
 
-	k8smnfconfig "github.com/IBM/integrity-enforcer/shield/pkg/config"
-	ishieldimage "github.com/IBM/integrity-enforcer/shield/pkg/image"
+	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
+	ishieldimage "github.com/open-cluster-management/integrity-shield/shield/pkg/image"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -71,7 +71,7 @@ func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconf
 	}
 	// secret
 	for _, s := range secrets {
-		if s.KeySecretNamespace == resource.GetNamespace() {
+		if s.KeySecretName != "" {
 			pubkey, err := LoadKeySecret(s.KeySecretNamespace, s.KeySecretName)
 			if err != nil {
 				fmt.Println("Failed to load pubkey; err: ", err.Error())
@@ -98,9 +98,12 @@ func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconf
 			VerifyResourceResult: nil,
 		}
 	}
+
 	message := ""
+	violation := true
 	if result.InScope {
 		if result.Verified {
+			violation = false
 			message = fmt.Sprintf("singed by a valid signer: %s", result.Signer)
 		} else {
 			message = "no signature found"
@@ -111,6 +114,7 @@ func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconf
 			}
 		}
 	} else {
+		violation = false
 		message = "not protected"
 	}
 
@@ -118,11 +122,6 @@ func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconf
 	resultMsg := ""
 	if len(tmpMsg) > 0 {
 		resultMsg = tmpMsg[0]
-	}
-
-	violation := true
-	if result.Verified {
-		violation = false
 	}
 
 	return VerifyResultDetail{

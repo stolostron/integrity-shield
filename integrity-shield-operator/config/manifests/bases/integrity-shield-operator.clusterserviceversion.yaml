@@ -4,7 +4,7 @@ metadata:
   annotations:
     alm-examples: '[]'
     capabilities: Basic Install
-  name: integrity-shield-operator.v0.0.0
+  name: integrity-shield-operator.v0.3.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -46,4 +46,4 @@ spec:
   maturity: alpha
   provider:
     name: Community
-  version: 0.0.0
+  version: 0.3.0

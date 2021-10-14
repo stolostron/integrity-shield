@@ -19,8 +19,8 @@ package v1
 import (
 	"time"
 
-	k8smnfconfig "github.com/IBM/integrity-enforcer/shield/pkg/config"
 	"github.com/jinzhu/copier"
+	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )

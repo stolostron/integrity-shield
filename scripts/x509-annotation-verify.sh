@@ -17,7 +17,7 @@
 
 CMDNAME=`basename $0`
 if [ $# -ne 2 ]; then
-  echo "Usage: $CMDNAME  <input-file> <pubring-key>" 1>&2
+  echo "Usage: $CMDNAME  <input-file> <CA-cert-file>" 1>&2
   exit 1
 fi
 
@@ -27,7 +27,7 @@ if [ ! -e $2 ]; then
 fi
 
 INPUT_FILE=$1
-PUBRING_KEY=$2
+CA_CERT_FILE=$2
 
 if ! [ -x "$(command -v yq)" ]; then
    echo 'Error: yq is not installed.' >&2
@@ -39,8 +39,8 @@ if [ ! -f $INPUT_FILE ]; then
    exit 1
 fi
 
-if [ ! -f $PUBRING_KEY ]; then
-   echo "pubring key file does not exist, please create it."
+if [ ! -f $CA_CERT_FILE ]; then
+   echo "CA cert file does not exist, please create it."
    exit 1
 fi
 
@@ -69,9 +69,11 @@ YQ_VERSION=$(yq --version 2>&1 | awk '{print $3}' | cut -c 1 )
 if [[ $YQ_VERSION == "3" ]]; then
     msg=$(yq r -d0 ${INPUT_FILE} 'metadata.annotations."integrityshield.io/message"')
     sign=$(yq r -d0 ${INPUT_FILE} 'metadata.annotations."integrityshield.io/signature"')
+    cert=$(yq r -d0 ${INPUT_FILE} 'metadata.annotations."integrityshield.io/certificate"')
 elif [[ $YQ_VERSION == "4" ]]; then
     msg=$(yq eval '.metadata.annotations."integrityshield.io/message" | select(di == 0)' ${INPUT_FILE})
     sign=$(yq eval '.metadata.annotations."integrityshield.io/signature" | select(di == 0)' ${INPUT_FILE})
+    cert=$(yq eval '.metadata.annotations."integrityshield.io/certificate" | select(di == 0)' ${INPUT_FILE})
 fi
 
 
@@ -85,6 +87,8 @@ fi
 ISHIELD_INPUT_FILE="${ISHIELD_TMP_DIR}/input.yaml"
 ISHIELD_SIGN_FILE="${ISHIELD_TMP_DIR}/input.sig"
 ISHIELD_MSG_FILE="${ISHIELD_TMP_DIR}/input.msg"
+ISHIELD_CERT_FILE="${ISHIELD_TMP_DIR}/input.crt"
+ISHIELD_PUBKEY_FILE="${ISHIELD_TMP_DIR}/input.pub"
 
 
 cat ${INPUT_FILE} > ${ISHIELD_INPUT_FILE}
@@ -92,6 +96,7 @@ cat ${INPUT_FILE} > ${ISHIELD_INPUT_FILE}
 if [[ $YQ_VERSION == "3" ]]; then
    yq d -d* ${ISHIELD_INPUT_FILE} 'metadata.annotations."integrityshield.io/message"' -i
    yq d -d* ${ISHIELD_INPUT_FILE} 'metadata.annotations."integrityshield.io/signature"' -i
+   yq d -d* ${ISHIELD_INPUT_FILE} 'metadata.annotations."integrityshield.io/certificate"' -i
    cnt=0
    yq r -d* ${ISHIELD_INPUT_FILE} -j | while read doc;
    do
@@ -104,6 +109,7 @@ if [[ $YQ_VERSION == "3" ]]; then
 elif [[ $YQ_VERSION == "4" ]]; then
    yq eval 'del(.metadata.annotations."integrityshield.io/message")' -i ${ISHIELD_INPUT_FILE}
    yq eval 'del(.metadata.annotations."integrityshield.io/signature")' -i ${ISHIELD_INPUT_FILE}
+   yq eval 'del(.metadata.annotations."integrityshield.io/certificate")' -i ${ISHIELD_INPUT_FILE}
    cnt=0
    while true
    do
@@ -118,6 +124,7 @@ elif [[ $YQ_VERSION == "4" ]]; then
       cnt=$[$cnt+1]
    done
 fi
+
 
 msg_body=`cat ${ISHIELD_INPUT_FILE}`
 
@@ -138,7 +145,6 @@ if [ "${msg_decoded}" != "${msg_body}" ]; then
    echo ""
    echo "Input file content has been changed."
    echo $result
-   exit $exit_status
    exit 1
 fi
 
@@ -151,22 +157,27 @@ if [ -z ${msg} ] || [ -z ${sign} ] ; then
 else
    echo $msg | ${base_decode} | ${gzip_decode} >  ${ISHIELD_MSG_FILE}
    echo $sign | ${base_decode} > ${ISHIELD_SIGN_FILE}
+   echo $cert | ${base_decode} | ${gzip_decode} > ${ISHIELD_CERT_FILE}
 
-   gpg --no-default-keyring --keyring ${PUBRING_KEY} --dry-run --verify ${ISHIELD_SIGN_FILE} ${ISHIELD_MSG_FILE}  > /dev/null 2>&1 
+   # get pubkey from certificate
+   openssl x509 -pubkey -noout -in ${ISHIELD_CERT_FILE} > ${ISHIELD_PUBKEY_FILE}
+
+   openssl dgst -sha256 -verify ${ISHIELD_PUBKEY_FILE} -signature ${ISHIELD_SIGN_FILE} ${ISHIELD_MSG_FILE}  > /dev/null 2>&1 
    sigstatus=$?
-
-   if [ -d ${ISHIELD_TMP_DIR} ]; then
-     rm -rf ${ISHIELD_TMP_DIR}
-   fi
 
    return_msg=""
    exit_status=1
-   if [ ${sigstatus} == 0 ]; then
-      return_msg="Signature is successfully verified."
-      exit_status=0
+   if [[ $sigstatus ]]; then
+      openssl verify -CAfile ${CA_CERT_FILE} ${ISHIELD_CERT_FILE}  > /dev/null 2>&1 
+      certstatus=$?
+      if [[ $certstatus ]]; then
+         return_msg="Signature is successfully verified."
+         exit_status=0
+      else
+         return_msg="Certificate verification failed."
+      fi
    else
-      return_msg="Signature is invalid."
-      exit_status=1
+      return_msg="Signature verification failed."
    fi
 
    result="${RED}Verification: Failure${NC}"
@@ -178,6 +189,7 @@ else
    echo $return_msg
    echo $result
    exit $exit_status
+
 fi
 
 

@@ -62,7 +62,7 @@ metadata:
   name: integrity-shield-operator
   namespace: ${ISHIELD_NS}
 spec:
-  channel: alpha
+  channel: ${ISHIELD_DEFAULT_CHANNEL}
   name: integrity-shield-operator
   source: integrity-shield-operator-catalog
   sourceNamespace: olm

@@ -20,9 +20,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	apiv1 "github.com/IBM/integrity-enforcer/integrity-shield-operator/api/v1"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	apiv1 "github.com/open-cluster-management/integrity-shield/integrity-shield-operator/api/v1"
 	"k8s.io/client-go/kubernetes/scheme"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/envtest"

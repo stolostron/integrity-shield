@@ -19,7 +19,7 @@ limitations under the License.
 package fake
 
 import (
-	v1 "github.com/IBM/integrity-enforcer/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
+	v1 "github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )
