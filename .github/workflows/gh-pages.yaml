@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master  # Set a branch name to trigger deployment
-      - ocm-master  # Just for test
 
 jobs:
   gitbook:
