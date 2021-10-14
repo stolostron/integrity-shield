@@ -20,7 +20,7 @@ X509, PGP and Sigstore signing are supported for singing Kubernetes manifest YAM
 
 
 
-Integrity Shield has two components mainly: API and Observer.
+Integrity Shield consists of two main components, API and Observer.
 
 Integrity Shield API receives a k8s resource from OPA/Gatekeeper, validates the resource which is included in the admission request and sends the verification result to OPA/Gatekeeper. Integrity Shield API uses verify-resource feature of k8s-manifest-sigstore internally to verify k8s manifest.
 
