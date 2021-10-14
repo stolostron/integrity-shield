@@ -3,7 +3,7 @@ Kubernetes resources are represented as YAML files, which are applied to cluster
 
 Integrity Shield provides preventive control for enforcing signature verification for any requests to create or update resources. Integrity Shield also provides continuous monitoring based on signature verification.
 
-![Scenario](./docs/new-ishield-scenario2.png)
+![Scenario](./docs/new-ishield-scenario.png)
 
 ## Features 
 
@@ -15,6 +15,9 @@ X509, PGP and Sigstore signing are supported for singing Kubernetes manifest YAM
 
 ## Architecture
 ![Scenario](./docs/architecture.png)
+
+
+
 Integrity Shield has two components mainly: API and Observer.
 
 Integrity Shield API receives a k8s resource from OPA/Gatekeeper, validates the resource which is included in the admission request and sends the verification result to OPA/Gatekeeper. Integrity Shield API uses verify-resource function of k8s-manifest-sigstore internally to verify k8s manifest.
