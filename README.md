@@ -7,13 +7,16 @@ Integrity Shield provides preventive control for enforcing signature verificatio
 
 ## Features 
 
+### Phased approach
 Two modes are selectively enabled on your cluster. 
 - Enforce (Admission Control): Block to deploy unauthorized Kubernetes resources. Integrity Shield works with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable admission control based on signature verification for Kubernetes resources. 
 - Detect (Continuous Monitoring): monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster
 
-
-
+### Manifest signing
 X509, PGP and Sigstore signing are supported for singing Kubernetes manifest YAML. K8s Integrity Shield supports Sigstore signing by using [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore).
+
+### Easy installation
+You can use [Integrity Shield Operator](https://operatorhub.io/operator/integrity-shield-operator) to easily install the Integrity Shield on your cluster.
 
 ## Architecture
 ![Scenario](./docs/architecture.png)
@@ -21,6 +24,7 @@ X509, PGP and Sigstore signing are supported for singing Kubernetes manifest YAM
 
 
 Integrity Shield consists of two main components, API and Observer.
+Integrity Shield Operator supports the installation and management of Integrity Shield components on cluster. 
 
 Integrity Shield API receives a k8s resource from OPA/Gatekeeper, validates the resource which is included in the admission request and sends the verification result to OPA/Gatekeeper. Integrity Shield API uses verify-resource feature of k8s-manifest-sigstore internally to verify k8s manifest.
 
