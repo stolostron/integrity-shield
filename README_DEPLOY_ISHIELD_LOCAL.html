@@ -269,112 +269,7 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h2 id="install-ishield-to-a-local-cluster-minikube">Install IShield to a local cluster (minikube)</h2>
-<p>This section describe the steps for deploying Integrity Shield (IShield) on your local minikube cluster via <code>oc</code> or <code>kubectl</code> CLI commands. </p>
-<ol>
-<li><p>Retrive the source from <code>integrity-enforcer</code> Git repository.</p>
-<p> git clone this repository and moved to <code>integrity-enforcer</code> directory</p>
-<pre><code> $ git clone https://github.com/IBM/integrity-enforcer.git
- $ cd integrity-shield
- $ pwd /home/repo/integrity-enforcer
-</code></pre><p> In this document, we clone the code in <code>/home/repo/integrity-enforcer</code>.</p>
-</li>
-<li><p>Prepare a namespace to deploy Integrity Shield. </p>
-<p>The following command uses <code>integrity-shield-operator-system</code> as default namespace for Integrity Shield. </p>
-<pre><code>make create-ns
-</code></pre><p>We swtich to <code>integrity-shield-operator-system</code> namespace.</p>
-<pre><code>oc project integrity-shield-operator-system
-</code></pre></li>
-<li><p>Prepare a private registry for hosting IShield container images, if not already exist.</p>
-<p>The following example create a private local container image registry to host the IShield container images.</p>
-<pre><code>$ make create-private-registry
-`
-</code></pre></li>
-<li><p>Define a public key secret for verifying signature by Integrity Shield.</p>
-<p> Integrity Shield requires a secret that includes a pubkey ring for verifying signatures of resources that need to be protected.  Integrity Shield supports X509 or PGP key for signing resources.</p>
-<p> By default, Integrity Shield provides a key setup. </p>
-<p> If you would like to use default key setup, the following command creates a public key secret for verifying signature</p>
-<pre><code> $ make create-key-ring
-</code></pre><p> If you would like to use your own key, please follow the steps in <a href="README_VERIFICATION_KEY_SETUP.md">doc</a> to generate a one:</p>
-<p> Once you have the encoded content of a verification key <code>/tmp/pubring.gpg</code>, embed it to <code>/tmp/keyring-secret.yaml</code> as follows.</p>
-<pre><code class="lang-yaml"><span class="hljs-attr">    apiVersion:</span> v1
-<span class="hljs-attr">    kind:</span> Secret
-<span class="hljs-attr">    metadata:</span>
-<span class="hljs-attr">      name:</span> keyring-secret
-<span class="hljs-attr">      type:</span> Opaque
-<span class="hljs-attr">    data:</span>
-      pubring.gpg: mQGNBF5nKwIBDADIiSiWZkD713UWpg2JBPomrj/iJRiMh ...
-</code></pre>
-<p> Create <code>keyring-secret</code> in a namespace <code>integrity-shield-operator-system</code> in the cluster.</p>
-<pre><code> $ oc create -f  /tmp/keyring-secret.yaml -n `integrity-shield-operator-system`
-</code></pre></li>
-<li><p>Define which signers (identified by email) should sign the resources in a specific namespace.</p>
-<p> If you use default key setup, the following command setup signers. </p>
-<pre><code> make setup-tmp-cr
-</code></pre><p> If you use your own key setup, configure <code>signerConfig</code> and <code>keyConfig</code> in the following <code>integrity-shield</code> Custom Resource file:</p>
-<p> Edit <a href="../integrity-shield-operator/config/samples/apis_v1alpha1_integrityshield.yaml"><code>config/samples/apis_v1alpha1_integrityshield.yaml</code></a> to specify a signer for a namespace <code>secure-ns</code>.</p>
-<p> Example below shows a signer <code>SampleSigner</code> identified by email <code>signer@enterprise.com</code> is configured to sign rosources to be protected in any namespace.</p>
-<pre><code class="lang-yaml"><span class="hljs-attr"> signerConfig:</span>
-<span class="hljs-attr">   policies:</span>
-<span class="hljs-attr">   - namespaces:</span>
-<span class="hljs-bullet">     -</span> <span class="hljs-string">&quot;*&quot;</span>
-<span class="hljs-attr">     signers:</span>
-<span class="hljs-bullet">     -</span> <span class="hljs-string">&quot;SampleSigner&quot;</span>
-<span class="hljs-attr">   - scope:</span> <span class="hljs-string">&quot;Cluster&quot;</span>
-<span class="hljs-attr">     signers:</span>
-<span class="hljs-bullet">     -</span> <span class="hljs-string">&quot;SampleSigner&quot;</span>
-<span class="hljs-attr">   signers:</span>
-<span class="hljs-attr">   - name:</span> <span class="hljs-string">&quot;SampleSigner&quot;</span>
-<span class="hljs-attr">     keyConfig:</span> sample-signer-keyconfig
-<span class="hljs-attr">     subjects:</span>
-<span class="hljs-attr">     - email:</span> <span class="hljs-string">&quot;sample_signer@signer.com&quot;</span>
-<span class="hljs-attr"> keyConfig:</span>
-<span class="hljs-attr"> - name:</span> sample-signer-keyconfig
-<span class="hljs-attr">   secretName:</span> keyring-secret
-</code></pre>
-</li>
-</ol>
-<ol>
-<li><p>Install Integrit Shield to a cluster</p>
-<p> Integrity Shield can be installed to cluster using a series of steps which are bundled in make commands.</p>
-<p> Before execute the make command, setup local environment as follows:</p>
-<ul>
-<li><code>ISHIELD_ENV</code> <local: means="" that="" we="" deploy="" ishield="" to="" a="" local="" cluster="" like="" minikube=""></local:></li>
-<li><code>ISHIELD_REPO_ROOT=&lt;set absolute path of the root directory of cloned integrity-shield source repository&gt;</code></li>
-<li><p><code>KUBECONFIG=~/kube/config/minikube</code>  (for deploying IShield on minikube cluster)</p>
-<p><code>~/kube/config/minikube</code> is the Kuebernetes config file with credentials for accessing a cluster via <code>kubectl</code>.</p>
-<p>The following example shows how to set up a local envionement.  </p>
-<pre><code>$ export ISHIELD_ENV=local
-$ export ISHIELD_REPO_ROOT=/home/repo/integrity-enforcer
-$ export KUBECONFIG=~/kube/config/minikube
-</code></pre><p>In this document, we clone the code in <code>/home/repo/integrity-enforcer</code>.</p>
-<p>Execute the following make commands to build Integrity Shield container images and pushes them to a local private container image registry..</p>
-<pre><code>$ cd integrity-shield
-$ make build-images
-$ make push-images-to-local
-</code></pre><p>Execute the following make commands to deploy Integrity Shield in a cluster.</p>
-<pre><code>$ make install-crds
-$ make install-operator
-</code></pre><p>If you use default key setup, the following command create Integrity Shield CR in cluster. </p>
-<pre><code>$ make create-tmp-cr
-</code></pre><p>If you use your own key setup, the following command create Integrity Shield CR in cluster. </p>
-<pre><code>$ make create-cr
-</code></pre></li>
-</ul>
-</li>
-<li><p>Confirm if <code>integrity-shield</code> is running successfully in a cluster.</p>
-<p> Check if there are two pods running in the namespace <code>integrity-shield-operator-system</code>: </p>
-<pre><code> $ oc get pod -n integrity-shield-operator-system
- integrity-shield-operator-c4699c95c-4p8wp   1/1     Running   0          5m
- integrity-shield-server-85c787bf8c-h5bnj    2/2     Running   0          82m
-</code></pre></li>
-<li><p>Clean up <code>integrity-shield</code> from a cluster</p>
-<p> Execute the following script to remove all resources related to IShield deployment from cluster.</p>
-<pre><code> $ cd integrity-shield
- $ make delete-tmp-cr
- $ make delete-operator
-</code></pre></li>
-</ol>
+                                <h1 id="deploy-integrity-shield-on-minikube">Deploy Integrity Shield on Minikube</h1>
 
                                 
                                 </section>
@@ -418,7 +313,7 @@ $ make install-operator
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Deploy Integrity Shield on Minikube","level":"1.9","depth":1,"next":{"title":"Development","level":"1.10","depth":1,"path":"README_DEVELOPMENT.md","ref":"README_DEVELOPMENT.md","articles":[]},"previous":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"path":"README_ISHIELD_OPERATOR_CR.md","ref":"README_ISHIELD_OPERATOR_CR.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_DEPLOY_ISHIELD_LOCAL.md","mtime":"2021-01-12T04:46:32.066Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-03-11T01:58:05.187Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Deploy Integrity Shield on Minikube","level":"1.9","depth":1,"next":{"title":"Development","level":"1.10","depth":1,"path":"README_DEVELOPMENT.md","ref":"README_DEVELOPMENT.md","articles":[]},"previous":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"path":"README_ISHIELD_OPERATOR_CR.md","ref":"README_ISHIELD_OPERATOR_CR.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_DEPLOY_ISHIELD_LOCAL.md","mtime":"2021-10-14T05:01:11.225Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-10-14T05:01:14.473Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

@@ -268,15 +268,17 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="integrity-shield">Integrity Shield</h1>
-<h2 id="integrity-shield-ishield">Integrity Shield (IShield)</h2>
-<p>Integrity Shield is a tool for built-in preventive integrity control for regulated cloud workloads. It includes signature based configuration drift prevention based on <a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/" target="_blank">Admission Webhook</a> on Kubernetes cluster.</p>
+<h2 id="integrity-shield">Integrity Shield</h2>
+<p>Integrity Shield is a tool for built-in preventive integrity control for regulated cloud workloads. It provides signature-based assurance of integrity for Kubernetes resources at cluster side.  </p>
+<p>Integrity Shield API works with <a href="https://github.com/open-policy-agent/gatekeeper" target="_blank">OPA/Gatekeeper</a>, verifies if the requests attached a signature, and blocks any unauthorized requests according to the constraint before actually persisting in etcd. Integrity Shield API uses <a href="https://github.com/sigstore/k8s-manifest-sigstore" target="_blank">k8s-manifest-sigstore</a> internally to verify Kubernetes manifest.</p>
+<p>Integrity Shield also has auditing capability: Integrity Shield Observer periodically verifies resources on cluster and reports the status of Kubernetes manifest integrity.</p>
 <p>Integrity Shield&apos;s capabilities are</p>
 <ul>
-<li>Allow to deploy authorized application pakcages only</li>
-<li>Allow to use signed deployment params only</li>
+<li>Allow to deploy authorized Kubernetes manifests only</li>
 <li>Zero-drift in resource configuration unless whitelisted</li>
 <li>Perform all integrity verification on cluster (admission controller, not in client side)</li>
 <li>Handle variations in application packaging and deployment (Helm /Operator /YAML / OLM Channel) with no modification in app installer</li>
+<li>Continuous resource monitoring</li>
 </ul>
 <h2 id="quick-start">Quick Start</h2>
 <p>See <a href="README_QUICK.html">Quick Start</a></p>
@@ -319,7 +321,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Overview","level":"1.2","depth":1,"path":"README_OVERVIEW.md","ref":"README_OVERVIEW.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README.md","mtime":"2021-01-08T07:44:14.227Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-03-11T01:58:05.187Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Overview","level":"1.2","depth":1,"path":"README_OVERVIEW.md","ref":"README_OVERVIEW.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README.md","mtime":"2021-10-14T05:00:37.065Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-10-14T05:01:14.473Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

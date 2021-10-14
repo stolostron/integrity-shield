@@ -270,74 +270,6 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="development">Development</h1>
-<h2 id="clone-repo">Clone Repo</h2>
-<pre><code>$ git clone git@github.com:IBM/integrity-enforcer.git
-$ cd integrity-shield
-</code></pre><h2 id="setup">Setup</h2>
-<p>Before executing the script, setup local environment as follows:</p>
-<ul>
-<li><code>ISHIELD_REPO_ROOT</code>: set absolute path of the root directory of cloned integrity-shield source repository</li>
-<li><code>KUBECONFIG=~/kube/config/minikube</code>  (for deploying IShield on minikube cluster)</li>
-</ul>
-<p><code>~/kube/config/minikube</code> is the Kuebernetes config file with credentials for accessing a cluster via <code>kubectl</code>.</p>
-<p>For example</p>
-<pre><code>$ export KUBECONFIG=~/kube/config/minikube
-$ export ISHIELD_REPO_ROOT=/repo/integrity-enforcer
-$ export ISHIELD_ENV=local
-</code></pre><h2 id="make-commands">Make commands</h2>
-<h3 id="create-private-registry-for-hosting-ishield-container-images">Create private registry for hosting IShield container images</h3>
-<p>The following example create a private local container image registry to host the IShield container images.</p>
-<pre><code>$ make create-private-registry
-</code></pre><h3 id="build-ishield-container-images">Build IShield container images</h3>
-<pre><code>$ make build-images
-$ make tag-images-to-local
-</code></pre><p>The make commands refer the steps for</p>
-<ul>
-<li>Building Integrity Shield container images</li>
-<li>Tagging Integrity Shield container images to be used locally.</li>
-</ul>
-<p>Three images are built.</p>
-<ul>
-<li><code>integrity-shield-operator</code> is image for operator which manages Integrity Shield</li>
-<li><code>integrity-shield-server</code> is image for IShield server</li>
-<li><code>integrity-shield-logging</code> is image for IShield logging side car</li>
-</ul>
-<h3 id="push-images">Push images</h3>
-<p>The following command pushes the built IShield images to local container image registry setup above.</p>
-<pre><code>$ make push-images-to-local
-</code></pre><p>Alternatively, you can push images to other container image registry as below.</p>
-<pre><code>$ make push-images
-</code></pre><p>You may need to setup image registry (e.g. dockerhub, quay.io etc.) and change the container images&apos; name and tag as needed.</p>
-<p>For example</p>
-<pre><code>$ export DOCKER_REGISTRY=docker.io
-$ export DOCKER_USER=integrityshield
-$ export DOCKER_PASS=&lt;password&gt;
-</code></pre><h3 id="install-ishield-to-a-cluster">Install IShield to a cluster</h3>
-<p>Create verification key as a secret.</p>
-<p>The following creates default key-ring secret required by IShield server.</p>
-<pre><code>make create-key-ring
-</code></pre><pre><code>$ make install-crds
-$ make install-operator
-$ make setup-tmp-cr
-$ make create-tmp-cr
-</code></pre><p>The make commands refer the steps for</p>
-<ul>
-<li>Create CRDs</li>
-<li>Install Integrity Shield operator</li>
-<li>Prepare Integrity Shield custom resource (operator installs IShield server automatically)</li>
-<li>Install Integrity Shield custom resource (operator installs IShield server automatically)</li>
-</ul>
-<h3 id="uninstall-ishield-from-cluster">Uninstall IShield from cluster</h3>
-<pre><code>$ make delete-tmp-cr
-$ make delete-keyring-secret
-$ make delete-operator
-</code></pre><p>The make command refers to the steps for</p>
-<ul>
-<li>Delete Integrity Shield custom resource (operator installs IShield server automatically)</li>
-<li>Delete Key-ring secret</li>
-<li>Delete Integrity Shield operator</li>
-<li>Delete CRDs</li>
-</ul>
 
                                 
                                 </section>
@@ -381,7 +313,7 @@ $ make delete-operator
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Development","level":"1.10","depth":1,"next":{"title":"Demo","level":"1.11","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Deploy Integrity Shield on Minikube","level":"1.9","depth":1,"path":"README_DEPLOY_ISHIELD_LOCAL.md","ref":"README_DEPLOY_ISHIELD_LOCAL.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_DEVELOPMENT.md","mtime":"2021-01-08T07:44:14.228Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-03-11T01:58:05.187Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Development","level":"1.10","depth":1,"next":{"title":"Demo","level":"1.11","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Deploy Integrity Shield on Minikube","level":"1.9","depth":1,"path":"README_DEPLOY_ISHIELD_LOCAL.md","ref":"README_DEPLOY_ISHIELD_LOCAL.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_DEVELOPMENT.md","mtime":"2021-10-14T05:01:11.229Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-10-14T05:01:14.473Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
