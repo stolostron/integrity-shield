@@ -7,7 +7,7 @@ on:
       - ocm-master  # Just for test
 
 jobs:
-  deploy:
+  gitbook:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,3 +16,4 @@ jobs:
         uses: ZanderZhao/gitbook-action@v1.2.4  # -> or ZanderZhao/gitbook-action@master.  If not use master click above, use latest please 
         with:                                   #    or fork this repo and use YourName/gitbook-action@master
           token: ${{ secrets.GITHUB_TOKEN }}  # -> remember add this in settings/secrets as following
+          source_dir: docs/
