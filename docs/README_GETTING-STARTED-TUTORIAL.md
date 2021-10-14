@@ -18,7 +18,7 @@ This tutorial will guide you through:
 
 ### Storing verification key as a Kubernetes Secret
 Create verification key as a Kubernetes Secret with the following command. 
-Please check [here](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_VERIFICATION_KEY_SETUP.md) to generate your own keypair.
+Please check [here](README_VERIFICATION_KEY_SETUP.md) to generate your own keypair.
 
 ```
 gpg --export signer@enterprise.com > /tmp/pubring.gpg
@@ -28,7 +28,7 @@ kubectl create secret generic my-pubkey --from-file=key=/tmp/pubring.gpg -n inte
 ## Detect (Continuous Monitoring)
 ### Creating a sample ManifestIntegrityConstraint
 Set the appropriate signer to "signers" field and create the following ManifestIntegrityConstraint resource.
-This constraint enable to monitor configmap resources in sample-ns.
+This constraint enable to monitor configmap resources in sample-ns. See [Define Protected Resources](README_CONSTRAINT.md) for detail specs.
 ```
 $ cat <<EOF | kubectl apply -f -
   apiVersion: constraints.gatekeeper.sh/v1beta1
@@ -52,7 +52,7 @@ $ cat <<EOF | kubectl apply -f -
       - name: sample-cm
       constraintName: configmap-constraint
       signers:
-      - sample@signer.com
+      - sample_signer@enterprise.com
       keyConfigs:
       - keySecretName: my-pubkey
         keySecretNamespace: integrity-shield-operator-system
@@ -84,7 +84,7 @@ configmap-constraint   122m   integrityshield.io/verifyResourceIgnored=false,int
 ```
 By checking verification result on per constraint, you can see which resources are violated from ManifestIntegrityState.
 ```
-$ kubectl get mis configmap-constraint -n integrity-shield-operator-system -o yaml                                                                                ?[doc]
+$ kubectl get mis configmap-constraint -n integrity-shield-operator-system -o yaml                                                                             
 apiVersion: apis.integrityshield.io/v1
 kind: ManifestIntegrityState
 metadata:
@@ -141,7 +141,7 @@ $ cat <<EOF | kubectl apply -f -
       - name: sample-cm
       constraintName: configmap-constraint
       signers:
-      - rurikudo@ibm.com
+      - sample_signer@enterprise.com
       keyConfigs:
       - keySecretName: my-pubkey
         keySecretNamespace: integrity-shield-operator-system
@@ -165,6 +165,14 @@ EOF
 
 Error from server ([configmap-constraint] denied; {"allow": false, "message": "failed to verify signature: failed to get signature: `cosign.sigstore.dev/message` is not found in the annotations"}): error when creating "STDIN": admission webhook "validation.gatekeeper.sh" denied the request: [configmap-constraint] denied; {"allow": false, "message": "failed to verify signature: failed to get signature: `cosign.sigstore.dev/message` is not found in the annotations"}
 ```
+
+You can see denied requests as Kubernetes Event like below.
+```
+$ kubectl get event -n secure-ns --field-selector type=IntegrityShield                                                     
+LAST SEEN   TYPE              REASON   OBJECT                   MESSAGE
+65s         IntegrityShield   Deny     configmap/sample-cm   [configmap-constraint]failed to verify signature: failed to get signature: `cosign.sigstore.dev/message` is not found in the annotations
+```
+
 ### Generating the signature for the sample resource
 Prepare the sample resource file.
 ```
@@ -179,9 +187,9 @@ cat << EOF > /tmp/sample-cm.yaml
     comment: comment1
 EOF
 ```
-Generate siganture with the following command. Please see this [document](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_SIGNING.md).
+Generate siganture with the following command. Please see this [document](README_SIGNING.md).
 ```
-$ ./scripts/gpg-annotation-sign.sh sample@signer.com /tmp/sample-cm.yaml
+$ ./scripts/gpg-annotation-sign.sh sample_signer@enterprise.com /tmp/sample-cm.yaml
 ```
 Check the signature is attached to the sample resource.
 ```
@@ -215,7 +223,7 @@ configmap-constraint   155m   integrityshield.io/verifyResourceIgnored=false,int
 ```
 By checking verification result on per constraint, you can see the sample resource has no violation.
 ```
-$ kubectl get mis configmap-constraint -n integrity-shield-operator-system -o yaml                                                                                ?[doc]
+$ kubectl get mis configmap-constraint -n integrity-shield-operator-system -o yaml                                                                                
 apiVersion: apis.integrityshield.io/v1
 kind: ManifestIntegrityState
 metadata:
@@ -237,9 +245,9 @@ spec:
     kind: ConfigMap
     name: sample-cm
     namespace: sample-ns
-    result: 'singed by a valid signer: sample@signer.com'
+    result: 'singed by a valid signer: sample_signer@enterprise.com'
     sigRef: __embedded_in_annotation__
-    signer: sample@signer.com
+    signer: sample_signer@enterprise.com
   observationTime: "2021-10-13 09:30:09"
   totalViolations: 0
   violation: false

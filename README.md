@@ -11,6 +11,8 @@ Two modes are selectively enabled on your cluster.
 - Enforce (Admission Control): Block to deploy unauthorized Kubernetes resources. Integrity Shield works with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable admission control based on signature verification for Kubernetes resources. 
 - Detect (Continuous Monitoring): monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster
 
+
+
 X509, PGP and Sigstore signing are supported for singing Kubernetes manifest YAML. K8s Integrity Shield supports Sigstore signing by using [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore).
 
 ## Architecture
@@ -20,7 +22,7 @@ X509, PGP and Sigstore signing are supported for singing Kubernetes manifest YAM
 
 Integrity Shield has two components mainly: API and Observer.
 
-Integrity Shield API receives a k8s resource from OPA/Gatekeeper, validates the resource which is included in the admission request and sends the verification result to OPA/Gatekeeper. Integrity Shield API uses verify-resource function of k8s-manifest-sigstore internally to verify k8s manifest.
+Integrity Shield API receives a k8s resource from OPA/Gatekeeper, validates the resource which is included in the admission request and sends the verification result to OPA/Gatekeeper. Integrity Shield API uses verify-resource feature of k8s-manifest-sigstore internally to verify k8s manifest.
 
 Integrity Shield API validates resources according to ManifestIntegrityConstraint which is a custom resource based on constraint framework of OPA/Gatekeeper. 
 
@@ -33,7 +35,7 @@ Integrity Shield Observer also uses k8s-manifest-sigstore to verify signature.
 Prerequisite: you'll need OPA/Gatekeeper installed on your cluster before you install Integrity Shield. 
 1. install operator
 This Operator will be installed in the "integrity-shield-operator-system" namespace.
-If you want to install other namespace, please follow this [instruction](docs/README_QUICK.md).
+If you want to install another namespace, please follow this [instruction](docs/README_QUICK.md).
 
 ```
 kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/deploy/integrity-shield-operator-latest.yaml
