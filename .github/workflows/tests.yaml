@@ -1,0 +1,58 @@
+name: Lint and Tests
+
+on: [pull_request]
+
+jobs:
+
+  # Lint action
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.17.x'
+      - name: Run Lint
+        run: |
+          set -e
+          export ISHIELD_REPO_ROOT=$(pwd)
+          export ISHIELD_ENV="local"
+          export ISHIELD_TEST_ENV="local"
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.42.1
+          make lint
+
+  # Unit Test action
+  unit-test:
+    name: Unit Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.17.x'
+      - name: Run Unit Test
+        run: |
+          set -e
+          export ISHIELD_REPO_ROOT=$(pwd)
+          export ISHIELD_ENV="local"
+          export ISHIELD_TEST_ENV="local"
+          make test-unit
+
+  # E2e Test action
+  e2e-test:
+    name: E2e Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.17.x'
+      - name: Run E2e Test
+        run: |
+          set -e
+          ./build/install-dependencies.sh
+          export ISHIELD_REPO_ROOT=$(pwd)
+          export ISHIELD_ENV="local"
+          export ISHIELD_TEST_ENV="local"
+          make test-e2e
