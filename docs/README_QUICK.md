@@ -13,11 +13,11 @@ $ kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeepe
 
 ## Install Integrity Shield
 ​
-This section describe the steps for deploying Integrity Shield (IShield) on your cluster. Here, We will use [kind](https://kind.sigs.k8s.io) which is a tool for running local Kubernetes clusters using Docker container “nodes”.
+This section describes the steps for deploying Integrity Shield on your cluster. Here, We will use [kind](https://kind.sigs.k8s.io), which is a tool for running local Kubernetes clusters using Docker container “nodes”.
 
 ### Retrive the source from `integrity-shield` Git repository.
 
-git clone this repository and moved to `integrity-shield` directory
+Git clone this repository and moved to `integrity-shield` directory
 
 ```
 $ git clone https://github.com/open-cluster-management/integrity-shield.git
@@ -27,8 +27,8 @@ $ pwd /home/repo/integrity-shield
 In this document, we clone the code in `/home/repo/integrity-shield`.
 
 ### Setup environment
-setup local environment as follows:
-- `ISHIELD_TEST_ENV <local: means that we deploy IShield to a local cluster like Kind cluster>`
+Setup local environment as follows:
+- `ISHIELD_TEST_ENV <local: means that we deploy Integrity Shield to a local cluster like Kind cluster>`
 - `ISHIELD_REPO_ROOT=<set absolute path of the root directory of cloned integrity-shield source repository`
 - `KUBECONFIG=~/kube/config/kind`  (for deploying Integrity Shield on kind cluster)
 
@@ -43,8 +43,8 @@ $ export KUBECONFIG=~/kube/config/kind
 
 ### Prepare Kubernets cluster and private registry
 
-Prepare a Kubernets cluster and private registry, if not already exist.
-The following example create a kind cluster which is a local Kubernetes cluster and a private local container image registry to host the IShield container images.
+Prepare a Kubernetes cluster and private registry, if not already exist.
+The following example creates a kind cluster which is a local Kubernetes cluster and a private local container image registry to host the Integrity Shield container images.
 
 ```
 $ make create-kind-cluster
@@ -55,25 +55,23 @@ $ make create-kind-cluster
 
 You can deploy Integrity Shield to any namespace. In this document, we will use `integrity-shield-operator-system` to deploy Integrity Shield.
 
-If you want to use another namespace, please change `ISHIELD_NS` variable in this [file](../ishield-build.conf).
+If you want to use another namespace, please change the `ISHIELD_NS` variable in this [file](../ishield-build.conf).
 ```
 make create-ns
 ```
 
 ### Install Integrity Shield to a cluster
 
-Integrity Shield can be installed to a cluster with simple steps.
-
-Execute the following make commands to build Integrity Shield images.
-In this document, we push images to local image registry `localhost:5000` because we set ISHIELD_TEST_ENV=local.
-If you want to use another registry, please change `LOCAL_REGISTRY` variable in this [file](../ishield-build.conf).
+Execute the following command to build Integrity Shield images.
+In this document, we push images to the local image registry `localhost:5000` because we set ISHIELD_TEST_ENV=local.
+If you want to use another registry, please change the `LOCAL_REGISTRY` variable in this [file](../ishield-build.conf).
 
 ```
 $ make build-images
 $ make push-images-to-local
 ```
 
-Then, execute the following command to deploy Integrity Shield Opertor in a cluster.
+Then, execute the following command to deploy Integrity Shield Operator in a cluster
 
 ```
 $ make install-operator
@@ -81,7 +79,7 @@ $ make make setup-tmp-cr
 $ make create-tmp-cr
 ```
 
-After successful installation, you should see a pod is running in the namespace `integrity-shield-operator-system`.
+After successful installation, you should see a pod running in the namespace `integrity-shield-operator-system`.
 
 ```
 $ kubectl get pod -n integrity-shield-operator-system                                                                     
@@ -93,7 +91,9 @@ Then, execute the following command to deploy Integrity Shield API and Observer 
 ```
 $ make create-tmp-cr
 ```
-After successful installation, you should see a pod is running in the namespace `integrity-shield-operator-system`.
+
+After successful installation, you should see a pod running in the namespace `integrity-shield-operator-system`.
+
 ```
 $ kubectl get pod -n integrity-shield-operator-system                                                                    
 NAME                                                            READY   STATUS    RESTARTS   AGE
@@ -109,9 +109,9 @@ Once Integrity Shield is deployed to a cluster, you are ready to put resources o
 
 The steps for protecting resources include:
 - Store verification key as a Kubernetes Secret
-- Configure ManifestIntegrityProfile to define which reource(s) should be protected
+- Configure ManifestIntegrityProfile to define which resource(s) should be protected
 
-and try two modes:
+Here, we will try two modes:
 - [Detect] Check resource integrity on cluster 
 - [Enforce] Enable preventive protection 
 
@@ -125,7 +125,7 @@ In this document, we use pgp signing.
 The following steps show how you can import your signature verification key to Integrity Shield.  
 Find out how to sign your resources [here](README_SIGNING.md).
 
-First, you need to export public key to a file. The following example shows a pubkey for a signer identified by an email `sample_signer@enterprise.com` is exported and stored in `/tmp/pubring.gpg`. (Use the filename `pubring.gpg`.)
+First, you need to export the public key to a file. The following example shows a pubkey for a signer identified by an email `sample_signer@enterprise.com` is exported and stored in `/tmp/pubring.gpg`. (Use the filename `pubring.gpg`.)
 
 ```
 $ gpg --export sample_signer@enterprise.com > /tmp/pubring.gpg
@@ -133,7 +133,7 @@ $ gpg --export sample_signer@enterprise.com > /tmp/pubring.gpg
 
 If you do not have any PGP key or you want to use new key, generate new one and export it to a file. See [this GitHub document](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-gpg-key).
 
-Then, create a secret that includes a pubkey ring for verifying signatures of resources
+Then, create a secret that includes a pubkey ring for verifying signatures of resources.
 
 ```
 kubectl create secret generic --save-config keyring-secret  -n integrity-shield-operator-system --from-file=/tmp/pubring.gpg
@@ -143,7 +143,7 @@ kubectl create secret generic --save-config keyring-secret  -n integrity-shield-
 
 You can define which resources should be protected with signature in a cluster by Integrity Shield. A custom resource `ManifestIntegrityConstraint` (MIC) includes the definition. Example below illustrates how to define ManifestIntegrityConstraint to protect three resources ConfigMap, Deployment, and Service in a namespace `secure-ns`. 
 
-Integrity Shield provides phased approach.
+Integrity Shield provides a phased approach.
 First, let's try **`Detect mode`**.
 
 ```
@@ -186,7 +186,7 @@ manifestintegrityconstraint.constraints.gatekeeper.sh/sample-constraint created
 See [Define Protected Resources](README_CONSTRAINT.md) for detail specs.
 
 ### Create a sample resource without signature
-Run the following command to create a sample configmap.
+Run the following command to create a Yaml manifest for a sample configmap.
 ```
 cat << EOF > /tmp/sample-cm.yaml
   apiVersion: v1
@@ -208,14 +208,15 @@ configmap/sample-cm created
 
 
 ### Check the resource integrity status from the ManifestIntegrityState generated by observer
-Check the results of resource integrity verification by observer with this command.
+Check the results of resource integrity verification by the observer with this command.
 you can see that some resources defined in sample-constraint are in invalid state because integrityshield.io/verifyResourceViolation label is true.
+
 ```
 $ kubectl get mis --show-labels -n integrity-shield-operator-system                                                                                             
 NAME                   AGE    LABELS
 sample-constraint      2m1s   integrityshield.io/verifyResourceIgnored=false,integrityshield.io/verifyResourceViolation=true
 ```
-By checking verification result on per constraint, you can see which resources are violated from ManifestIntegrityState.
+By checking the verification result on per constraint, you can see which resource is violated from ManifestIntegrityState.
 ```
 $ kubectl get mis sample-constraint -n integrity-shield-operator-system -o yaml                                                                               
 apiVersion: apis.integrityshield.io/v1
@@ -270,14 +271,14 @@ $ kubectl apply -f /tmp/sample-cm.yaml -n secure-ns
 configmap/sample-cm created
 ```
 
-Check the resource integrity status again. You can see that `integrityshield.io/verifyResourceViolation` label became false.
+Check the resource integrity status again. You will see that the label of `integrityshield.io/verifyResourceViolation` has become false.
 
 ```
 $ kubectl get mis --show-labels -n integrity-shield-operator-system
 NAME                   AGE   LABELS
 sample-constraint      22m   integrityshield.io/verifyResourceIgnored=false,integrityshield.io/verifyResourceViolation=false
 ```
-Also, you can see sample-cm has no violation because it has valid signature now.
+Also, you can see sample-cm has no violation because it has a valid signature now.
 ```
 $ kubectl get mis sample-constraint -n integrity-shield-operator-system -o yaml            
 apiVersion: apis.integrityshield.io/v1
@@ -310,7 +311,7 @@ status: {}
 
 Now, let's switch to  **`Enforce mode`**.
 
-To enable enforce mode, change `enforce: false` to `enforce: true`, then create ManifestIntegrityConstraint.
+To enable enforce mode, change `enforce: false` to `enforce: true`, then create the ManifestIntegrityConstraint.
 ```
 cat <<EOF | kubectl apply -f -
   apiVersion: constraints.gatekeeper.sh/v1beta1
@@ -349,7 +350,7 @@ EOF
 
 ### Create a sample resource without signature
 
-Run the following command to create a sample service.
+Run the following command to create a Yaml manifeset for a sample service.
 ```
 cat << EOF > /tmp/sample-svc.yaml
 apiVersion: v1
