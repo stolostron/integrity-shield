@@ -90,7 +90,51 @@ spec:
         kind: IntegrityShield
         name: integrityshields.apis.integrityshield.io
         version: v1
-  description: "Kubernetes resources are represented as YAML files, which are applied to clusters when you create and update the resource. The YAML content is designed carefully to achieve the application desired state and should not be tampered with. If the YAML content is modified maliciously or accidentally, and applied to a cluster without notice, the cluster moves to an unexpected state.\n\n[K8s Integrity Shield](https://github.com/open-cluster-management/integrity-shield) provides preventive control for enforcing signature verification for any requests to create or update resources. This operator supports the installation and management of K8s Integrity Shield on cluster. \n\nTwo modes are selectively enabled on your cluster. \n- Enforce (Admission Control): Block to deploy unauthorized Kubernetes resources. K8s Integrity Shield works with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable admission control based on signature verification for Kubernetes resources.\n- Detect (Continuous Monitoring): monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster\n\nX509, PGP and Sigstore signing are supported for singing Kubernetes manifest YAML. K8s Integrity Shield supports Sigstore signing by using [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore).\n\n## Preparations before installation\n\nOPA/Gatekeeper should be deployed before installing K8s Integrity Shield.\nThe installation instructions to deploy OPA/Gatekeeper components is [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/).\n\n\n## Installation\nInstall K8s Integrity Shield Operator by following the instruction after clicking Install button at the top right. Then you can create the operator Custom Resource `IntegrityShield` to complete installation.\n\nIf you want to change the settings such as default run mode (detection/enforcement) or audit interval,  please check [here](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).\n\nTo verify that installation was completed successfully,\nrun the following command.\nThe following three pods will be installed with default CR.\n```\n$ kubectl get pod -n integrity-shield-operator-system                                                                                                                  \nNAME                                                            READY   STATUS    RESTARTS   AGE\nintegrity-shield-api-7b7f768bf7-fhrpg                           1/1     Running   0          20s\nintegrity-shield-observer-5bc66f75f7-tn8fw                      1/1     Running   0          25s\nintegrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running   0          3h5m\n```\n\nAfter installation, you can protect Kubernetes resources by following this [document](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md).\n\n## Supported Versions\n### Platform\nK8s Integrity Shield can be deployed with the operator. We have verified the feasibility on the following platforms:\n\n- [RedHat OpenShift 4.7.1 and 4.9.0](https://www.openshift.com)  \n- [Kuberenetes v1.19.7 and v1.21.1](https://kubernetes.io)\n\n### OPA/Gatekeeper\n- [gatekeeper-operator v0.2.0](https://github.com/open-policy-agent/gatekeeper)\n- [gatekeeper v3.5.2 and v3.6.0](https://github.com/open-policy-agent/gatekeeper)"
+  description: |-
+    Kubernetes resources are represented as YAML files, which are applied to clusters when you create and update the resource. The YAML content is designed carefully to achieve the application desired state and should not be tampered with. If the YAML content is modified maliciously or accidentally, and applied to a cluster without notice, the cluster moves to an unexpected state.
+
+    [K8s Integrity Shield](https://github.com/open-cluster-management/integrity-shield) provides preventive control for enforcing signature verification for any requests to create or update resources. This operator supports the installation and management of K8s Integrity Shield on cluster.
+
+    Two modes are selectively enabled on your cluster.
+    - Enforce (Admission Control): Block to deploy unauthorized Kubernetes resources. K8s Integrity Shield works with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable admission control based on signature verification for Kubernetes resources.
+    - Detect (Continuous Monitoring): monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster
+
+    X509, PGP and Sigstore signing are supported for singing Kubernetes manifest YAML. K8s Integrity Shield supports Sigstore signing by using [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore).
+
+    ## Preparations before installation
+
+    OPA/Gatekeeper should be deployed before installing K8s Integrity Shield.
+    The installation instructions to deploy OPA/Gatekeeper components is [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/).
+
+
+    ## Installation
+    Install K8s Integrity Shield Operator by following the instruction after clicking Install button at the top right. Then you can create the operator Custom Resource `IntegrityShield` to complete installation.
+
+    If you want to change the settings such as default run mode (detection/enforcement) or audit interval,  please check [here](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).
+
+    To verify that installation was completed successfully,
+    run the following command.
+    The following three pods will be installed with default CR.
+    ```
+    $ kubectl get pod -n integrity-shield-operator-system
+    NAME                                                            READY   STATUS    RESTARTS   AGE
+    integrity-shield-api-7b7f768bf7-fhrpg                           1/1     Running   0          20s
+    integrity-shield-observer-5bc66f75f7-tn8fw                      1/1     Running   0          25s
+    integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running   0          3h5m
+    ```
+
+    After installation, you can protect Kubernetes resources by following this [document](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md).
+
+    ## Supported Versions
+    ### Platform
+    K8s Integrity Shield can be deployed with the operator. We have verified the feasibility on the following platforms:
+
+    - [RedHat OpenShift 4.7.1 and 4.9.0](https://www.openshift.com)
+    - [Kuberenetes v1.19.7 and v1.21.1](https://kubernetes.io)
+
+    ### OPA/Gatekeeper
+    - [gatekeeper-operator v0.2.0](https://github.com/open-policy-agent/gatekeeper)
+    - [gatekeeper v3.5.2 and v3.6.0](https://github.com/open-policy-agent/gatekeeper)
   displayName: K8s Integrity Shield
   icon:
     - base64data: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTkuMzQgMTk1LjE2Ij48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzI5NzdmZjt9LmNscy0ye2ZpbGw6I2ZmZjt9LmNscy0ze2ZpbGw6I2JhYzVmNzt9PC9zdHlsZT48L2RlZnM+PGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+PGcgaWQ9IkxheWVyXzEtMiIgZGF0YS1uYW1lPSJMYXllciAxIj48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik05Mi41MywxLjYzLDI1LjgsMzMuNzdhMTYuNDUsMTYuNDUsMCwwLDAtOC45MSwxMS4xNkwuNDEsMTE3LjE0YTE2LjQ4LDE2LjQ4LDAsMCwwLDMuMTgsMTMuOTJMNDkuNzcsMTg5YTE2LjQ2LDE2LjQ2LDAsMCwwLDEyLjg2LDYuMTlIMTM2LjdBMTYuNDgsMTYuNDgsMCwwLDAsMTQ5LjU3LDE4OWw0Ni4xOC01Ny45MWExNi40NCwxNi40NCwwLDAsMCwzLjE3LTEzLjkyTDE4Mi40NCw0NC45M2ExNi40NCwxNi40NCwwLDAsMC04LjktMTEuMTZMMTA2LjgxLDEuNjNBMTYuNDgsMTYuNDgsMCwwLDAsOTIuNTMsMS42M1oiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xNTYuMDYsNjMuNTdhOC4xMiw4LjEyLDAsMCwwLTQuOTEtNi4zbC00OC4zOS0yMGE4LjEsOC4xLDAsMCwwLTYuMTksMGwtNDguMzksMjBhOC4xNiw4LjE2LDAsMCwwLTQuOTEsNi4zLDEwNy4yOSwxMDcuMjksMCwwLDAsMy4zOSw0NS4xNiw5NC44MSw5NC44MSwwLDAsMCwxNS44MiwzMC44LDEwOC4zNywxMDguMzcsMCwwLDAsMzMuMjUsMjgsOC4xLDguMSwwLDAsMCw3Ljg3LDBjMTMuNTQtNy41NiwyNC43My0xNywzMy4yNS0yOGE5NC45NCw5NC45NCwwLDAsMCwxNS44My0zMC44LDEwNy40MSwxMDcuNDEsMCwwLDAsMy4zOC00NS4xNloiLz48cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik05OS42NywxNjguNTVhOCw4LDAsMCwwLDMuOTMtMWMxMy41NC03LjU2LDI0LjczLTE3LDMzLjI1LTI4YTk0Ljk0LDk0Ljk0LDAsMCwwLDE1LjgzLTMwLjgsMTA3LjQxLDEwNy40MSwwLDAsMCwzLjM4LTQ1LjE2aDBhOC4xMiw4LjEyLDAsMCwwLTQuOTEtNi4zbC00OC4zOS0yMCIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTExNS44MSw1OC4yMywxMDIsNTIuNTJhNi4xOCw2LjE4LDAsMCwwLTQuNzQsMEw2MC4yMyw2Ny44OGE2LjIyLDYuMjIsMCwwLDAtMy43Niw0LjgyLDgyLjM0LDgyLjM0LDAsMCwwLDIuNTksMzQuNTksNzIuODMsNzIuODMsMCwwLDAsMTIuMTIsMjMuNiw4Mi44OCw4Mi44OCwwLDAsMCwyNS40NywyMS40NCw2LjIyLDYuMjIsMCwwLDAsNiwwLDgyLjg4LDgyLjg4LDAsMCwwLDI1LjQ3LTIxLjQ0LDcyLjY0LDcyLjY0LDAsMCwwLDEyLjEyLTIzLjYsODIuMjIsODIuMjIsMCwwLDAsMi42LTM0LjU5aDBhNi4yMiw2LjIyLDAsMCwwLTMuNzYtNC44MmwtOS42LTQiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik05OS42NywxNTQuMTFhNy4yMSw3LjIxLDAsMCwxLTMuNS0uOUE4NCw4NCwwLDAsMSw3MC4zOSwxMzEuNWE3My42LDczLjYsMCwwLDEtMTIuMjgtMjMuOTIsODMuMjQsODMuMjQsMCwwLDEtMi42My0zNUE3LjIzLDcuMjMsMCwwLDEsNTkuODUsNjdMOTYuOTEsNTEuNmE3LjIxLDcuMjEsMCwwLDEsNS41MSwwbDEzLjc3LDUuNy0uNzcsMS44NS0xMy43Ni01LjdhNS4xOCw1LjE4LDAsMCwwLTQsMEw2MC42MSw2OC44YTUuMTksNS4xOSwwLDAsMC0zLjE1LDRBODEuMjQsODEuMjQsMCwwLDAsNjAsMTA3YTcxLjgzLDcxLjgzLDAsMCwwLDEyLDIzLjI3LDgxLjkyLDgxLjkyLDAsMCwwLDI1LjE2LDIxLjE4LDUuMzIsNS4zMiwwLDAsMCw1LDAsODEuODUsODEuODUsMCwwLDAsMjUuMTctMjEuMTksNzEuNjYsNzEuNjYsMCwwLDAsMTItMjMuMjYsODEuMjksODEuMjksMCwwLDAsMi41Ny0zNC4xNyw1LjIyLDUuMjIsMCwwLDAtMy4xNi00bC05LjU5LTQsLjc2LTEuODQsOS42LDRhNy4yNSw3LjI1LDAsMCwxLDQuMzcsNS42LDgzLjQxLDgzLjQxLDAsMCwxLTIuNjMsMzUsNzMuNjMsNzMuNjMsMCwwLDEtMTIuMjksMjMuOTIsODQsODQsMCwwLDEtMjUuNzcsMjEuNzFBNy4yMSw3LjIxLDAsMCwxLDk5LjY3LDE1NC4xMVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik05NS44LDEyMC4zNmE0LDQsMCwwLDEtMi42Ni0xTDgwLjc3LDEwOEE0LDQsMCwxLDEsODYsMTAxLjlsLjE0LjEyLDksOC40NCwxNy40LTIzLjg0YTQsNCwwLDEsMSw2Ljc4LDQuMjgsMy43NywzLjc3LDAsMCwxLS4zMS40MmwtMjAsMjcuNDZhNCw0LDAsMCwxLTIuODEsMS42M1oiLz48L2c+PC9nPjwvc3ZnPg==
