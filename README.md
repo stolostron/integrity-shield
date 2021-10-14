@@ -3,7 +3,7 @@ Kubernetes resources are represented as YAML files, which are applied to cluster
 
 Integrity Shield provides preventive control for enforcing signature verification for any requests to create or update resources. Integrity Shield also provides continuous monitoring based on signature verification.
 
-![Scenario](./docs/new-ishield-scenario.png)
+![Scenario](./docs/ishield-scenario.png)
 
 ## Features 
 
