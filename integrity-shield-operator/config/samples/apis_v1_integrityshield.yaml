@@ -38,7 +38,7 @@ spec:
   requestHandlerConfig: |
     defaultConstraintAction:
       mode: detect
-      suppressAuditResult: false
+      admissionOnly: false
     sideEffect: 
       createDenyEvent: true
     log:
