@@ -1,4 +1,9 @@
-# Quick Start
+# Quick Start for Development
+
+This document will guide you through:
+- how to install Integrity Shield with make commands
+- how to use your own image registry for Integrity Shield
+- how to install Integrity Shield to another namespace
 
 ## Prerequisites
 ​
