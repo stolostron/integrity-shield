@@ -36,12 +36,8 @@ type ParameterObject struct {
 }
 
 type Action struct {
-	Audit struct {
-		Inform bool `json:"inform,omitempty"`
-	} `json:"audit,omitempty"`
-	AdmissionControl struct {
-		Enforce bool `json:"enforce,omitempty"`
-	} `json:"admissionControl,omitempty"`
+	Mode                string `json:"mode,omitempty"`
+	SuppressAuditResult bool   `json:"suppressAuditResult,omitempty"`
 }
 
 type SignatureRef struct {

@@ -289,13 +289,15 @@ func (self *Observer) Run() {
 			ObservationTime: time.Now().Format(timeFormat),
 		}
 
-		// check if targeted constraint
+		// check if supress audit result
 		ignored := false
 		if constraint.Parameters.Action == nil {
-			ignored = !rhconfig.DefaultConstraintAction.Audit.Inform
-
+			ignored = rhconfig.DefaultConstraintAction.SuppressAuditResult
 		} else {
-			ignored = !constraint.Parameters.Action.Audit.Inform
+			ignored = constraint.Parameters.Action.SuppressAuditResult
+		}
+		if ignored {
+			log.Info("the audit result about %s will be not reported", constraint.Parameters.ConstraintName)
 		}
 
 		// export VerifyResult

@@ -92,9 +92,24 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 	// get enforce action
 	enforce := false
 	if paramObj.Action == nil {
-		enforce = rhconfig.DefaultConstraintAction.AdmissionControl.Enforce
+		if rhconfig.DefaultConstraintAction.Mode != "" {
+			if rhconfig.DefaultConstraintAction.Mode == "enforce" {
+				enforce = true
+			}
+		}
 	} else {
-		enforce = paramObj.Action.AdmissionControl.Enforce
+		if paramObj.Action.Mode == "enforce" || paramObj.Action.Mode != "detect" {
+			log.WithFields(log.Fields{
+				"namespace": req.Namespace,
+				"name":      req.Name,
+				"kind":      req.Kind.Kind,
+				"operation": req.Operation,
+				"userName":  req.UserInfo.Username,
+			}).Warningf("run mode should be set to 'enforce' or 'detect' in rule,%s", paramObj.ConstraintName)
+		}
+		if paramObj.Action.Mode == "enforce" {
+			enforce = true
+		}
 	}
 	if enforce {
 		log.Info("enforce action is enabled.")

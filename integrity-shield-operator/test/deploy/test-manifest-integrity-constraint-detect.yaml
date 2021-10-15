@@ -16,7 +16,4 @@ spec:
     - keySecretName: keyring-secret
       keySecretNamespace: integrity-shield-operator-system
     action:
-      admissionControl:
-        enforce: false
-      audit:
-        inform: true
+      mode: detect
