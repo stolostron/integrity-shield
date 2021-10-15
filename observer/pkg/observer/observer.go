@@ -297,7 +297,7 @@ func (self *Observer) Run() {
 			ignored = constraint.Parameters.Action.SuppressAuditResult
 		}
 		if ignored {
-			log.Info("the audit result about %s will be not reported", constraint.Parameters.ConstraintName)
+			log.Infof("the audit result about %s will be not reported", constraint.Parameters.ConstraintName)
 		}
 
 		// export VerifyResult
