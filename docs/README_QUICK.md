@@ -168,10 +168,7 @@ cat <<EOF | kubectl apply -f -
       - "secure-ns"
     parameters:
       action:
-        admissionControl:
-          enforce: false
-        audit:
-          inform: true
+        mode: detect
       constraintName: sample-constraint
       signers:
       - sample_signer@enterprise.com
@@ -334,10 +331,7 @@ cat <<EOF | kubectl apply -f -
       - "secure-ns"
     parameters:
       action:
-        admissionControl:
-          enforce: true
-        audit:
-          inform: true
+        mode: enforce
       constraintName: sample-constraint
       signers:
       - sample_signer@enterprise.com

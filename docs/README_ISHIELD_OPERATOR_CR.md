@@ -17,11 +17,7 @@ Integrity shield enforce/monitor resources according to ManifestIntegrityConstra
 When you want to change the default value, please edit here.
 ```yaml
   requestHandlerConfig: |
-    defaultConstraintAction:
-      audit:
-        inform: true
-      admissionControl:
-        enforce: false
+    mode: detect
 ```
 
 ### Enable/Disable side effect

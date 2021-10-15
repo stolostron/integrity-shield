@@ -46,10 +46,7 @@ $ cat <<EOF | kubectl apply -f -
       - "sample-ns"
     parameters:
       action:
-        admissionControl:
-          enforce: false
-        audit:
-          inform: true
+        mode: detect
       objectSelector:
       - name: sample-cm
       constraintName: configmap-constraint
@@ -131,10 +128,7 @@ $ cat <<EOF | kubectl apply -f -
       - "sample-ns"
     parameters:
       action:
-        admissionControl:
-          enforce: true
-        audit:
-          inform: true
+        mode: enforce
       objectSelector:
       - name: sample-cm
       constraintName: configmap-constraint
