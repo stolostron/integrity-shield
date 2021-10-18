@@ -1,0 +1,18 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches:
+      - master  # Set a branch name to trigger deployment
+
+jobs:
+  gitbook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Gitbook Action           # https://github.com/ZanderZhao/gitbook-action/releases
+        uses: ZanderZhao/gitbook-action@v1.2.4  # -> or ZanderZhao/gitbook-action@master.  If not use master click above, use latest please 
+        with:                                   #    or fork this repo and use YourName/gitbook-action@master
+          token: ${{ secrets.GITHUB_TOKEN }}  # -> remember add this in settings/secrets as following
+          source_dir: docs/

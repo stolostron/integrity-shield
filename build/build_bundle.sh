@@ -80,7 +80,15 @@ cat tmp.json  | yq r - -P > $csvfile
 rm tmp.json
 
 cp  ${ISHIELD_REPO_ROOT}/docs/README_OPERATOR_HUB.md ${TMP_DIR}README_OPERATOR_HUB.md
-sed -i '1,2d' ${ISHIELD_REPO_ROOT}/docs/README_OPERATOR_HUB.md
+
+OS_NAME=$(uname -s)
+if [[ "$OS_NAME" == "Darwin" ]]; then
+   sedi=(-i "")
+else
+   sedi=(-i)
+fi
+
+sed "${sedi[@]}" '1,2d' ${ISHIELD_REPO_ROOT}/docs/README_OPERATOR_HUB.md
 
 yq w -i $csvfile spec.description  -- "$(< ${ISHIELD_REPO_ROOT}/docs/README_OPERATOR_HUB.md)"
 yq w -i $csvfile metadata.annotations.containerImage "${TARGET_OPERATOR_IMG}"

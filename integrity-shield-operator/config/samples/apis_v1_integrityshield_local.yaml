@@ -36,10 +36,8 @@ spec:
   requestHandlerConfigName: request-handler-config
   requestHandlerConfig: |
     defaultConstraintAction:
-      audit:
-        inform: true
-      admissionControl:
-        enforce: false
+      mode: detect
+      admissionOnly: false
     sideEffect:
       createDenyEvent: true
     log:

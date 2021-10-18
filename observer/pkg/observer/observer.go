@@ -221,7 +221,7 @@ func (self *Observer) Run() {
 		results := []VerifyResultDetail{}
 		for _, resource := range resources {
 			// skip object
-			result := ObserveResource(resource, constraint.Parameters.SignatureRef, ignoreFields, skipObjects, secrets)
+			result := ObserveResource(resource, constraint.Parameters, ignoreFields, skipObjects, secrets)
 			imgAllow, imgMsg := ObserveImage(resource, constraint.Parameters.ImageProfile)
 			if !imgAllow {
 				if !result.Violation {
@@ -289,13 +289,15 @@ func (self *Observer) Run() {
 			ObservationTime: time.Now().Format(timeFormat),
 		}
 
-		// check if targeted constraint
+		// check if supress audit result
 		ignored := false
 		if constraint.Parameters.Action == nil {
-			ignored = !rhconfig.DefaultConstraintAction.Audit.Inform
-
+			ignored = rhconfig.DefaultConstraintAction.AdmissionOnly
 		} else {
-			ignored = !constraint.Parameters.Action.Audit.Inform
+			ignored = constraint.Parameters.Action.AdmissionOnly
+		}
+		if ignored {
+			log.Infof("the audit result about %s will be not reported", constraint.Parameters.ConstraintName)
 		}
 
 		// export VerifyResult

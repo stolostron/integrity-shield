@@ -34,13 +34,13 @@ const AnnotationKeyDomain = "integrityshield.io"
 const ImageRefAnnotationKeyShield = "integrityshield.io/signature"
 const provenanceEnvKey = "ENABLE_PROVENANCE_RESULT"
 
-func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconfig.SignatureRef, ignoreFields k8smanifest.ObjectFieldBindingList, skipObjects k8smanifest.ObjectReferenceList, secrets []k8smnfconfig.KeyConfig) VerifyResultDetail {
+func ObserveResource(resource unstructured.Unstructured, paramObj k8smnfconfig.ParameterObject, ignoreFields k8smanifest.ObjectFieldBindingList, skipObjects k8smanifest.ObjectReferenceList, secrets []k8smnfconfig.KeyConfig) VerifyResultDetail {
 	namespace := os.Getenv("POD_NAMESPACE")
 	if namespace == "" {
 		namespace = defaultPodNamespace
 	}
 	log.Debug("Observed Resource:", resource.GetAPIVersion(), resource.GetKind(), resource.GetNamespace(), resource.GetName())
-	vo := &k8smanifest.VerifyResourceOption{}
+	vo := &paramObj.VerifyResourceOption
 	vo.IgnoreFields = ignoreFields
 	vo.SkipObjects = skipObjects
 	// vo.CheckDryRunForApply = true
@@ -51,15 +51,15 @@ func ObserveResource(resource unstructured.Unstructured, signatureRef k8smnfconf
 	}
 	vo.DryRunNamespace = namespace
 
-	if signatureRef.ImageRef != "" {
-		vo.ImageRef = signatureRef.ImageRef
+	if paramObj.SignatureRef.ImageRef != "" {
+		vo.ImageRef = paramObj.SignatureRef.ImageRef
 	}
-	if signatureRef.SignatureResourceRef.Name != "" && signatureRef.SignatureResourceRef.Namespace != "" {
-		ref := fmt.Sprintf("k8s://ConfigMap/%s/%s", signatureRef.SignatureResourceRef.Namespace, signatureRef.SignatureResourceRef.Name)
+	if paramObj.SignatureRef.SignatureResourceRef.Name != "" && paramObj.SignatureRef.SignatureResourceRef.Namespace != "" {
+		ref := fmt.Sprintf("k8s://ConfigMap/%s/%s", paramObj.SignatureRef.SignatureResourceRef.Namespace, paramObj.SignatureRef.SignatureResourceRef.Name)
 		vo.SignatureResourceRef = ref
 	}
-	if signatureRef.ProvenanceResourceRef.Name != "" && signatureRef.ProvenanceResourceRef.Namespace != "" {
-		ref := fmt.Sprintf("k8s://ConfigMap/%s/%s", signatureRef.ProvenanceResourceRef.Namespace, signatureRef.ProvenanceResourceRef.Name)
+	if paramObj.SignatureRef.ProvenanceResourceRef.Name != "" && paramObj.SignatureRef.ProvenanceResourceRef.Namespace != "" {
+		ref := fmt.Sprintf("k8s://ConfigMap/%s/%s", paramObj.SignatureRef.ProvenanceResourceRef.Namespace, paramObj.SignatureRef.ProvenanceResourceRef.Name)
 		vo.ProvenanceResourceRef = ref
 	}
 
