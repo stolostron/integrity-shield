@@ -36,11 +36,11 @@ Integrity Shield Observer also uses k8s-manifest-sigstore to verify signature.
 
 
 ## Installation
-Prerequisite: you'll need OPA/Gatekeeper installed on your cluster before you install Integrity Shield. 
+Prerequisite: Before installing Integrity Shield, OPA/Gatekeeper should be installed on the cluster.
 1. Install operator
 
 This Operator will be installed in the "integrity-shield-operator-system" namespace.
-If you want to install another namespace, please follow this [instruction](docs/README_QUICK.md).
+If you want to install another namespace, please check this [document](docs/README_DEVELOP.md).
 
 ```
 kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/deploy/integrity-shield-operator-latest.yaml
