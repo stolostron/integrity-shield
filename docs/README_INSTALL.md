@@ -3,11 +3,18 @@ There are two ways to install Integrity Shield.
 - OLM
 - Operator Manual Install
 
-## Prerequisite
+### Prerequisite
 Before installing Integrity Shield, [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) should be installed on the cluster.
 
 ## OLM
+1. Install Integrity Shield Operator
 Please click the `Install` button in the upper right corner of this [document](https://operatorhub.io/operator/integrity-shield-operator) and follow the instructions.
+
+2. Install Integrity Shield CR
+
+```
+kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
+```
 
 ## Operator Manual Install
 You can install Integrity Shield the following two steps.
