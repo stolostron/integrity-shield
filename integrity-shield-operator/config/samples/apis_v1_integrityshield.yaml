@@ -51,6 +51,8 @@ spec:
       skipObjects:
       - kind: ConfigMap
         name: kube-root-ca.crt
+      - kind: ConfigMap
+        name: openshift-service-ca.crt
       ignoreFields:
       - fields:
         - spec.host
