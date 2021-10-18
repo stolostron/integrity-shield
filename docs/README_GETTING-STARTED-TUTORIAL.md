@@ -141,7 +141,7 @@ $ cat <<EOF | kubectl apply -f -
       - name: sample-cm
       constraintName: configmap-constraint
       signers:
-      - rurikudo@ibm.com
+      - sample@signer.com
       keyConfigs:
       - keySecretName: my-pubkey
         keySecretNamespace: integrity-shield-operator-system

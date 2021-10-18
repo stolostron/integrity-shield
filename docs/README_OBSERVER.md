@@ -94,7 +94,7 @@ spec:
     namespace: sample-ns
     result: 'singed by a valid signer: sample@signer.com'
     sigRef: sample-image-registry/sample-cm-signature:0.0.1
-    signer: rkudo@redhat.com
+    signer: sample@signer.com
   - apiGroup: ""
     apiVersion: ""
     kind: ConfigMap
