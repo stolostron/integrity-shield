@@ -142,7 +142,7 @@ fi
 cat <<EOF
 apiVersion: v1
 data:
-  pubring.gpg: `cat ${PUBRING_KEY_FILE_PATH} | ${BASE}`
+  key: `cat ${PUBRING_KEY_FILE_PATH} | ${BASE}`
 kind: Secret
 metadata:
   annotations:
