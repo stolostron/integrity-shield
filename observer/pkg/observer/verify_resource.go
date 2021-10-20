@@ -19,7 +19,6 @@ package observer
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
@@ -32,7 +31,6 @@ import (
 
 const AnnotationKeyDomain = "integrityshield.io"
 const ImageRefAnnotationKeyShield = "integrityshield.io/signature"
-const provenanceEnvKey = "ENABLE_PROVENANCE_RESULT"
 
 func ObserveResource(resource unstructured.Unstructured, paramObj k8smnfconfig.ParameterObject, ignoreFields k8smanifest.ObjectFieldBindingList, skipObjects k8smanifest.ObjectReferenceList, secrets []k8smnfconfig.KeyConfig) VerifyResultDetail {
 	namespace := os.Getenv("POD_NAMESPACE")
@@ -43,12 +41,7 @@ func ObserveResource(resource unstructured.Unstructured, paramObj k8smnfconfig.P
 	vo := &paramObj.VerifyResourceOption
 	vo.IgnoreFields = ignoreFields
 	vo.SkipObjects = skipObjects
-	// vo.CheckDryRunForApply = true
-	provStr := os.Getenv(provenanceEnvKey)
-	prov, _ := strconv.ParseBool(provStr)
-	if prov {
-		vo.Provenance = true
-	}
+	vo.Provenance = paramObj.GetProvenance
 	vo.DryRunNamespace = namespace
 
 	if paramObj.SignatureRef.ImageRef != "" {

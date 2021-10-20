@@ -127,7 +127,6 @@ type Observer struct {
 	LogLevel               string                  `json:"logLevel,omitempty"`
 	Interval               string                  `json:"interval,omitempty"`
 	ExportDetailResult     bool                    `json:"exportDetailResult,omitempty"`
-	Provenanece            bool                    `json:"provenanece,omitempty"`
 	ResultDetailConfigName string                  `json:"resultDetailConfigName,omitempty"`
 	ResultDetailConfigKey  string                  `json:"resultDetailConfigKey,omitempty"`
 	Resources              v1.ResourceRequirements `json:"resources,omitempty"`

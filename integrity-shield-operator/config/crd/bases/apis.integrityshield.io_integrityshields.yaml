@@ -673,8 +673,6 @@ spec:
                     type: string
                   name:
                     type: string
-                  provenanece:
-                    type: boolean
                   resources:
                     description: ResourceRequirements describes the compute resource requirements.
                     properties:

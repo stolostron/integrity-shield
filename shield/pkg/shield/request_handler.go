@@ -98,7 +98,7 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 			}
 		}
 	} else {
-		if paramObj.Action.Mode == "enforce" || paramObj.Action.Mode != "detect" {
+		if paramObj.Action.Mode != "enforce" && paramObj.Action.Mode != "detect" {
 			log.WithFields(log.Fields{
 				"namespace": req.Namespace,
 				"name":      req.Name,

@@ -33,6 +33,7 @@ type ParameterObject struct {
 	ImageProfile                     ImageProfile                    `json:"imageProfile,omitempty"`
 	k8smanifest.VerifyResourceOption `json:""`
 	Action                           *Action `json:"action,omitempty"`
+	GetProvenance                    bool    `json:"getProvenance,omitempty"`
 }
 
 type Action struct {
