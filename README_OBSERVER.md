@@ -44,7 +44,7 @@ spec:
     objectSelector:
     - name: sample-cm
     signers:
-    - sample@signer.com
+    - sample_signer@enterprise.com
     skipObjects:
     - kind: ConfigMap
       name: openshift-service-ca.crt
@@ -92,9 +92,9 @@ spec:
     kind: ConfigMap
     name: game-demo
     namespace: sample-ns
-    result: 'singed by a valid signer: sample@signer.com'
+    result: 'singed by a valid signer: sample_signer@enterprise.com'
     sigRef: sample-image-registry/sample-cm-signature:0.0.1
-    signer: sample@signer.com
+    signer: sample_signer@enterprise.com
   - apiGroup: ""
     apiVersion: ""
     kind: ConfigMap

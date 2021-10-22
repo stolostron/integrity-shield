@@ -1,0 +1,587 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Getting Started · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="style.css">
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="README_FOR_CONSTRAINT.html" />
+    
+    
+    <link rel="prev" href="README_INSTALL.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="README_OVERVIEW.html">
+            
+                <a href="README_OVERVIEW.html">
+            
+                    
+                    Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="README_INSTALL.html">
+            
+                <a href="README_INSTALL.html">
+            
+                    
+                    Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4" data-path="README_GETTING-STARTED-TUTORIAL.html">
+            
+                <a href="README_GETTING-STARTED-TUTORIAL.html">
+            
+                    
+                    Getting Started
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_FOR_CONSTRAINT.html">
+            
+                <a href="README_FOR_CONSTRAINT.html">
+            
+                    
+                    Define Protected Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="README_SIGNING.html">
+            
+                <a href="README_SIGNING.html">
+            
+                    
+                    How to Sign Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="README_SECURITY.html">
+            
+                <a href="README_SECURITY.html">
+            
+                    
+                    Security
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="README_ISHIELD_OPERATOR_CR.html">
+            
+                <a href="README_ISHIELD_OPERATOR_CR.html">
+            
+                    
+                    Integrity Shield Custom Resource
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="README_DEMO.html">
+            
+                <a href="README_DEMO.html">
+            
+                    
+                    Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="README_DEVELOP.html">
+            
+                <a href="README_DEVELOP.html">
+            
+                    
+                    Developer Guide
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Getting Started</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="integrity-shield-getting-started-tutorial">Integrity Shield Getting Started Tutorial</h1>
+<p>This tutorial will guide you through:</p>
+<ul>
+<li>Storing verification key as a Kubernetes Secret</li>
+<li>Configuring ManifestIntegrityProfile to define which resource(s) should be protected</li>
+<li>Creating a sample resource without signature</li>
+<li>Generating the signature for the sample resource</li>
+<li>Creating a sample resource with signature</li>
+<li>[Detect mode] Checking the resource integrity status from the ManifestIntegrityState generated by observer</li>
+<li>[Enforce mode] Checking the denied requests as Kubernetes Event</li>
+</ul>
+<p>Integrity Shield provides a phased approach. It allows users to use signature-based protection first in detection mode and then switch to enforcement mode.</p>
+<h3 id="store-verification-key-as-a-kubernetes-secret">Store verification key as a Kubernetes Secret</h3>
+<p>Integrity Shield requires a secret that includes a pubkey for verifying signatures of resources that need to be protected.  Integrity Shield supports X509, PGP or Sigstore key for signing resources.
+In this document, we use pgp signing.</p>
+<p>Create a verification key as a Kubernetes Secret with the following command. 
+Please check <a href="README_VERIFICATION_KEY_SETUP.md">here</a> to generate your own keypair.</p>
+<pre><code>gpg --export signer@enterprise.com &gt; /tmp/pubring.gpg
+kubectl create secret generic my-pubkey --from-file=key=/tmp/pubring.gpg -n integrity-shield-operator-system
+</code></pre><p>If you do not have any PGP key or you want to use new key, generate new one and export it to a file. See <a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-gpg-key" target="_blank">this GitHub document</a>.</p>
+<h2 id="detect-mode-continuous-monitoring">Detect mode (Continuous Monitoring)</h2>
+<h3 id="create-a-sample-manifestintegrityconstraint">Create a sample ManifestIntegrityConstraint</h3>
+<p>A custom resource <code>ManifestIntegrityConstraint</code> (MIC) includes the definition of which resources should be protected with signature in a cluster by Integrity Shield.</p>
+<p>This constraint enables us to monitor three resources ConfigMap, Deployment, and Service in a namespace <code>secure-ns</code>.
+Set the appropriate signer to &quot;signers&quot; field and create the following ManifestIntegrityConstraint resource.</p>
+<p>See <a href="README_CONSTRAINT.md">Define Protected Resources</a> for detailed specs.</p>
+<pre><code>cat &lt;&lt;EOF | kubectl apply -f -
+  apiVersion: constraints.gatekeeper.sh/v1beta1
+  kind: ManifestIntegrityConstraint
+  metadata:
+    name: sample-constraint
+  spec:
+    match:
+      kinds:
+      - apiGroups:
+        - &quot;&quot;
+        kinds:
+        - ConfigMap
+        - Service
+      - apiGroups:
+        - &quot;apps&quot;
+        kinds:
+        - Deployment
+      namespaces:
+      - &quot;secure-ns&quot;
+    parameters:
+      action:
+        mode: detect
+      constraintName: sample-constraint
+      signers:
+      - sample_signer@enterprise.com
+      keyConfigs:
+      - keySecretName: my-pubkey
+        keySecretNamespace: integrity-shield-operator-system
+EOF
+
+manifestintegrityconstraint.constraints.gatekeeper.sh/sample-constraint created
+</code></pre><h3 id="create-a-sample-resource-without-signature">Create a sample resource without signature</h3>
+<p>Run the following command to create a Yaml manifest for a sample configmap.</p>
+<pre><code>cat &lt;&lt; EOF &gt; /tmp/sample-cm.yaml
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: sample-cm
+  data:
+    key1: val1
+    key2: val2
+    comment: comment1
+EOF
+</code></pre><p>Create a sample configmap by the command below, and the configmap will be created because of detection mode.</p>
+<pre><code>$ kubectl apply -f /tmp/sample-cm.yaml -n secure-ns
+configmap/sample-cm created
+</code></pre><h3 id="check-the-resource-integrity-status-from-the-manifestintegritystate-generated-by-observer">Check the resource integrity status from the ManifestIntegrityState generated by observer</h3>
+<p>Check the audit result for all constraints on the cluster with this command.
+you can see that some resources defined in sample-constraint are in invalid state because <code>integrityshield.io/verifyResourceViolation</code> label is true.</p>
+<pre><code>$ kubectl get mis --show-labels -n integrity-shield-operator-system                                                                                             
+NAME                   AGE    LABELS
+sample-constraint      2m1s   integrityshield.io/verifyResourceIgnored=false,integrityshield.io/verifyResourceViolation=true
+</code></pre><p>By checking the verification result on per constraint, you can see which resource is violated from ManifestIntegrityState.</p>
+<pre><code>$ kubectl get mis sample-constraint -n integrity-shield-operator-system -o yaml                                                                               
+apiVersion: apis.integrityshield.io/v1
+kind: ManifestIntegrityState
+metadata:
+  labels:
+    integrityshield.io/verifyResourceIgnored: &quot;false&quot;
+    integrityshield.io/verifyResourceViolation: &quot;true&quot;
+  name: sample-constraint
+  namespace: integrity-shield-operator-system
+spec:
+  constraintName: sample-constraint
+  nonViolations: null
+  observationTime: &quot;2021-10-14 13:04:55&quot;
+  totalViolations: 1
+  violation: true
+  violations:
+  - apiGroup: &quot;&quot;
+    apiVersion: v1
+    kind: ConfigMap
+    name: sample-cm
+    namespace: secure-ns
+    result: &apos;failed to verify signature: failed to get signature: `cosign.sigstore.dev/message`
+      is not found in the annotations&apos;
+status: {}
+</code></pre><h3 id="create-a-resource-with-signature">Create a resource with signature</h3>
+<p>Generate siganture with the following command. Please see this <a href="README_SIGNING.html">document</a>.</p>
+<pre><code>$ ./scripts/gpg-annotation-sign.sh sample_signer@enterprise.com /tmp/sample-cm.yaml
+</code></pre><p>Check the signature is attached to the sample resource.</p>
+<pre><code>$ less /tmp/sample-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sample-cm
+  annotations:
+    integrityshield.io/message: H4sIAMmiZmEAAzXLMQqAMAyF4T...
+    integrityshield.io/signature: LS0tLS1CRUdJTiBQR1AgU...
+data:
+  key1: val1
+  key2: val2
+  comment: comment1
+</code></pre><p>Apply a sample configmap by the command below.</p>
+<pre><code>$ kubectl apply -f /tmp/sample-cm.yaml -n secure-ns
+configmap/sample-cm created
+</code></pre><p>Check the resource integrity status again. You will see that the label of <code>integrityshield.io/verifyResourceViolation</code> has become false.</p>
+<pre><code>$ kubectl get mis --show-labels -n integrity-shield-operator-system
+NAME                   AGE   LABELS
+sample-constraint      22m   integrityshield.io/verifyResourceIgnored=false,integrityshield.io/verifyResourceViolation=false
+</code></pre><p>Also, you can see sample-cm has no violation because it has a valid signature now.</p>
+<pre><code>$ kubectl get mis sample-constraint -n integrity-shield-operator-system -o yaml            
+apiVersion: apis.integrityshield.io/v1
+kind: ManifestIntegrityState
+metadata:
+  labels:
+    integrityshield.io/verifyResourceIgnored: &quot;false&quot;
+    integrityshield.io/verifyResourceViolation: &quot;false&quot;
+  name: sample-constraint
+  namespace: integrity-shield-operator-system
+spec:
+  constraintName: sample-constraint
+  nonViolations:
+  - apiGroup: &quot;&quot;
+    apiVersion: &quot;&quot;
+    kind: ConfigMap
+    name: sample-cm
+    namespace: secure-ns
+    result: &apos;singed by a valid signer: sample_signer@enterprise.com&apos;
+    sigRef: __embedded_in_annotation__
+    signer: sample_signer@enterprise.com
+  observationTime: &quot;2021-10-14 13:24:54&quot;
+  totalViolations: 0
+  violation: false
+  violations: null
+status: {}
+</code></pre><h2 id="enforce-mode-admission-control">Enforce mode (Admission Control)</h2>
+<h3 id="reconfigure-a-sample-manifestintegrityconstraint-to-turn-on-enforce-mode">Reconfigure a sample ManifestIntegrityConstraint to turn on Enforce mode</h3>
+<p>Now, let&apos;s switch to  <strong><code>Enforce mode</code></strong>.
+To enable enforce mode, change <code>mode: detect</code> to <code>mode: enforce</code>, then create the ManifestIntegrityConstraint.</p>
+<pre><code>cat &lt;&lt;EOF | kubectl apply -f -
+  apiVersion: constraints.gatekeeper.sh/v1beta1
+  kind: ManifestIntegrityConstraint
+  metadata:
+    name: sample-constraint
+  spec:
+    match:
+      kinds:
+      - apiGroups:
+        - &quot;&quot;
+        kinds:
+        - ConfigMap
+        - Service
+      - apiGroups:
+        - &quot;apps&quot;
+        kinds:
+        - Deployment
+      namespaces:
+      - &quot;secure-ns&quot;
+    parameters:
+      action:
+        mode: enforce
+      constraintName: sample-constraint
+      signers:
+      - sample_signer@enterprise.com
+      keyConfigs:
+      - keySecretName: my-pubkey
+        keySecretNamespace: integrity-shield-operator-system
+EOF
+</code></pre><h3 id="create-a-sample-resource-without-signature">Create a sample resource without signature</h3>
+<p>Run the following command to create a Yaml manifeset for a sample service.</p>
+<pre><code>cat &lt;&lt; EOF &gt; /tmp/sample-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-service
+spec:
+  selector:
+    app: SampleApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+EOF
+</code></pre><p>Create a sample service by the command below, and the service will be blocked because the signature verification fails.</p>
+<pre><code>$ kubectl create -f /tmp/sample-svc.yaml -n secure-ns                                                                 
+Error from server ([sample-constraint] denied; {&quot;allow&quot;: false, &quot;message&quot;: &quot;failed to verify signature: failed to get signature: `cosign.sigstore.dev/message` is not found in the annotations&quot;}): error when creating &quot;/tmp/sample-svc.yaml&quot;: admission webhook &quot;validation.gatekeeper.sh&quot; denied the request: [sample-constraint] denied; {&quot;allow&quot;: false, &quot;message&quot;: &quot;failed to verify signature: failed to get signature: `cosign.sigstore.dev/message` is not found in the annotations&quot;}
+</code></pre><h3 id="check-denied-request">Check denied request</h3>
+<p>Integrity Shield generates an Event when it does not allow the admission request.
+You can see denied requests as Kubernetes Event like below.</p>
+<pre><code>$ kubectl get event -n secure-ns --field-selector type=IntegrityShield                                                     
+LAST SEEN   TYPE              REASON   OBJECT                   MESSAGE
+65s         IntegrityShield   Deny     service/sample-service   [sample-constraint]failed to verify signature: failed to get signature: `cosign.sigstore.dev/message` is not found in the annotations
+</code></pre><h3 id="generating-the-signature-for-the-sample-resource">Generating the signature for the sample resource</h3>
+<p>Generate a signature for a resource. Run the following script to generate a signature.</p>
+<pre><code>$ ./scripts/gpg-annotation-sign.sh sample_signer@enterprise.com /tmp/sample-svc.yaml
+</code></pre><p>Then, run the same command again to create Service. It should be successful this time because the resource has valid siganture.</p>
+<pre><code>$ kubectl create -f /tmp/sample-svc.yaml -n secure-ns                                                                
+service/sample-service created
+</code></pre><p>You can confirm that all protected resources are valid.</p>
+<pre><code>kind: ManifestIntegrityState
+metadata:
+  creationTimestamp: &quot;2021-10-14T13:04:55Z&quot;
+  generation: 18
+  labels:
+    integrityshield.io/verifyResourceIgnored: &quot;false&quot;
+    integrityshield.io/verifyResourceViolation: &quot;false&quot;
+  name: sample-constraint
+  namespace: integrity-shield-operator-system
+spec:
+  constraintName: sample-constraint
+  nonViolations:
+  - apiGroup: &quot;&quot;
+    apiVersion: &quot;&quot;
+    kind: Service
+    name: sample-service
+    namespace: secure-ns
+    result: &apos;singed by a valid signer: sample_signer@enterprise.com&apos;
+    sigRef: __embedded_in_annotation__
+    signer: sample_signer@enterprise.com
+  - apiGroup: &quot;&quot;
+    apiVersion: v1
+    kind: ConfigMap
+    name: sample-cm
+    namespace: secure-ns
+    result: &apos;singed by a valid signer: sample_signer@enterprise.com&apos;
+    sigRef: __embedded_in_annotation__
+    signer: sample_signer@enterprise.com
+  observationTime: &quot;2021-10-14 14:29:49&quot;
+  totalViolations: 0
+  violation: false
+  violations: null
+status: {}
+</code></pre>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="README_INSTALL.html" class="navigation navigation-prev " aria-label="Previous page: Installation">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="README_FOR_CONSTRAINT.html" class="navigation navigation-next " aria-label="Next page: Define Protected Resources">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Getting Started","level":"1.4","depth":1,"next":{"title":"Define Protected Resources","level":"1.5","depth":1,"path":"README_FOR_CONSTRAINT.md","ref":"README_FOR_CONSTRAINT.md","articles":[]},"previous":{"title":"Installation","level":"1.3","depth":1,"path":"README_INSTALL.md","ref":"README_INSTALL.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_GETTING-STARTED-TUTORIAL.md","mtime":"2021-10-22T04:31:47.393Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-10-22T04:32:24.089Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-hide-published-with/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

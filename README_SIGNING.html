@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Development · GitBook</title>
+        <title>How to Sign Resources · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -49,10 +49,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="README_DEMO.html" />
+    <link rel="next" href="README_SECURITY.html" />
     
     
-    <link rel="prev" href="README_DEPLOY_ISHIELD_LOCAL.html" />
+    <link rel="prev" href="README_FOR_CONSTRAINT.html" />
     
 
     </head>
@@ -107,12 +107,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="README_QUICK.html">
+        <li class="chapter " data-level="1.3" data-path="README_INSTALL.html">
             
-                <a href="README_QUICK.html">
+                <a href="README_INSTALL.html">
             
                     
-                    Quick Start
+                    Installation
             
                 </a>
             
@@ -120,9 +120,22 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+        <li class="chapter " data-level="1.4" data-path="README_GETTING-STARTED-TUTORIAL.html">
             
-                <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+                <a href="README_GETTING-STARTED-TUTORIAL.html">
+            
+                    
+                    Getting Started
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_FOR_CONSTRAINT.html">
+            
+                <a href="README_FOR_CONSTRAINT.html">
             
                     
                     Define Protected Resources
@@ -133,22 +146,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="README_SIGNER_CONFIG.html">
+        <li class="chapter active" data-level="1.6" data-path="README_SIGNING.html">
             
-                <a href="README_SIGNER_CONFIG.html">
-            
-                    
-                    Signer Configuration
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
-            
-                <a href="README_RESOURCE_SIGNATURE.html">
+                <a href="README_SIGNING.html">
             
                     
                     How to Sign Resources
@@ -185,38 +185,25 @@
             
         </li>
     
-        <li class="chapter " data-level="1.9" data-path="README_DEPLOY_ISHIELD_LOCAL.html">
-            
-                <a href="README_DEPLOY_ISHIELD_LOCAL.html">
-            
-                    
-                    Deploy Integrity Shield on Minikube
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter active" data-level="1.10" data-path="README_DEVELOPMENT.html">
-            
-                <a href="README_DEVELOPMENT.html">
-            
-                    
-                    Development
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.11" data-path="README_DEMO.html">
+        <li class="chapter " data-level="1.9" data-path="README_DEMO.html">
             
                 <a href="README_DEMO.html">
             
                     
                     Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="README_DEVELOP.html">
+            
+                <a href="README_DEVELOP.html">
+            
+                    
+                    Developer Guide
             
                 </a>
             
@@ -254,7 +241,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Development</a>
+        <a href="." >How to Sign Resources</a>
     </h1>
 </div>
 
@@ -269,7 +256,42 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="development">Development</h1>
+                                <h1 id="how-to-sign-resources">How to Sign Resources</h1>
+<h2 id="signing-types">Signing Types</h2>
+<p>Integrity Shield supports three types of signing and verification.</p>
+<ul>
+<li><code>pgp</code>: use <a href="https://www.gnupg.org/index.html" target="_blank">gpg key</a> for signing. certificate is not used.</li>
+<li><code>x509</code>: use x509 signing key and certificate. CA certificate is necessary for verification.</li>
+<li><code>sigstore</code>: use <a href="https://github.com/sigstore/cosign" target="_blank">cosign key</a> for signing with kubectl subcommand plugin in <a href="https://github.com/sigstore/k8s-manifest-sigstore" target="_blank">k8s-manifest-sigstore</a> project.</li>
+</ul>
+<h2 id="pgp">PGP</h2>
+<p>To sign a YAML manifest with gpg key, you need to specify signer email in your gpg signing key.</p>
+<p>If you do not have any gpg key or you want to use a new key, generate a new one and export it to a file. See <a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/" target="_blank">this GitHub document</a></p>
+<p>You can run <code>scripts/gpg-annotation-sign.sh</code> script to generate signature annotations in YAML file which appends a signature for a Yaml file as annotations. For example,</p>
+<pre><code>$ ./scripts/gpg-annotation-sign.sh sample-signer@example.com sample-configmap.yaml
+</code></pre><p>Note:  <code>gpg-annotation-sign.sh</code> will append the signature annotation to the input YAML file, please back up the original file if necessary.</p>
+<p>You can verify a signed YAML manfiest file by the following script. It will show a message like this in case of success.</p>
+<pre><code>$ ./scripts/gpg-annotation-verify.sh sample-configmap.yaml path/to/public-keyring-file
+
+Signature is successfully verified.
+Verification: Success
+</code></pre><h2 id="x509">x509</h2>
+<p>To sign a YAML manifest with x509 signing key, you can run <code>scripts/gpg-annotation-sign.sh</code> script with x509 key and certificate.</p>
+<pre><code>$ ./scripts/x509-annotation-sign.sh path/to/key-file path/to/certificate-file sample-configmap.yaml
+</code></pre><p>Note:  <code>x509-annotation-sign.sh</code> will append the signature annotation to the input YAML file, please back up the original file if necessary.</p>
+<p>You can verify a signed YAML manfiest file by the following script. It will show a message like this in case of success.</p>
+<pre><code>$ ./scripts/x509-annotation-verify.sh sample-configmap.yaml path/to/CA-certificate-file
+
+Signature is successfully verified.
+Verification: Success
+</code></pre><h2 id="sigstore">Sigstore</h2>
+<p>To sign a YAML manifest with sigstore YAML manfiest signing, you can use <code>kubectl sigstore</code> command, which is provided by <a href="https://github.com/sigstore/k8s-manifest-sigstore" target="_blank">sigstore/k8s-manifest-sigstore</a> project.</p>
+<p>The actual signing command using kubectl sigstore is like this.</p>
+<pre><code>$ kubectl sigstore sign -f sample-configmap.yaml -k cosign.key
+</code></pre><p>Verification command is something like this.</p>
+<pre><code>$ kubectl sigstore verify -f sample-configmap.yaml.signed -k cosign.pub
+INFO[0000] verifed: true
+</code></pre><p>About a detail description of this command, you can refer to <a href="https://github.com/sigstore/k8s-manifest-sigstore/blob/main/docs/LATEST_RELEASE.md#whats-new-in-v010" target="_blank">k8s-manifest-sigstore document</a>.</p>
 
                                 
                                 </section>
@@ -297,12 +319,12 @@
 
             
                 
-                <a href="README_DEPLOY_ISHIELD_LOCAL.html" class="navigation navigation-prev " aria-label="Previous page: Deploy Integrity Shield on Minikube">
+                <a href="README_FOR_CONSTRAINT.html" class="navigation navigation-prev " aria-label="Previous page: Define Protected Resources">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="README_DEMO.html" class="navigation navigation-next " aria-label="Next page: Demo">
+                <a href="README_SECURITY.html" class="navigation navigation-next " aria-label="Next page: Security">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -313,7 +335,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Development","level":"1.10","depth":1,"next":{"title":"Demo","level":"1.11","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Deploy Integrity Shield on Minikube","level":"1.9","depth":1,"path":"README_DEPLOY_ISHIELD_LOCAL.md","ref":"README_DEPLOY_ISHIELD_LOCAL.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_DEVELOPMENT.md","mtime":"2021-10-22T03:25:51.540Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-10-22T03:25:55.156Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"How to Sign Resources","level":"1.6","depth":1,"next":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"previous":{"title":"Define Protected Resources","level":"1.5","depth":1,"path":"README_FOR_CONSTRAINT.md","ref":"README_FOR_CONSTRAINT.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_SIGNING.md","mtime":"2021-10-22T04:31:47.393Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-10-22T04:32:24.089Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

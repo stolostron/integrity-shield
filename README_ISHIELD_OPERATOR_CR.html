@@ -49,7 +49,7 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="README_DEPLOY_ISHIELD_LOCAL.html" />
+    <link rel="next" href="README_DEMO.html" />
     
     
     <link rel="prev" href="README_SECURITY.html" />
@@ -107,12 +107,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="README_QUICK.html">
+        <li class="chapter " data-level="1.3" data-path="README_INSTALL.html">
             
-                <a href="README_QUICK.html">
+                <a href="README_INSTALL.html">
             
                     
-                    Quick Start
+                    Installation
             
                 </a>
             
@@ -120,9 +120,22 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+        <li class="chapter " data-level="1.4" data-path="README_GETTING-STARTED-TUTORIAL.html">
             
-                <a href="README_FOR_RESOURCE_SIGNING_PROFILE.html">
+                <a href="README_GETTING-STARTED-TUTORIAL.html">
+            
+                    
+                    Getting Started
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_FOR_CONSTRAINT.html">
+            
+                <a href="README_FOR_CONSTRAINT.html">
             
                     
                     Define Protected Resources
@@ -133,22 +146,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="README_SIGNER_CONFIG.html">
+        <li class="chapter " data-level="1.6" data-path="README_SIGNING.html">
             
-                <a href="README_SIGNER_CONFIG.html">
-            
-                    
-                    Signer Configuration
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
-            
-                <a href="README_RESOURCE_SIGNATURE.html">
+                <a href="README_SIGNING.html">
             
                     
                     How to Sign Resources
@@ -185,38 +185,25 @@
             
         </li>
     
-        <li class="chapter " data-level="1.9" data-path="README_DEPLOY_ISHIELD_LOCAL.html">
-            
-                <a href="README_DEPLOY_ISHIELD_LOCAL.html">
-            
-                    
-                    Deploy Integrity Shield on Minikube
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.10" data-path="README_DEVELOPMENT.html">
-            
-                <a href="README_DEVELOPMENT.html">
-            
-                    
-                    Development
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.11" data-path="README_DEMO.html">
+        <li class="chapter " data-level="1.9" data-path="README_DEMO.html">
             
                 <a href="README_DEMO.html">
             
                     
                     Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="README_DEVELOP.html">
+            
+                <a href="README_DEVELOP.html">
+            
+                    
+                    Developer Guide
             
                 </a>
             
@@ -282,11 +269,7 @@ Please update IntegrityShield custom resource as necessary.</p>
 <h3 id="define-default-run-mode">Define default run mode</h3>
 <p>Integrity shield enforce/monitor resources according to ManifestIntegrityConstraint. The behavior when Integrity Shield verify resources is defined in action field. See <a href="README_CONSTRAINT.md#define-run-mode">Define run mode</a>.<br>When you want to change the default value, please edit here.</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">  requestHandlerConfig:</span> <span class="hljs-string">|
-</span><span class="hljs-attr">    defaultConstraintAction:</span>
-<span class="hljs-attr">      audit:</span>
-<span class="hljs-attr">        inform:</span> <span class="hljs-literal">true</span>
-<span class="hljs-attr">      admissionControl:</span>
-<span class="hljs-attr">        enforce:</span> <span class="hljs-literal">false</span>
+</span><span class="hljs-attr">    mode:</span> detect
 </code></pre>
 <h3 id="enabledisable-side-effect">Enable/Disable side effect</h3>
 <p>Integrity Shield generates an event by default when it blocks a request because it fails to verify the signature. 
@@ -452,7 +435,7 @@ exclude_namespaces = [
                 </a>
                 
                 
-                <a href="README_DEPLOY_ISHIELD_LOCAL.html" class="navigation navigation-next " aria-label="Next page: Deploy Integrity Shield on Minikube">
+                <a href="README_DEMO.html" class="navigation navigation-next " aria-label="Next page: Demo">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -463,7 +446,7 @@ exclude_namespaces = [
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"next":{"title":"Deploy Integrity Shield on Minikube","level":"1.9","depth":1,"path":"README_DEPLOY_ISHIELD_LOCAL.md","ref":"README_DEPLOY_ISHIELD_LOCAL.md","articles":[]},"previous":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_ISHIELD_OPERATOR_CR.md","mtime":"2021-10-22T03:25:12.004Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-10-22T03:25:55.156Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"next":{"title":"Demo","level":"1.9","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_ISHIELD_OPERATOR_CR.md","mtime":"2021-10-22T04:31:47.393Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-10-22T04:32:24.089Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

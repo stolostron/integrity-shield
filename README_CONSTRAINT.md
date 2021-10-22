@@ -46,16 +46,12 @@ a secret resource which contains public key and certificates should be setup in 
 
 
 ## Define run mode
-You can change behavior when Integrity Shield verify resources defined in the constraint by changing action field.
-- **admissionControl**: If enforce is true, the admission requests for the resource defined in the constraint are enforced, so the admission request is blocked if the resource is invalid. If enforce is false, the admission request is allowed even if the resource is not valid.
-- **audit**:  If inform is true, the audit results for the constraint is exported to ManifestIntegrityStatus resource as usual. If inform is false, the results will be exported, but the ManifestIntegrityStatus resource will be labeled with ignored=true.
+You can change behavior when Integrity Shield verify resources by changing action field.
+If mode is set to `enforce`, the admission requests for the resource defined in the constraint are enforced, so the admission request is blocked if the resource is invalid. If mode is `detect`, the admission request is allowed even if the resource is not valid.
 ```yaml
   parameters:
     action:
-      admissionControl:
-        enforce: false
-      audit:
-        inform: true
+      mode: detect
 ```
 
 ## Define target object scope
