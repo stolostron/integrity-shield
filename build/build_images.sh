@@ -75,7 +75,7 @@ fi
 
 # Build ishield-api image
 echo -----------------------------
-echo [1/4] Building ishield-api image.
+echo [1/5] Building ishield-api image.
 cd ${SHIELD_DIR}
 go mod tidy
 exit_status=$?
@@ -107,7 +107,7 @@ echo ""
 
 # Build ishield-ac-server image
 echo -----------------------------
-echo [2/4] Building ishield-ac-server image.
+echo [2/5] Building ishield-ac-server image.
 cd ${SHIELD_AC_DIR}
 go mod tidy
 exit_status=$?
@@ -138,7 +138,7 @@ echo ""
 
 # Build ishield-observer image
 echo -----------------------------
-echo [3/4] Building ishield-observer image.
+echo [3/5] Building ishield-observer image.
 cd ${SHIELD_OBSERVER_DIR}
 go mod tidy
 exit_status=$?
@@ -160,7 +160,7 @@ fi
 
 # Build ishield-exemption-logger image
 echo -----------------------------
-echo [3/4] Building ishield-exemption-logger image.
+echo [4/5] Building ishield-exemption-logger image.
 cd ${SHIELD_EXEMPTION_LOGGER_DIR}
 go mod tidy
 exit_status=$?
@@ -182,7 +182,7 @@ fi
 
 # Build integrity-shield-operator image
 echo -----------------------------
-echo [4/4] Building integrity-shield-operator image.
+echo [5/5] Building integrity-shield-operator image.
 cd ${SHIELD_OP_DIR}
 go mod tidy
 exit_status=$?
