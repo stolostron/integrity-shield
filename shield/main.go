@@ -58,6 +58,7 @@ func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 }
 
 func requestHandler(w http.ResponseWriter, r *http.Request) {
+	log.Info("request received")
 
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -95,6 +96,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("failed to convert `request` in input object into %T", request), http.StatusInternalServerError)
 		return
 	}
+	log.Infof("request has been parsed successfully, kind: %s, name: %s", request.Kind.Kind, request.Name)
 
 	parametersIf, parametersFound := inputMap["parameters"]
 	if !parametersFound {
@@ -118,6 +120,8 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Infof("returning a response, allow: %v", result.Allow)
+	w.WriteHeader(http.StatusOK)
 	if _, err := w.Write(resp); err != nil {
 		http.Error(w, fmt.Sprintf("could not write response: %v", err), http.StatusInternalServerError)
 		return
