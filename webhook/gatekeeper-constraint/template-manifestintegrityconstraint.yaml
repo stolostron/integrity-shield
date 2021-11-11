@@ -18,8 +18,8 @@ spec:
           not is_allowed_kind
           not is_excluded
           is_create_or_update
-          constraint := input.constraint
-          ishield_input := {"parameters":input.parameters, "request":input.review, "constraint":input.constraint.metadata.name}
+          cst_name := get_constraint_name(input)
+          ishield_input := {"parameters":input.parameters, "request":input.review, "constraint":cst_name}
           reqdata := json.marshal(ishield_input)
           url := "https://integrity-shield-api.k8s-manifest-sigstore.svc:8123/api/request"
           resp := http_post(url, reqdata)
@@ -44,10 +44,25 @@ spec:
           })
         }
 
+        # get constraint name or empty string if not
+        get_constraint_name(inputdata) = name {
+          cst := object.get(inputdata, "constraint", {})
+          cst_meta := object.get(cst, "metadata", {})
+          name := object.get(cst_meta, "name", "")
+        }
+
         # get decision result from API response
         get_result(resp) = result {
-          raw_body := object.get(resp, "raw_body", "{}")
+          raw_body := object.get(resp, "raw_body", null)
+          not is_null(raw_body)
           result := json.unmarshal(raw_body)
+        }
+        # if error, return it as result
+        get_result(resp) = result {
+          raw_body := object.get(resp, "raw_body", null)
+          is_null(raw_body)
+          error_msg := object.get(resp, "error", "")
+          result := {"http_error":error_msg}
         }
 
         # if API response is null, deny
@@ -61,7 +76,7 @@ spec:
           resp.status_code != 200
         }
 
-        # if decision result is "allow == false" or "allow" is not set correcly, then deny
+        # if decision result is "allow == false" or not set, then deny
         should_be_denied(resp) {
           not is_null(resp)
           result := get_result(resp)
