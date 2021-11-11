@@ -423,7 +423,7 @@ spec:
     selector:     
       app: integrity-shield-observer
     logLevel: info
-    interval: "2"
-    # exportDetailResult: true
-    # resultDetailConfigName: verify-resource-result
-    # resultDetailConfigKey: "config.yaml"
+    interval: "5"
+    exportDetailResult: true
+    resultDetailConfigName: verify-resource-result
+    resultDetailConfigKey: "config.yaml"

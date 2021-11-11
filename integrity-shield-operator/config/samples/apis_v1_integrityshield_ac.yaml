@@ -254,6 +254,15 @@ spec:
       limits:
         cpu: 500m
         memory: 512Mi
+  logging:
+    name: integrity-shield-logger
+    imagePullPolicy: Always
+    image: localhost:5000/integrity-shield-logging
+    intervalSeconds: "10"
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
   webhookServerTlsSecretName: integrity-shield-validator-tls
   webhookServiceName: integrity-shield-validator-service
   webhookConfigName: integrity-shield-validating-webhook-configuration

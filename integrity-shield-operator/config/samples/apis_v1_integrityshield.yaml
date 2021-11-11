@@ -33,6 +33,15 @@ spec:
       limits:
         cpu: 500m
         memory: 512Mi
+  logging:
+    name: integrity-shield-logger
+    imagePullPolicy: Always
+    image: quay.io/open-cluster-management/integrity-shield-logging
+    intervalSeconds: "10"
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
   requestHandlerConfigKey: config.yaml
   requestHandlerConfigName: request-handler-config
   requestHandlerConfig: |
