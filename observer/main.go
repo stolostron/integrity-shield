@@ -39,7 +39,6 @@ func main() {
 		select {
 		case <-ticker.C:
 			insp.Run()
-
 		case <-abort:
 			fmt.Println("Launch aborted!")
 			return

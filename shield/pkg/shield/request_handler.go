@@ -53,6 +53,7 @@ const (
 	EventTypeAnnotationValueDeny = "deny"
 )
 const rekorServerEnvKey = "REKOR_SERVER"
+const timeFormat = "2006-01-02 15:04:05"
 
 func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObject) *ResultFromRequestHandler {
 
@@ -80,6 +81,21 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 
 	// setup log
 	k8smnfconfig.SetupLogger(rhconfig.Log, req)
+	contextLogger := k8smnfconfig.InitContextLogger(rhconfig.Log)
+	if paramObj.ConstraintName == "" {
+		log.Warning("ConstraintName is empty. Please set constraint name in parameter field.")
+	}
+	logRecord := map[string]interface{}{
+		"namespace":      req.Namespace,
+		"name":           req.Name,
+		"apiGroup":       req.RequestResource.Group,
+		"apiVersion":     req.RequestResource.Version,
+		"kind":           req.Kind.Kind,
+		"resource":       req.RequestResource.Resource,
+		"userName":       req.UserInfo.Username,
+		"constraintName": paramObj.ConstraintName,
+		"admissionTime":  time.Now().Format(timeFormat),
+	}
 
 	log.WithFields(log.Fields{
 		"namespace": req.Namespace,
@@ -166,6 +182,9 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 	if (skipUserMatched || commonSkipUserMatched) && !inScopeUserMatched {
 		allow = true
 		message = "SkipUsers rule matched."
+		logRecord["reason"] = message
+		logRecord["allow"] = allow
+		contextLogger.SendLog(logRecord)
 	} else if !inScopeObjMatched {
 		allow = true
 		message = "ObjectSelector rule did not match. Out of scope of verification."

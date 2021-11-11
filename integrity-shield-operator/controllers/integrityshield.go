@@ -147,6 +147,18 @@ func (r *IntegrityShieldReconciler) deleteObserverResultCRD(
 	return r.deleteCRD(instance, expected)
 }
 
+func (r *IntegrityShieldReconciler) createOrUpdateExemptionCRD(
+	instance *apiv1.IntegrityShield) (ctrl.Result, error) {
+	expected := res.BuildExemptionCRD(instance)
+	return r.createOrUpdateCRD(instance, expected)
+}
+
+func (r *IntegrityShieldReconciler) deleteExemptionCRD(
+	instance *apiv1.IntegrityShield) (ctrl.Result, error) {
+	expected := res.BuildExemptionCRD(instance)
+	return r.deleteCRD(instance, expected)
+}
+
 /**********************************************
 
 				ConfigMap

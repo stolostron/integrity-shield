@@ -24,7 +24,7 @@ import (
 )
 
 type ParameterObject struct {
-	ConstraintName                   string                          `json:"constraintName,omitempty"`
+	ConstraintName                   string                          `json:"constraintName"`
 	SignatureRef                     SignatureRef                    `json:"signatureRef,omitempty"`
 	KeyConfigs                       []KeyConfig                     `json:"keyConfigs,omitempty"`
 	InScopeObjects                   k8smanifest.ObjectReferenceList `json:"objectSelector,omitempty"`
@@ -37,8 +37,7 @@ type ParameterObject struct {
 }
 
 type Action struct {
-	Mode          string `json:"mode,omitempty"`
-	AdmissionOnly bool   `json:"admissionOnly,omitempty"`
+	Mode string `json:"mode,omitempty"`
 }
 
 type SignatureRef struct {

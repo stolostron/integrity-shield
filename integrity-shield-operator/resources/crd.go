@@ -59,7 +59,7 @@ func buildCRD(name, namespace string, crdNames extv1.CustomResourceDefinitionNam
 	return newCRD
 }
 
-//shield config crd
+//constraint crd for ac2
 func BuildManifestIntegrityProfileCRD(cr *apiv1.IntegrityShield) *extv1.CustomResourceDefinition {
 	crdNames := extv1.CustomResourceDefinitionNames{
 		Kind:       "ManifestIntegrityProfile",
@@ -71,7 +71,7 @@ func BuildManifestIntegrityProfileCRD(cr *apiv1.IntegrityShield) *extv1.CustomRe
 	return buildCRD("manifestintegrityprofiles.apis.integrityshield.io", cr.Namespace, crdNames, false)
 }
 
-//shield config crd
+//manifest integrity state crd
 func BuildObserverResultCRD(cr *apiv1.IntegrityShield) *extv1.CustomResourceDefinition {
 	crdNames := extv1.CustomResourceDefinitionNames{
 		Kind:       "ManifestIntegrityState",
@@ -81,4 +81,16 @@ func BuildObserverResultCRD(cr *apiv1.IntegrityShield) *extv1.CustomResourceDefi
 		ShortNames: []string{"mis"},
 	}
 	return buildCRD("manifestintegritystates.apis.integrityshield.io", cr.Namespace, crdNames, true)
+}
+
+//manifest integrity exemption crd
+func BuildExemptionCRD(cr *apiv1.IntegrityShield) *extv1.CustomResourceDefinition {
+	crdNames := extv1.CustomResourceDefinitionNames{
+		Kind:       "ManifestIntegrityExemption",
+		Plural:     "manifestintegrityexemptions",
+		ListKind:   "ManifestIntegrityExemptionList",
+		Singular:   "manifestintegrityexemption",
+		ShortNames: []string{"mie"},
+	}
+	return buildCRD("manifestintegrityexemptions.apis.integrityshield.io", cr.Namespace, crdNames, true)
 }

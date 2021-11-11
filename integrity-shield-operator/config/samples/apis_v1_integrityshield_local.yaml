@@ -32,6 +32,15 @@ spec:
       limits:
         cpu: 500m
         memory: 512Mi
+  logging:
+    name: integrity-shield-logger
+    imagePullPolicy: Always
+    image: localhost:5000/integrity-shield-logging
+    intervalSeconds: "10"
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
   requestHandlerConfigKey: config.yaml
   requestHandlerConfigName: request-handler-config
   requestHandlerConfig: |
@@ -41,9 +50,10 @@ spec:
     sideEffect:
       createDenyEvent: true
     log:
-      level: info
+      level: trace
       manifestSigstoreLogLevel: info
       format: json
+      contextLoggerEnabled: true
     requestFilterProfile: 
       skipObjects:
       - kind: ConfigMap
@@ -77,6 +87,7 @@ spec:
         - metadata.annotations.cosign.sigstore.dev/message
         - metadata.annotations.cosign.sigstore.dev/certificate
         - metadata.annotations.cosign.sigstore.dev/signature
+        - metadata.annotations.deployment.kubernetes.io/revision
         objects:
         - name: '*'
       - fields:
@@ -412,7 +423,7 @@ spec:
     selector:     
       app: integrity-shield-observer
     logLevel: info
-    interval: "5"
-    exportDetailResult: true
-    resultDetailConfigName: verify-resource-result
-    resultDetailConfigKey: "config.yaml"
+    interval: "2"
+    # exportDetailResult: true
+    # resultDetailConfigName: verify-resource-result
+    # resultDetailConfigKey: "config.yaml"

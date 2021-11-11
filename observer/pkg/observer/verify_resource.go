@@ -37,7 +37,6 @@ func ObserveResource(resource unstructured.Unstructured, paramObj k8smnfconfig.P
 	if namespace == "" {
 		namespace = defaultPodNamespace
 	}
-	log.Debug("Observed Resource:", resource.GetAPIVersion(), resource.GetKind(), resource.GetNamespace(), resource.GetName())
 	vo := &paramObj.VerifyResourceOption
 	vo.IgnoreFields = ignoreFields
 	vo.SkipObjects = skipObjects
@@ -73,9 +72,9 @@ func ObserveResource(resource unstructured.Unstructured, paramObj k8smnfconfig.P
 			break
 		}
 	}
-	log.Debug("VerifyResourceOption", vo)
+	// log.Debug("VerifyResourceOption", vo)
 	result, err := k8smanifest.VerifyResource(resource, vo)
-	log.Debug("VerifyResource result: ", result)
+	log.Debug("Verify resource result from k8smanifest: ", result)
 	if err != nil {
 		log.Warningf("Signature verification is required for this request, but verifyResource return error ; %s", err.Error())
 		return VerifyResultDetail{
@@ -118,8 +117,7 @@ func ObserveResource(resource unstructured.Unstructured, paramObj k8smnfconfig.P
 	}
 
 	return VerifyResultDetail{
-		Time: time.Now().Format(timeFormat),
-		// Resource:             resource,
+		Time:                 time.Now().Format(timeFormat),
 		Kind:                 resource.GroupVersionKind().Kind,
 		Name:                 resource.GetName(),
 		Namespace:            resource.GetNamespace(),

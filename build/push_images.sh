@@ -31,6 +31,16 @@ if [ -z "$ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION" ]; then
     exit 1
 fi
 
+if [ -z "$ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION" ]; then
+    echo "ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
+    exit 1
+fi
+
+if [ -z "$ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION" ]; then
+    echo "ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
+    exit 1
+fi
+
 if [ -z "$ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION" ]; then
     echo "ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
     exit 1
@@ -51,6 +61,14 @@ echo ""
 echo -----------------------------
 echo [2/4] Pushing integrity-shield-observer image.
 docker push ${ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION}
+echo done.
+echo -----------------------------
+echo ""
+
+# Push integrity-shield-exemption-logger image
+echo -----------------------------
+echo [2/4] Pushing integrity-shield-exemption-logger image.
+docker push ${ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION}
 echo done.
 echo -----------------------------
 echo ""

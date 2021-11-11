@@ -192,6 +192,17 @@ func BuildRoleForIShield(cr *apiv1.IntegrityShield) *rbacv1.Role {
 					"get", "list", "create", "update",
 				},
 			},
+			{
+				APIGroups: []string{
+					"apis.integrityshield.io",
+				},
+				Resources: []string{
+					"manifestintegrityexemptions",
+				},
+				Verbs: []string{
+					"get", "list", "create", "update", "delete",
+				},
+			},
 		},
 	}
 	return role

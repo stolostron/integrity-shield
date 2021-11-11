@@ -57,10 +57,10 @@ if [ -z "$ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION" ]; then
     exit 1
 fi
 
-# if [ -z "$ISHIELD_INSPECTOR_IMAGE_NAME_AND_VERSION" ]; then
-#     echo "ISHIELD_INSPECTOR_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
-#     exit 1
-# fi
+if [ -z "$ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION" ]; then
+    echo "ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
+    exit 1
+fi
 
 if [ -z "$ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION" ]; then
     echo "ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
@@ -156,6 +156,28 @@ if [ "$NO_CACHE" = true ] ; then
     docker build -t ${ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION} . --no-cache
 else
     docker build -t ${ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION} .
+fi
+
+# Build ishield-exemption-logger image
+echo -----------------------------
+echo [3/4] Building ishield-exemption-logger image.
+cd ${SHIELD_EXEMPTION_LOGGER_DIR}
+go mod tidy
+exit_status=$?
+if [ $exit_status -ne 0 ]; then
+    echo "failed"
+    exit 1
+fi
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -ldflags="-s -w" -a -o build/_bin/ishield-logger ./
+exit_status=$?
+if [ $exit_status -ne 0 ]; then
+    echo "failed"
+    exit 1
+fi
+if [ "$NO_CACHE" = true ] ; then
+    docker build -t ${ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION} . --no-cache
+else
+    docker build -t ${ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION} .
 fi
 
 # Build integrity-shield-operator image

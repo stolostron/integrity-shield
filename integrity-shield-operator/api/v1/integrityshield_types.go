@@ -24,9 +24,9 @@ import (
 const (
 	DefaultIShieldWebhookTimeout = 10
 	DefaultIShieldAPILabel       = "integrity-shield-api"
-
-	CleanupFinalizerName = "cleanup.finalizers.integrityshield.io"
-	CsvPath              = "./bundle/manifests/integrity-shield-operator.clusterserviceversion.yaml"
+	DefaultFilePath              = "/ishield-app/public/events.txt"
+	CleanupFinalizerName         = "cleanup.finalizers.integrityshield.io"
+	CsvPath                      = "./bundle/manifests/integrity-shield-operator.clusterserviceversion.yaml"
 )
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
@@ -47,13 +47,14 @@ type IntegrityShieldSpec struct {
 
 	Security SecurityConfig `json:"security,omitempty"`
 
-	// request handler
-	API                      APIContainer `json:"shieldApi,omitempty"`
-	RequestHandlerConfigKey  string       `json:"requestHandlerConfigKey,omitempty"`
-	RequestHandlerConfigName string       `json:"requestHandlerConfigName,omitempty"`
-	RequestHandlerConfig     string       `json:"requestHandlerConfig,omitempty"`
-	ApiServiceName           string       `json:"shieldApiServiceName,omitempty"`
-	ApiServicePort           int32        `json:"shieldApiServicePort,omitempty"`
+	// api
+	API                      APIContainer    `json:"shieldApi,omitempty"`
+	RequestHandlerConfigKey  string          `json:"requestHandlerConfigKey,omitempty"`
+	RequestHandlerConfigName string          `json:"requestHandlerConfigName,omitempty"`
+	RequestHandlerConfig     string          `json:"requestHandlerConfig,omitempty"`
+	ApiServiceName           string          `json:"shieldApiServiceName,omitempty"`
+	ApiServicePort           int32           `json:"shieldApiServicePort,omitempty"`
+	Logging                  LoggerContainer `json:"logging,omitempty"`
 
 	// admission controller
 	ControllerContainer           ControllerContainer `json:"admissionController,omitempty"`
@@ -85,6 +86,16 @@ type APIContainer struct {
 	Tag             string                  `json:"imageTag,omitempty"`
 	Port            int32                   `json:"port,omitempty"`
 	Resources       v1.ResourceRequirements `json:"resources,omitempty"`
+}
+type LoggerContainer struct {
+	Name            string                  `json:"name,omitempty"`
+	SelectorLabels  map[string]string       `json:"selector,omitempty"`
+	SecurityContext *v1.SecurityContext     `json:"securityContext,omitempty"`
+	ImagePullPolicy v1.PullPolicy           `json:"imagePullPolicy,omitempty"`
+	Image           string                  `json:"image,omitempty"`
+	Tag             string                  `json:"imageTag,omitempty"`
+	Resources       v1.ResourceRequirements `json:"resources,omitempty"`
+	IntervalSeconds string                  `json:"intervalSeconds,omitempty"`
 }
 
 type ControllerContainer struct {

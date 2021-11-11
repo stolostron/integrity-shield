@@ -53,13 +53,12 @@ var logLevelMap = map[string]log.Level{
 }
 
 type RequestHandlerConfig struct {
-	ImageVerificationConfig ImageVerificationConfig `json:"imageVerificationConfig,omitempty"`
-	KeyPathList             []string                `json:"keyPathList,omitempty"`
-	SigStoreConfig          SigStoreConfig          `json:"sigStoreConfig,omitempty"`
-	RequestFilterProfile    RequestFilterProfile    `json:"requestFilterProfile,omitempty"`
-	Log                     LogConfig               `json:"log,omitempty"`
-	SideEffectConfig        SideEffectConfig        `json:"sideEffect,omitempty"`
-	DefaultConstraintAction Action                  `json:"defaultConstraintAction,omitempty"`
+	KeyPathList             []string             `json:"keyPathList,omitempty"`
+	SigStoreConfig          SigStoreConfig       `json:"sigStoreConfig,omitempty"`
+	RequestFilterProfile    RequestFilterProfile `json:"requestFilterProfile,omitempty"`
+	Log                     LogConfig            `json:"log,omitempty"`
+	SideEffectConfig        SideEffectConfig     `json:"sideEffect,omitempty"`
+	DefaultConstraintAction Action               `json:"defaultConstraintAction,omitempty"`
 	Options                 []string
 }
 
@@ -67,14 +66,13 @@ type LogConfig struct {
 	Level                    string `json:"level,omitempty"`
 	ManifestSigstoreLogLevel string `json:"manifestSigstoreLogLevel,omitempty"`
 	Format                   string `json:"format,omitempty"`
+	ContextLoggerEnabled     bool   `json:"contextLoggerEnabled,omitempty"`
+	ContextLoggerLimitSize   int64  `json:"contextLoggerLimitSize,omitempty"`
 }
 
 type SideEffectConfig struct {
 	// Event
 	CreateDenyEvent bool `json:"createDenyEvent"`
-}
-
-type ImageVerificationConfig struct {
 }
 
 type SigStoreConfig struct {

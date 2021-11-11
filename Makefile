@@ -285,6 +285,7 @@ tag-images-to-local:
 	docker tag $(ISHIELD_API_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_API_IMAGE_NAME_AND_VERSION)
 	docker tag $(ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION)
 	docker tag $(ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION)
+	docker tag $(ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION)
 	docker tag $(ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION)
 
 push-images-to-local: tag-images-to-local
@@ -292,6 +293,7 @@ push-images-to-local: tag-images-to-local
 	docker push $(TEST_ISHIELD_API_IMAGE_NAME_AND_VERSION)
 	docker push $(TEST_ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION)
 	docker push $(TEST_ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION)
+	docker push $(TEST_ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION)
 	docker push $(TEST_ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION)
 
 setup-test-env: create-ns create-keyring-secret
@@ -467,6 +469,8 @@ log-observer:
 	bash $(ISHIELD_REPO_ROOT)/scripts/log_observer.sh
 log-ac-server:
 	bash $(ISHIELD_REPO_ROOT)/scripts/log_ac.sh
+log-logging:
+	bash $(ISHIELD_REPO_ROOT)/scripts/log_logging.sh
 
 clean-tmp:
 	@if [ -f "$(TMP_CR_FILE)" ]; then\

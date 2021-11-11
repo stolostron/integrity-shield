@@ -138,6 +138,12 @@ func (r *IntegrityShieldReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		return recResult, recErr
 	}
 
+	//CRD
+	recResult, recErr = r.createOrUpdateExemptionCRD(instance)
+	if recErr != nil || recResult.Requeue {
+		return recResult, recErr
+	}
+
 	// Observer
 	if instance.Spec.Observer.Enabled {
 		//CRD
@@ -276,6 +282,12 @@ func (r *IntegrityShieldReconciler) deleteClusterScopedChildrenResources(instanc
 	}
 	//Cluster Role Binding
 	_, err = r.deleteClusterRoleBindingForIShield(instance)
+	if err != nil {
+		return err
+	}
+
+	// CRD
+	_, err = r.deleteExemptionCRD(instance)
 	if err != nil {
 		return err
 	}

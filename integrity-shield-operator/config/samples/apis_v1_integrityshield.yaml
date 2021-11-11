@@ -80,6 +80,7 @@ spec:
         - metadata.annotations.cosign.sigstore.dev/message
         - metadata.annotations.cosign.sigstore.dev/certificate
         - metadata.annotations.cosign.sigstore.dev/signature
+        - metadata.annotations.deployment.kubernetes.io/revision
         objects:
         - name: '*'
       - fields:

@@ -31,6 +31,11 @@ if [ -z "$ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION" ]; then
     exit 1
 fi
 
+if [ -z "$ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION" ]; then
+    echo "ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
+    exit 1
+fi
+
 
 if [ -z "$ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION" ]; then
     echo "ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
@@ -46,24 +51,40 @@ fi
 
 # Pull integrity-shield-api image
 echo -----------------------------
-echo [1/3] Pulling integrity-shield-api image.
+echo [1/5] Pulling integrity-shield-api image.
 docker pull ${ISHIELD_API_IMAGE_NAME_AND_VERSION}
 echo done.
 echo -----------------------------
 echo ""
 
 
-# Push integrity-shield-admission-controller image
+# Pull integrity-shield-admission-controller image
 echo -----------------------------
-echo [2/3] Pulling integrity-shield-admission-controller image.
+echo [2/5] Pulling integrity-shield-admission-controller image.
 docker pull ${ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION}
 echo done.
 echo -----------------------------
 echo ""
 
-# Push integrity-shield-operator image
+# Pull integrity-shield-observer image
 echo -----------------------------
-echo [3/3] Pulling integrity-shield-operator image.
+echo [3/5] Pulling integrity-shield-observer image.
+docker pull ${$ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION}
+echo done.
+echo -----------------------------
+echo ""
+
+# Pull integrity-shield-exemption-logger image
+echo -----------------------------
+echo [4/5] Pulling integrity-shield-exemption-logger image.
+docker pull ${ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION}
+echo done.
+echo -----------------------------
+echo ""
+
+# Pull integrity-shield-operator image
+echo -----------------------------
+echo [5/5] Pulling integrity-shield-operator image.
 docker pull ${ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION}
 echo done.
 echo -----------------------------

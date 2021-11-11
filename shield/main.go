@@ -43,6 +43,7 @@ func init() {
 	log.Info("initialize cosign.")
 	cmd := cosign.Init()
 	_ = cmd.Exec(context.Background(), []string{})
+
 	log.Info("Integrity Shield has been started.")
 }
 

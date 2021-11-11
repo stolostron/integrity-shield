@@ -27,8 +27,9 @@ import (
 	"strings"
 	"time"
 
+	mieclient "github.com/open-cluster-management/integrity-shield/logging/pkg/client/manifestintegrityexemption/clientset/versioned/typed/manifestintegrityexemption/v1"
 	vrc "github.com/open-cluster-management/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
-	vrcclient "github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
+	misclient "github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
 	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
 	"github.com/pkg/errors"
 	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
@@ -38,12 +39,9 @@ import (
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/dynamic"
 	kubeclient "k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
 )
 
 const timeFormat = "2006-01-02 15:04:05"
@@ -60,17 +58,20 @@ const defaultObserverResultDetailConfigName = "verify-result-detail"
 const logLevelEnvKey = "LOG_LEVEL"
 const k8sLogLevelEnvKey = "K8S_MANIFEST_SIGSTORE_LOG_LEVEL"
 
-// const ImageRefAnnotationKey = "cosign.sigstore.dev/imageRef"
-
 const VerifyResourceViolationLabel = "integrityshield.io/verifyResourceViolation"
-const VerifyResourceIgnoreLabel = "integrityshield.io/verifyResourceIgnored"
 
 const rekorServerEnvKey = "REKOR_SERVER"
 
-type Observer struct {
-	APIResources []groupResource
+var IgnoredKinds = []string{"Event", "Lease", "Endpoints", "TokenReview", "SubjectAccessReview", "SelfSubjectAccessReview", "LocalSubjectAccessReview"}
 
-	dynamicClient dynamic.Interface
+type Observer struct {
+	APIResources     []groupResource
+	Namespaces       []string
+	DynamicClient    dynamic.Interface
+	MieClient        *mieclient.ApisV1Client
+	MisClient        *misclient.ApisV1Client
+	Clientset        *kubeclient.Clientset
+	IShiledNamespace string
 }
 
 // Observer Result Detail
@@ -99,18 +100,6 @@ type ObservationDetailResults struct {
 	ConstraintResults []ConstraintResult `json:"constraintResults"`
 }
 
-// groupResource contains the APIGroup and APIResource
-type groupResource struct {
-	APIGroup    string             `json:"apiGroup"`
-	APIVersion  string             `json:"apiVersion"`
-	APIResource metav1.APIResource `json:"resource"`
-}
-
-type groupResourceWithTargetNS struct {
-	groupResource    `json:""`
-	TargetNamespaces []string `json:"targetNamespace"`
-}
-
 var logLevelMap = map[string]log.Level{
 	"panic": log.PanicLevel,
 	"fatal": log.FatalLevel,
@@ -131,17 +120,30 @@ func (self *Observer) Init() error {
 	kubeconf, _ := kubeutil.GetKubeConfig()
 
 	var err error
-
 	err = self.getAPIResources(kubeconf)
 	if err != nil {
 		return err
 	}
-
-	dynamicClient, err := dynamic.NewForConfig(kubeconf)
+	err = self.getNamespaces(kubeconf)
 	if err != nil {
 		return err
 	}
-	self.dynamicClient = dynamicClient
+
+	// set kubeclients
+	dynamicClient, _ := dynamic.NewForConfig(kubeconf)
+	self.DynamicClient = dynamicClient
+	mieClient, _ := mieclient.NewForConfig(kubeconf)
+	self.MieClient = mieClient
+	misClient, _ := misclient.NewForConfig(kubeconf)
+	self.MisClient = misClient
+	clientset, _ := kubeclient.NewForConfig(kubeconf)
+	self.Clientset = clientset
+
+	namespace := os.Getenv("POD_NAMESPACE")
+	if namespace == "" {
+		namespace = defaultPodNamespace
+	}
+	self.IShiledNamespace = namespace
 
 	// log
 	if os.Getenv("LOG_FORMAT") == "json" {
@@ -166,10 +168,17 @@ func (self *Observer) Init() error {
 }
 
 func (self *Observer) Run() {
-	// load config -> requestHandlerConfig
+	// load requestHandlerConfig
 	rhconfig, err := k8smnfconfig.LoadRequestHandlerConfig()
 	if err != nil {
 		log.Error("Failed to load RequestHandlerConfig; err: ", err.Error())
+	}
+
+	// reload all namespaces
+	kubeconf, _ := kubeutil.GetKubeConfig()
+	err = self.getNamespaces(kubeconf)
+	if err != nil {
+		log.Info("failed to update namespace list")
 	}
 
 	// load constraints
@@ -198,17 +207,19 @@ func (self *Observer) Run() {
 	var constraintResults []ConstraintResult
 	for _, constraint := range constraints {
 		constraintName := constraint.Parameters.ConstraintName
+		log.Infof("Process new constraint %s ...", constraintName)
 		var violations []vrc.VerifyResult
 		var nonViolations []vrc.VerifyResult
 		narrowedGVKList := self.getPossibleProtectedGVKs(constraint.Match)
 		if narrowedGVKList == nil {
-			log.Info("there is no resources to observe in the constraint:", constraint.Parameters.ConstraintName)
+			log.Info("there is no resources to observe in the constraint: ", constraint.Parameters.ConstraintName)
 			return
 		}
+		log.Debug("possible Protected GVKs: ", narrowedGVKList)
 		// get all resources of extracted GVKs
 		resources := []unstructured.Unstructured{}
 		for _, gResource := range narrowedGVKList {
-			tmpResources, _ := self.getAllResoucesByGroupResource(gResource)
+			tmpResources, _ := self.getAllResoucesByGroupResource(gResource, constraint.Match.LabelSelector)
 			resources = append(resources, tmpResources...)
 		}
 
@@ -220,6 +231,7 @@ func (self *Observer) Run() {
 		skipObjects = append(skipObjects, constraint.Parameters.SkipObjects...)
 		results := []VerifyResultDetail{}
 		for _, resource := range resources {
+			log.Debugf("Observe new resource; ns:%s, kind:%s, name:%s", resource.GetNamespace(), resource.GetKind(), resource.GetName())
 			// skip object
 			result := ObserveResource(resource, constraint.Parameters, ignoreFields, skipObjects, secrets)
 			imgAllow, imgMsg := ObserveImage(resource, constraint.Parameters.ImageProfile)
@@ -231,8 +243,8 @@ func (self *Observer) Run() {
 					result.Message = fmt.Sprintf("%s, [Image]%s", result.Message, imgMsg)
 				}
 			}
-
-			log.Debug("VerifyResultDetail", result)
+			result = self.checkExemption(constraintName, result)
+			log.Debug("Verify result: ", result)
 			results = append(results, result)
 		}
 
@@ -256,10 +268,12 @@ func (self *Observer) Run() {
 					Kind:       res.Kind,
 					ApiGroup:   res.ApiGroup,
 					ApiVersion: res.ApiVersion,
-					Signer:     res.VerifyResourceResult.Signer,
-					SigRef:     res.VerifyResourceResult.SigRef,
-					SignedTime: res.VerifyResourceResult.SignedTime,
 					Result:     res.Message,
+				}
+				if res.VerifyResourceResult != nil {
+					vres.Signer = res.VerifyResourceResult.Signer
+					vres.SigRef = res.VerifyResourceResult.SigRef
+					vres.SignedTime = res.VerifyResourceResult.SignedTime
 				}
 				nonViolations = append(nonViolations, vres)
 			}
@@ -289,19 +303,8 @@ func (self *Observer) Run() {
 			ObservationTime: time.Now().Format(timeFormat),
 		}
 
-		// check if supress audit result
-		ignored := false
-		if constraint.Parameters.Action == nil {
-			ignored = rhconfig.DefaultConstraintAction.AdmissionOnly
-		} else {
-			ignored = constraint.Parameters.Action.AdmissionOnly
-		}
-		if ignored {
-			log.Infof("the audit result about %s will be not reported", constraint.Parameters.ConstraintName)
-		}
-
 		// export VerifyResult
-		_ = exportVerifyResult(vrr, ignored, violated)
+		_ = self.exportVerifyResult(vrr, violated)
 		// VerifyResultDetail
 		cres := ConstraintResult{
 			ConstraintName:  constraintName,
@@ -318,42 +321,42 @@ func (self *Observer) Run() {
 		ConstraintResults: constraintResults,
 		Time:              time.Now().Format(timeFormat),
 	}
-	_ = exportResultDetail(res)
+	_ = self.exportResultDetail(res)
 }
 
-func exportVerifyResult(vrr vrc.ManifestIntegrityStateSpec, ignored bool, violated bool) error {
-	config, err := kubeutil.GetKubeConfig()
+func (self *Observer) checkExemption(constraintName string, res VerifyResultDetail) VerifyResultDetail {
+	// load manifest integrity exemption
+	mie, err := self.MieClient.ManifestIntegrityExemptions(self.IShiledNamespace).Get(context.Background(), constraintName, metav1.GetOptions{})
 	if err != nil {
-		log.Error(err)
-		return err
+		return res
 	}
-	clientset, err := vrcclient.NewForConfig(config)
-	if err != nil {
-		log.Error(err)
-		return err
+	for _, ex := range mie.Spec.AdmissionResults {
+		if ex.Namespace == res.Namespace && ex.Name == res.Name &&
+			ex.Kind == res.Kind && ex.ApiGroup == res.ApiGroup && ex.ApiVersion == res.ApiVersion {
+			if ex.Allow {
+				res.Violation = false
+				res.Message = fmt.Sprintf("Created by skipUser: %s", ex.UserName)
+				log.Debug("Exemption log found. Created by skipUser: ", res)
+				return res
+			}
+		}
 	}
-	namespace := os.Getenv("POD_NAMESPACE")
-	if namespace == "" {
-		namespace = defaultPodNamespace
-	}
+	return res
+}
 
+func (self *Observer) exportVerifyResult(vrr vrc.ManifestIntegrityStateSpec, violated bool) error {
 	// label
 	vv := "false"
-	iv := "false"
 	if violated {
 		vv = "true"
 	}
-	if ignored {
-		iv = "true"
-	}
 	labels := map[string]string{
 		VerifyResourceViolationLabel: vv,
-		VerifyResourceIgnoreLabel:    iv,
 	}
 
-	obj, err := clientset.ManifestIntegrityStates(namespace).Get(context.Background(), vrr.ConstraintName, metav1.GetOptions{})
+	obj, err := self.MisClient.ManifestIntegrityStates(self.IShiledNamespace).Get(context.Background(), vrr.ConstraintName, metav1.GetOptions{})
 	if err != nil || obj == nil {
-		log.Info("creating new ManifestIntegrityState resource...")
+		log.Infof("creating new ManifestIntegrityState resource %s ...", vrr.ConstraintName)
 		newVRC := &vrc.ManifestIntegrityState{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: vrr.ConstraintName,
@@ -362,16 +365,16 @@ func exportVerifyResult(vrr vrc.ManifestIntegrityStateSpec, ignored bool, violat
 		}
 
 		newVRC.Labels = labels
-		_, err = clientset.ManifestIntegrityStates(namespace).Create(context.Background(), newVRC, metav1.CreateOptions{})
+		_, err = self.MisClient.ManifestIntegrityStates(self.IShiledNamespace).Create(context.Background(), newVRC, metav1.CreateOptions{})
 		if err != nil {
 			log.Error("failed to create ManifestIntegrityStates:", err.Error())
 			return err
 		}
 	} else {
-		log.Info("updating ManifestIntegrityStatees resource...")
+		log.Infof("updating ManifestIntegrityStatees resource %s ...", vrr.ConstraintName)
 		obj.Spec = vrr
 		obj.Labels = labels
-		_, err = clientset.ManifestIntegrityStates(namespace).Update(context.Background(), obj, metav1.UpdateOptions{})
+		_, err = self.MisClient.ManifestIntegrityStates(self.IShiledNamespace).Update(context.Background(), obj, metav1.UpdateOptions{})
 		if err != nil {
 			log.Error("failed to update ManifestIntegrityStates:", err.Error())
 			return err
@@ -380,7 +383,7 @@ func exportVerifyResult(vrr vrc.ManifestIntegrityStateSpec, ignored bool, violat
 	return nil
 }
 
-func exportResultDetail(results ObservationDetailResults) error {
+func (self *Observer) exportResultDetail(results ObservationDetailResults) error {
 	exportStr := os.Getenv(exportDetailResult)
 	export := defaultExportDetailResult
 	if exportStr != "" {
@@ -408,16 +411,7 @@ func exportResultDetail(results ObservationDetailResults) error {
 	}
 
 	// load
-	config, err := kubeutil.GetKubeConfig()
-	if err != nil {
-		return nil
-	}
-	clientset, err := kubeclient.NewForConfig(config)
-	if err != nil {
-		log.Error(err)
-		return nil
-	}
-	cm, err := clientset.CoreV1().ConfigMaps(namespace).Get(context.Background(), configName, metav1.GetOptions{})
+	cm, err := self.Clientset.CoreV1().ConfigMaps(namespace).Get(context.Background(), configName, metav1.GetOptions{})
 	if err != nil {
 		// create
 		log.Info("creating new configmap to store verify result...", configName)
@@ -430,7 +424,7 @@ func exportResultDetail(results ObservationDetailResults) error {
 		newcm.Data = map[string]string{
 			configKey: string(resByte),
 		}
-		_, err := clientset.CoreV1().ConfigMaps(namespace).Create(context.Background(), newcm, metav1.CreateOptions{})
+		_, err := self.Clientset.CoreV1().ConfigMaps(namespace).Create(context.Background(), newcm, metav1.CreateOptions{})
 		if err != nil {
 			log.Error("failed to create configmap", err.Error())
 			return err
@@ -443,82 +437,13 @@ func exportResultDetail(results ObservationDetailResults) error {
 		cm.Data = map[string]string{
 			configKey: string(resByte),
 		}
-		_, err := clientset.CoreV1().ConfigMaps(namespace).Update(context.Background(), cm, metav1.UpdateOptions{})
+		_, err := self.Clientset.CoreV1().ConfigMaps(namespace).Update(context.Background(), cm, metav1.UpdateOptions{})
 		if err != nil {
 			log.Error("failed to update configmap", err.Error())
 			return err
 		}
 	}
 	return nil
-}
-
-func (self *Observer) getAPIResources(kubeconfig *rest.Config) error {
-	discoveryClient, err := discovery.NewDiscoveryClientForConfig(kubeconfig)
-	if err != nil {
-		return err
-	}
-
-	apiResourceLists, err := discoveryClient.ServerPreferredResources()
-	if err != nil {
-		return err
-	}
-	resources := []groupResource{}
-	for _, apiResourceList := range apiResourceLists {
-		if len(apiResourceList.APIResources) == 0 {
-			continue
-		}
-		gv, err := schema.ParseGroupVersion(apiResourceList.GroupVersion)
-		if err != nil {
-			continue
-		}
-		for _, resource := range apiResourceList.APIResources {
-			if len(resource.Verbs) == 0 {
-				continue
-			}
-			resources = append(resources, groupResource{
-				APIGroup:    gv.Group,
-				APIVersion:  gv.Version,
-				APIResource: resource,
-			})
-		}
-	}
-	self.APIResources = resources
-	return nil
-}
-
-func (self *Observer) getAllResoucesByGroupResource(gResourceWithTargetNS groupResourceWithTargetNS) ([]unstructured.Unstructured, error) {
-	var resources []unstructured.Unstructured
-	var err error
-	gResource := gResourceWithTargetNS.groupResource
-	targetNSs := gResourceWithTargetNS.TargetNamespaces
-	namespaced := gResource.APIResource.Namespaced
-	gvr := schema.GroupVersionResource{
-		Group:    gResource.APIGroup,
-		Version:  gResource.APIVersion,
-		Resource: gResource.APIResource.Name,
-	}
-
-	var tmpResourceList *unstructured.UnstructuredList
-	if namespaced {
-		for _, ns := range targetNSs {
-			tmpResourceList, err = self.dynamicClient.Resource(gvr).Namespace(ns).List(context.Background(), metav1.ListOptions{})
-			if err != nil {
-				log.Error("failed to get tmpResourceList:", err.Error())
-				break
-			}
-			resources = append(resources, tmpResourceList.Items...)
-		}
-
-	} else {
-		tmpResourceList, err = self.dynamicClient.Resource(gvr).List(context.Background(), metav1.ListOptions{})
-		resources = append(resources, tmpResourceList.Items...)
-	}
-	if err != nil {
-		// ignore RBAC error - IShield SA
-		log.Error("RBAC error when listing resources; error:", err.Error())
-		return []unstructured.Unstructured{}, nil
-	}
-	return resources, nil
 }
 
 func LoadKeySecret(keySecertNamespace, keySecertName string) (string, error) {
@@ -586,127 +511,25 @@ func (self *Observer) loadConstraints() ([]ConstraintSpec, error) {
 		Version:  "v1beta1",
 		Resource: "manifestintegrityconstraint",
 	}
-	constraintList, err := self.dynamicClient.Resource(gvr).List(context.Background(), metav1.ListOptions{})
+	constraintList, err := self.DynamicClient.Resource(gvr).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
 	micList := []ConstraintSpec{}
 	for _, unstructed := range constraintList.Items {
-		log.Debug("unstructed.Object", unstructed.Object)
 		var mic ConstraintSpec
 		spec, ok := unstructed.Object["spec"]
 		if !ok {
-			fmt.Println("failed to get spec in constraint", unstructed.GetName())
+			log.Error("failed to get spec in constraint", unstructed.GetName())
 		}
 		jsonStr, err := json.Marshal(spec)
 		if err != nil {
-			fmt.Println(err)
+			log.Error(err)
 		}
 		if err := json.Unmarshal(jsonStr, &mic); err != nil {
-			fmt.Println(err)
+			log.Error(err)
 		}
-		log.Debug("ManigestIntegrityConstraint:", mic)
 		micList = append(micList, mic)
 	}
 	return micList, nil
-}
-
-func (self *Observer) getPossibleProtectedGVKs(match MatchCondition) []groupResourceWithTargetNS {
-	possibleProtectedGVKs := []groupResourceWithTargetNS{}
-	for _, apiResource := range self.APIResources {
-		matched, tmpGvks := checkIfRuleMatchWithGVK(match, apiResource)
-		if matched {
-			possibleProtectedGVKs = append(possibleProtectedGVKs, tmpGvks...)
-		}
-	}
-	return possibleProtectedGVKs
-}
-
-// TODO: check logic
-func checkIfRuleMatchWithGVK(match MatchCondition, apiResource groupResource) (bool, []groupResourceWithTargetNS) {
-	possibleProtectedGVKs := []groupResourceWithTargetNS{}
-
-	log.Debug("apiResource ", apiResource)
-	// TODO: support "LabelSelector"
-	if len(match.Kinds) == 0 {
-		return false, nil
-	}
-	matched := false
-	for _, kinds := range match.Kinds {
-		kmatch := false
-		agmatch := false
-		if len(kinds.ApiGroups) != 0 {
-			agmatch = Contains(kinds.ApiGroups, apiResource.APIGroup)
-			log.Debug(fmt.Sprintf("check apiGroup condition: rule %s, apiResource.APIGroup %s, matched %s", kinds.ApiGroups, apiResource.APIGroup, strconv.FormatBool(agmatch)))
-		} else {
-			agmatch = true
-		}
-		if len(kinds.ApiGroups) != 0 {
-			kmatch = Contains(kinds.Kinds, apiResource.APIResource.Kind)
-		} else {
-			kmatch = true
-		}
-		if kmatch && agmatch {
-			matched = true
-			namespaces := match.Namespaces
-			if match.NamespaceSelector != nil {
-				labeledNS := getLabelMatchedNamespace(match.NamespaceSelector)
-				namespaces = append(namespaces, labeledNS...)
-			}
-			possibleProtectedGVKs = append(possibleProtectedGVKs, groupResourceWithTargetNS{
-				groupResource:    apiResource,
-				TargetNamespaces: namespaces,
-			})
-		}
-	}
-	log.WithFields(log.Fields{
-		"matched":               matched,
-		"possibleProtectedGVKs": possibleProtectedGVKs,
-	}).Debug("check match condition")
-	return matched, possibleProtectedGVKs
-}
-
-func Contains(pattern []string, value string) bool {
-	for _, p := range pattern {
-		if p == value {
-			return true
-		}
-	}
-	return false
-}
-
-func getLabelMatchedNamespace(labelSelector *metav1.LabelSelector) []string {
-	matchedNs := []string{}
-	if labelSelector == nil {
-		return []string{}
-	}
-	config, err := kubeutil.GetKubeConfig()
-	if err != nil {
-		return []string{}
-	}
-	clientset, err := kubeclient.NewForConfig(config)
-	if err != nil {
-		log.Error(err)
-		return []string{}
-	}
-	namespaces, err := clientset.CoreV1().Namespaces().List(context.Background(), metav1.ListOptions{})
-	if err != nil {
-		log.Errorf("failed to list a namespace:`%s`", err.Error())
-		return []string{}
-	}
-	selector, err := metav1.LabelSelectorAsSelector(labelSelector)
-	if err != nil {
-		log.Errorf("failed to convert the LabelSelector api type into a struct that implements labels.Selector; %s", err.Error())
-		return []string{}
-	}
-
-	for _, ns := range namespaces.Items {
-		labelsMap := ns.GetLabels()
-		labelsSet := labels.Set(labelsMap)
-		matched := selector.Matches(labelsSet)
-		if matched {
-			matchedNs = append(matchedNs, ns.Name)
-		}
-	}
-	return matchedNs
 }
