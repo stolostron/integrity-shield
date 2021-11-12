@@ -30,4 +30,4 @@ if [ -z "$ISHIELD_AC_SERVER_POD" ]; then
     exit 1
 fi
 
-kubectl logs -f -n ${ISHIELD_NS} ${ISHIELD_AC_SERVER_POD} 
+kubectl logs -f -n ${ISHIELD_NS} ${ISHIELD_AC_SERVER_POD} -c integrity-shield-validator

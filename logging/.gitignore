@@ -1,4 +1,5 @@
-build/_output/
+build/
+build/_bin/
 
 # Binaries for programs and plugins
 *.exe

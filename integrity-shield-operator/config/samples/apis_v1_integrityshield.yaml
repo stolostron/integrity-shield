@@ -47,7 +47,6 @@ spec:
   requestHandlerConfig: |
     defaultConstraintAction:
       mode: detect
-      admissionOnly: false
     sideEffect: 
       createDenyEvent: true
     log:
