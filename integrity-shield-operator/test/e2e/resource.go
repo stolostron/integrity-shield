@@ -15,12 +15,17 @@
 package e2e
 
 import (
+	"context"
 	goctx "context"
 	"fmt"
 	"strings"
+	"time"
+
+	"github.com/ghodss/yaml"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/duration"
 )
 
 // IsPodReady returns true if a pod is ready; false otherwise.
@@ -79,9 +84,100 @@ func CheckPodStatus(framework *Framework, namespace, expected string) error {
 		return fmt.Errorf("Pod is not found: %v", expected)
 	}
 	if pod_exist && !ready {
+		DescribePod(framework, namespace, expected)
 		return fmt.Errorf("Pod is not ready: %v", expected)
 	}
 	return nil
+}
+
+func DescribePod(framework *Framework, namespace, expected string) {
+	ShowPodStatus(framework, namespace, expected)
+	ShowEventsForPod(framework, namespace, expected)
+}
+
+func ShowPodStatus(framework *Framework, namespace, expected string) {
+	name := GetPodName(framework, namespace, expected)
+	if name == "" {
+		fmt.Printf("failed to find a Pod that name starts with `%s`.\n", expected)
+		return
+	}
+	pod, err := framework.KubeClientSet.CoreV1().Pods(namespace).Get(goctx.TODO(), name, metav1.GetOptions{})
+	if err != nil {
+		fmt.Printf("failed to get pod, error: %s\n", err.Error())
+		return
+	}
+	fmt.Printf("Showing status of Pod `%s`\n", name)
+	podStatusBytes, err := yaml.Marshal(pod.Status)
+	if err != nil {
+		fmt.Printf("failed to marshal pod status, error: %s\n", err.Error())
+		return
+	}
+	fmt.Println(string(podStatusBytes))
+}
+
+func ShowEventsForPod(framework *Framework, namespace, expected string) {
+	name := GetPodName(framework, namespace, expected)
+	if name == "" {
+		fmt.Printf("failed to find a Pod that name starts with `%s`.\n", expected)
+		return
+	}
+	eventsInterface := framework.KubeClientSet.CoreV1().Events(namespace)
+	selector := eventsInterface.GetFieldSelector(&name, &namespace, nil, nil)
+	initialOpts := metav1.ListOptions{
+		FieldSelector: selector.String(),
+		Limit:         500, //default chunk size of kubectl describe
+	}
+	events, err := eventsInterface.List(context.Background(), initialOpts)
+	if err != nil {
+		fmt.Printf("failed to list events, error: %s\n", err.Error())
+		return
+	}
+	if len(events.Items) == 0 {
+		fmt.Printf("there are no events related to the Pod `%s`.\n", name)
+		return
+	}
+	fmt.Printf("showing events related to the Pod `%s`.\n", name)
+	fmt.Printf("Events:\n  Type\tReason\tAge\tFrom\tMessage\n")
+	fmt.Printf("  ----\t------\t----\t----\t-------\n")
+	for _, e := range events.Items {
+		var interval string
+		firstTimestampSince := translateMicroTimestampSince(e.EventTime)
+		if e.EventTime.IsZero() {
+			firstTimestampSince = translateTimestampSince(e.FirstTimestamp)
+		}
+		if e.Series != nil {
+			interval = fmt.Sprintf("%s (x%d over %s)", translateMicroTimestampSince(e.Series.LastObservedTime), e.Series.Count, firstTimestampSince)
+		} else if e.Count > 1 {
+			interval = fmt.Sprintf("%s (x%d over %s)", translateTimestampSince(e.LastTimestamp), e.Count, firstTimestampSince)
+		} else {
+			interval = firstTimestampSince
+		}
+		source := e.Source.Component
+		if source == "" {
+			source = e.ReportingController
+		}
+		fmt.Printf("  %v\t%v\t%s\t%v\t%v\n",
+			e.Type,
+			e.Reason,
+			interval,
+			source,
+			strings.TrimSpace(e.Message),
+		)
+	}
+}
+
+func translateMicroTimestampSince(timestamp metav1.MicroTime) string {
+	if timestamp.IsZero() {
+		return "<unknown>"
+	}
+	return duration.HumanDuration(time.Since(timestamp.Time))
+}
+
+func translateTimestampSince(timestamp metav1.Time) string {
+	if timestamp.IsZero() {
+		return "<unknown>"
+	}
+	return duration.HumanDuration(time.Since(timestamp.Time))
 }
 
 func GetPodName(framework *Framework, namespace, expected string) string {
