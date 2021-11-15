@@ -84,11 +84,15 @@ func CheckPodStatus(framework *Framework, namespace, expected string) error {
 		return fmt.Errorf("Pod is not found: %v", expected)
 	}
 	if pod_exist && !ready {
-		ShowPodStatus(framework, namespace, expected)
-		ShowEventsForPod(framework, namespace, expected)
+		DescribePod(framework, namespace, expected)
 		return fmt.Errorf("Pod is not ready: %v", expected)
 	}
 	return nil
+}
+
+func DescribePod(framework *Framework, namespace, expected string) {
+	ShowPodStatus(framework, namespace, expected)
+	ShowEventsForPod(framework, namespace, expected)
 }
 
 func ShowPodStatus(framework *Framework, namespace, expected string) {
