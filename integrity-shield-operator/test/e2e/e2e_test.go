@@ -49,7 +49,7 @@ var _ = Describe("Test: integrity shield", func() {
 				return CheckPodStatus(framework, namespace, expected)
 			}, timeout, 1).Should(BeNil())
 		})
-		It("IShield server should be created properly", func() {
+		It("IShield API Pod should be created properly", func() {
 			framework := initFrameWork()
 			var timeout int = 300
 			expected := api_name
