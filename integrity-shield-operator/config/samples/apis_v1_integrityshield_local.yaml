@@ -39,8 +39,8 @@ spec:
     intervalSeconds: "10"
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 100m
+        memory: 128Mi
   requestHandlerConfigKey: config.yaml
   requestHandlerConfigName: request-handler-config
   requestHandlerConfig: |

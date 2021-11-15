@@ -260,8 +260,8 @@ spec:
     intervalSeconds: "10"
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 100m
+        memory: 128Mi
   webhookServerTlsSecretName: integrity-shield-validator-tls
   webhookServiceName: integrity-shield-validator-service
   webhookConfigName: integrity-shield-validating-webhook-configuration
