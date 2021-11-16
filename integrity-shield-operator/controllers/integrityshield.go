@@ -135,27 +135,27 @@ func (r *IntegrityShieldReconciler) deleteManifestIntegrityProfileCRD(
 	return r.deleteCRD(instance, expected)
 }
 
-func (r *IntegrityShieldReconciler) createOrUpdateObserverResultCRD(
+func (r *IntegrityShieldReconciler) createOrUpdateManifestIntegrityStateCRD(
 	instance *apiv1.IntegrityShield) (ctrl.Result, error) {
-	expected := res.BuildObserverResultCRD(instance)
+	expected := res.BuildManifestIntegrityStateCRD(instance)
 	return r.createOrUpdateCRD(instance, expected)
 }
 
-func (r *IntegrityShieldReconciler) deleteObserverResultCRD(
+func (r *IntegrityShieldReconciler) deleteManifestIntegrityStateCRD(
 	instance *apiv1.IntegrityShield) (ctrl.Result, error) {
-	expected := res.BuildObserverResultCRD(instance)
+	expected := res.BuildManifestIntegrityStateCRD(instance)
 	return r.deleteCRD(instance, expected)
 }
 
-func (r *IntegrityShieldReconciler) createOrUpdateExemptionCRD(
+func (r *IntegrityShieldReconciler) createOrUpdateManifestIntegrityDecisionCRD(
 	instance *apiv1.IntegrityShield) (ctrl.Result, error) {
-	expected := res.BuildExemptionCRD(instance)
+	expected := res.BuildManifestIntegrityDecisionCRD(instance)
 	return r.createOrUpdateCRD(instance, expected)
 }
 
-func (r *IntegrityShieldReconciler) deleteExemptionCRD(
+func (r *IntegrityShieldReconciler) deleteManifestIntegrityDecisionCRD(
 	instance *apiv1.IntegrityShield) (ctrl.Result, error) {
-	expected := res.BuildExemptionCRD(instance)
+	expected := res.BuildManifestIntegrityDecisionCRD(instance)
 	return r.deleteCRD(instance, expected)
 }
 

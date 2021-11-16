@@ -36,8 +36,8 @@ if [ -z "$ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION" ]; then
     exit 1
 fi
 
-if [ -z "$ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION" ]; then
-    echo "ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
+if [ -z "$ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION" ]; then
+    echo "ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
     exit 1
 fi
 
@@ -65,10 +65,10 @@ echo done.
 echo -----------------------------
 echo ""
 
-# Push integrity-shield-exemption-logger image
+# Push integrity-shield-reporter image
 echo -----------------------------
-echo [3/5] Pushing integrity-shield-exemption-logger image.
-docker push ${ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION}
+echo [3/5] Pushing integrity-shield-reporter image.
+docker push ${ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION}
 echo done.
 echo -----------------------------
 echo ""

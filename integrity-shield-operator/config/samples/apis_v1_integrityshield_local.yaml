@@ -30,12 +30,12 @@ spec:
       app: integrity-shield-api
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
-  logging:
-    name: integrity-shield-logger
+        cpu: 250m
+        memory: 256Mi
+  reporter:
+    name: integrity-shield-reporter
     imagePullPolicy: Always
-    image: localhost:5000/integrity-shield-logging
+    image: localhost:5000/integrity-shield-reporter
     intervalSeconds: "10"
     resources:
       limits:
@@ -52,7 +52,8 @@ spec:
       level: trace
       manifestSigstoreLogLevel: info
       format: json
-      contextLoggerEnabled: true
+    decisionReporterConfig:
+      enabled: true
     requestFilterProfile: 
       skipObjects:
       - kind: ConfigMap
@@ -421,6 +422,10 @@ spec:
     image: localhost:5000/integrity-shield-observer
     selector:     
       app: integrity-shield-observer
+    resources:
+      limits:
+        cpu: 250m
+        memory: 256Mi
     logLevel: info
     interval: "5"
     exportDetailResult: true

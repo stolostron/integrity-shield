@@ -18,7 +18,7 @@ FROM registry.access.redhat.com/ubi7/ubi-minimal:7.9
 
 # RUN yum install -y tar
 
-RUN mkdir -p /ishield-app && mkdir -p /ishield-app/public
+RUN mkdir -p /ishield-app && mkdir -p /ishield-app/shared
 COPY build/_bin/ishield-api /ishield-app/ishield-api
 
 RUN chgrp -R 0 /ishield-app && chmod -R g=u /ishield-app

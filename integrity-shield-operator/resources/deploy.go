@@ -45,7 +45,7 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 	volumes = []v1.Volume{
 		SecretVolume("ishield-api-certs", cr.Spec.APITlsSecretName),
 		EmptyDirVolume("tmp"),
-		EmptyDirVolume("log-volume"),
+		EmptyDirVolume("report-volume"),
 	}
 
 	volumemounts = []v1.VolumeMount{
@@ -59,8 +59,8 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 			Name:      "tmp",
 		},
 		{
-			MountPath: "/ishield-app/public",
-			Name:      "log-volume",
+			MountPath: "/ishield-app/shared",
+			Name:      "report-volume",
 		},
 	}
 
@@ -70,8 +70,8 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 			Name:      "tmp",
 		},
 		{
-			MountPath: "/ishield-app/public",
-			Name:      "log-volume",
+			MountPath: "/ishield-app/shared",
+			Name:      "report-volume",
 		},
 	}
 
@@ -83,12 +83,12 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 		image = SetImageVersion(cr.Spec.API.Image, version, cr.Spec.API.Name)
 	}
 
-	var loggerImage string
-	if cr.Spec.Logging.Tag != "" {
-		loggerImage = SetImageVersion(cr.Spec.Logging.Image, cr.Spec.Logging.Tag, cr.Spec.Logging.Name)
+	var reporterImage string
+	if cr.Spec.Reporter.Tag != "" {
+		reporterImage = SetImageVersion(cr.Spec.Reporter.Image, cr.Spec.Reporter.Tag, cr.Spec.Reporter.Name)
 	} else {
-		version := GetVersion(cr.Spec.Logging.Name)
-		loggerImage = SetImageVersion(cr.Spec.Logging.Image, version, cr.Spec.Logging.Name)
+		version := GetVersion(cr.Spec.Reporter.Name)
+		reporterImage = SetImageVersion(cr.Spec.Reporter.Image, version, cr.Spec.Reporter.Name)
 	}
 	apiContainer := v1.Container{
 		Name:            cr.Spec.API.Name,
@@ -139,17 +139,17 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 				Value: cr.Spec.RequestHandlerConfigName,
 			},
 			{
-				Name:  "EVENTS_FILE_PATH",
+				Name:  "DECISION_FILE_PATH",
 				Value: apiv1.DefaultFilePath,
 			},
 		},
 		Resources: cr.Spec.API.Resources,
 	}
-	loggerContainer := v1.Container{
-		Name:            cr.Spec.Logging.Name,
-		SecurityContext: cr.Spec.Logging.SecurityContext,
-		Image:           loggerImage,
-		ImagePullPolicy: cr.Spec.Logging.ImagePullPolicy,
+	reporterContainer := v1.Container{
+		Name:            cr.Spec.Reporter.Name,
+		SecurityContext: cr.Spec.Reporter.SecurityContext,
+		Image:           reporterImage,
+		ImagePullPolicy: cr.Spec.Reporter.ImagePullPolicy,
 		ReadinessProbe: &v1.Probe{
 			InitialDelaySeconds: 10,
 			PeriodSeconds:       10,
@@ -180,18 +180,18 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 			},
 			{
 				Name:  "INTERVAL_SECONDS",
-				Value: cr.Spec.Logging.IntervalSeconds,
+				Value: cr.Spec.Reporter.IntervalSeconds,
 			},
 			{
-				Name:  "EVENTS_FILE_PATH",
+				Name:  "DECISION_FILE_PATH",
 				Value: apiv1.DefaultFilePath,
 			},
 		},
-		Resources: cr.Spec.Logging.Resources,
+		Resources: cr.Spec.Reporter.Resources,
 	}
 	containers := []v1.Container{
 		apiContainer,
-		loggerContainer,
+		reporterContainer,
 	}
 
 	return &appsv1.Deployment{
@@ -236,7 +236,7 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 	volumes := []v1.Volume{
 		SecretVolume("webhook-tls", cr.Spec.WebhookServerTlsSecretName),
 		EmptyDirVolume("tmp"),
-		EmptyDirVolume("log-volume"),
+		EmptyDirVolume("report-volume"),
 	}
 
 	servervolumemounts := []v1.VolumeMount{
@@ -250,8 +250,8 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 			Name:      "tmp",
 		},
 		{
-			MountPath: "/ishield-app/public",
-			Name:      "log-volume",
+			MountPath: "/ishield-app/shared",
+			Name:      "report-volume",
 		},
 	}
 

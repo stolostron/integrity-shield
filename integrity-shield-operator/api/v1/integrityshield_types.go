@@ -24,7 +24,7 @@ import (
 const (
 	DefaultIShieldWebhookTimeout = 10
 	DefaultIShieldAPILabel       = "integrity-shield-api"
-	DefaultFilePath              = "/ishield-app/public/events.txt"
+	DefaultFilePath              = "/ishield-app/shared/decisions.txt"
 	CleanupFinalizerName         = "cleanup.finalizers.integrityshield.io"
 	CsvPath                      = "./bundle/manifests/integrity-shield-operator.clusterserviceversion.yaml"
 )
@@ -48,13 +48,13 @@ type IntegrityShieldSpec struct {
 	Security SecurityConfig `json:"security,omitempty"`
 
 	// api
-	API                      APIContainer    `json:"shieldApi,omitempty"`
-	RequestHandlerConfigKey  string          `json:"requestHandlerConfigKey,omitempty"`
-	RequestHandlerConfigName string          `json:"requestHandlerConfigName,omitempty"`
-	RequestHandlerConfig     string          `json:"requestHandlerConfig,omitempty"`
-	ApiServiceName           string          `json:"shieldApiServiceName,omitempty"`
-	ApiServicePort           int32           `json:"shieldApiServicePort,omitempty"`
-	Logging                  LoggerContainer `json:"logging,omitempty"`
+	API                      APIContainer      `json:"shieldApi,omitempty"`
+	RequestHandlerConfigKey  string            `json:"requestHandlerConfigKey,omitempty"`
+	RequestHandlerConfigName string            `json:"requestHandlerConfigName,omitempty"`
+	RequestHandlerConfig     string            `json:"requestHandlerConfig,omitempty"`
+	ApiServiceName           string            `json:"shieldApiServiceName,omitempty"`
+	ApiServicePort           int32             `json:"shieldApiServicePort,omitempty"`
+	Reporter                 ReporterContainer `json:"reporter,omitempty"`
 
 	// admission controller
 	ControllerContainer           ControllerContainer `json:"admissionController,omitempty"`
@@ -87,7 +87,7 @@ type APIContainer struct {
 	Port            int32                   `json:"port,omitempty"`
 	Resources       v1.ResourceRequirements `json:"resources,omitempty"`
 }
-type LoggerContainer struct {
+type ReporterContainer struct {
 	Name            string                  `json:"name,omitempty"`
 	SelectorLabels  map[string]string       `json:"selector,omitempty"`
 	SecurityContext *v1.SecurityContext     `json:"securityContext,omitempty"`

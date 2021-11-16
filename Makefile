@@ -236,11 +236,13 @@ ifeq ($(ISHIELD_TEST_ENV), remote)
 TMP_OBSERVER_IMG=$(REGISTRY)/$(ISHIELD_OBSERVER)
 TMP_ADMISSION_CONTROLLER_IMG=$(REGISTRY)/$(ISHIELD_ADMISSION_CONTROLLER)
 TMP_ISHIELD_IMG=$(REGISTRY)/$(ISHIELD_IMAGE)
+TMP_REPORTER_IMG=$(REGISTRY)/$(ISHIELD_REPORTER)
 OPERATOR_IMG=$(ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION)
 else
 TMP_OBSERVER_IMG=$(LOCAL_REGISTRY)/$(ISHIELD_OBSERVER)
 TMP_ADMISSION_CONTROLLER_IMG=$(LOCAL_REGISTRY)/$(ISHIELD_ADMISSION_CONTROLLER)
 TMP_ISHIELD_IMG=$(LOCAL_REGISTRY)/$(ISHIELD_IMAGE)
+TMP_REPORTER_IMG=$(LOCAL_REGISTRY)/$(ISHIELD_REPORTER)
 OPERATOR_IMG=$(TEST_ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION)
 endif
 
@@ -285,7 +287,7 @@ tag-images-to-local:
 	docker tag $(ISHIELD_API_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_API_IMAGE_NAME_AND_VERSION)
 	docker tag $(ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION)
 	docker tag $(ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION)
-	docker tag $(ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION)
+	docker tag $(ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION)
 	docker tag $(ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION) $(TEST_ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION)
 
 push-images-to-local: tag-images-to-local
@@ -293,7 +295,7 @@ push-images-to-local: tag-images-to-local
 	docker push $(TEST_ISHIELD_API_IMAGE_NAME_AND_VERSION)
 	docker push $(TEST_ISHIELD_ADMISSION_CONTROLLER_IMAGE_NAME_AND_VERSION)
 	docker push $(TEST_ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION)
-	docker push $(TEST_ISHIELD_EXEMPTION_LOGGER_IMAGE_NAME_AND_VERSION)
+	docker push $(TEST_ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION)
 	docker push $(TEST_ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION)
 
 setup-test-env: create-ns create-keyring-secret
@@ -420,6 +422,8 @@ setup-tmp-cr:
 		yq write -i $(TMP_CR_FILE) spec.shieldApi.imagePullPolicy Always ; \
 		yq write -i $(TMP_CR_FILE) spec.shieldApi.resources.limits.cpu 200m ; \
 		yq write -i $(TMP_CR_FILE) spec.shieldApi.resources.limits.memory 256Mi ; \
+		yq write -i $(TMP_CR_FILE) spec.reporter.image $(TMP_REPORTER_IMG) ; \
+		yq write -i $(TMP_CR_FILE) spec.reporter.imagePullPolicy Always ; \
 		yq write -i $(TMP_CR_FILE) spec.observer.image $(TMP_OBSERVER_IMG) ; \
 		yq write -i $(TMP_CR_FILE) spec.observer.imagePullPolicy Always ; \
 		yq write -i $(TMP_CR_FILE) spec.observer.resources.limits.cpu 200m ; \
@@ -428,6 +432,8 @@ setup-tmp-cr:
 		yq write -i $(TMP_CR_AC_FILE) spec.admissionController.imagePullPolicy Always ; \
 		yq write -i $(TMP_CR_AC_FILE) spec.admissionController.resources.limits.cpu 200m ; \
 		yq write -i $(TMP_CR_AC_FILE) spec.admissionController.resources.limits.memory 256Mi ; \
+		yq write -i $(TMP_CR_AC_FILE) spec.reporter.image $(TMP_REPORTER_IMG) ; \
+		yq write -i $(TMP_CR_AC_FILE) spec.reporter.imagePullPolicy Always ; \
 		yq write -i $(TMP_CR_AC_FILE) spec.observer.image $(TMP_OBSERVER_IMG) ; \
 		yq write -i $(TMP_CR_AC_FILE) spec.observer.imagePullPolicy Always ; \
 		yq write -i $(TMP_CR_AC_FILE) spec.observer.resources.limits.cpu 200m ; \
@@ -437,6 +443,8 @@ setup-tmp-cr:
 		yq eval -i ".spec.shieldApi.imagePullPolicy = \"Always\"" $(TMP_CR_FILE) ; \
 		yq eval -i ".spec.shieldApi.resources.limits.cpu = \"200m\"" $(TMP_CR_FILE) ; \
 		yq eval -i ".spec.shieldApi.resources.limits.memory = \"256Mi\"" $(TMP_CR_FILE) ; \
+		yq eval -i ".spec.reporter.image = \"$(TMP_REPORTER_IMG)\"" $(TMP_CR_FILE) ; \
+		yq eval -i ".spec.reporter.imagePullPolicy = \"Always\"" $(TMP_CR_FILE) ; \
 		yq eval -i ".spec.observer.image = \"$(TMP_OBSERVER_IMG)\"" $(TMP_CR_FILE) ; \
 		yq eval -i ".spec.observer.imagePullPolicy = \"Always\"" $(TMP_CR_FILE) ; \
 		yq eval -i ".spec.observer.resources.limits.cpu = \"200m\"" $(TMP_CR_FILE) ; \
@@ -445,6 +453,8 @@ setup-tmp-cr:
 		yq eval -i ".spec.admissionController.imagePullPolicy = \"Always\"" $(TMP_CR_AC_FILE) ; \
 		yq eval -i ".spec.admissionController.resources.limits.cpu = \"200m\"" $(TMP_CR_AC_FILE) ; \
 		yq eval -i ".spec.admissionController.resources.limits.memory = \"256Mi\"" $(TMP_CR_AC_FILE) ; \
+		yq eval -i ".spec.reporter.image = \"$(TMP_REPORTER_IMG)\"" $(TMP_CR_AC_FILE) ; \
+		yq eval -i ".spec.reporter.imagePullPolicy = \"Always\"" $(TMP_CR_AC_FILE) ; \
 		yq eval -i ".spec.observer.image = \"$(TMP_OBSERVER_IMG)\"" $(TMP_CR_AC_FILE) ; \
 		yq eval -i ".spec.observer.imagePullPolicy = \"Always\"" $(TMP_CR_AC_FILE) ; \
 		yq eval -i ".spec.observer.resources.limits.cpu = \"200m\"" $(TMP_CR_AC_FILE) ; \
@@ -469,8 +479,8 @@ log-observer:
 	bash $(ISHIELD_REPO_ROOT)/scripts/log_observer.sh
 log-ac-server:
 	bash $(ISHIELD_REPO_ROOT)/scripts/log_ac.sh
-log-logging:
-	bash $(ISHIELD_REPO_ROOT)/scripts/log_logging.sh
+log-reporter:
+	bash $(ISHIELD_REPO_ROOT)/scripts/log_reporter.sh
 
 clean-tmp:
 	@if [ -f "$(TMP_CR_FILE)" ]; then\

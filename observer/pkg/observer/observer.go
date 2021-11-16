@@ -27,14 +27,14 @@ import (
 	"strings"
 	"time"
 
-	mieclient "github.com/open-cluster-management/integrity-shield/logging/pkg/client/manifestintegrityexemption/clientset/versioned/typed/manifestintegrityexemption/v1"
 	vrc "github.com/open-cluster-management/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
 	misclient "github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
+	midclient "github.com/open-cluster-management/integrity-shield/reporter/pkg/client/manifestintegritydecision/clientset/versioned/typed/manifestintegritydecision/v1"
 	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
+	kubeutil "github.com/open-cluster-management/integrity-shield/shield/pkg/kubernetes"
 	"github.com/pkg/errors"
 	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
-	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/kubeutil"
 	log "github.com/sirupsen/logrus"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -44,7 +44,7 @@ import (
 	kubeclient "k8s.io/client-go/kubernetes"
 )
 
-const timeFormat = "2006-01-02 15:04:05"
+const timeFormat = "2006-01-02T15:04:05Z07:00"
 
 const exportDetailResult = "ENABLE_DETAIL_RESULT"
 const detailResultConfigName = "OBSERVER_RESULT_CONFIG_NAME"
@@ -68,7 +68,7 @@ type Observer struct {
 	APIResources     []groupResource
 	Namespaces       []string
 	DynamicClient    dynamic.Interface
-	MieClient        *mieclient.ApisV1Client
+	MidClient        *midclient.ApisV1Client
 	MisClient        *misclient.ApisV1Client
 	Clientset        *kubeclient.Clientset
 	IShiledNamespace string
@@ -132,8 +132,8 @@ func (self *Observer) Init() error {
 	// set kubeclients
 	dynamicClient, _ := dynamic.NewForConfig(kubeconf)
 	self.DynamicClient = dynamicClient
-	mieClient, _ := mieclient.NewForConfig(kubeconf)
-	self.MieClient = mieClient
+	mieClient, _ := midclient.NewForConfig(kubeconf)
+	self.MidClient = mieClient
 	misClient, _ := misclient.NewForConfig(kubeconf)
 	self.MisClient = misClient
 	clientset, _ := kubeclient.NewForConfig(kubeconf)
@@ -326,7 +326,7 @@ func (self *Observer) Run() {
 
 func (self *Observer) checkExemption(constraintName string, res VerifyResultDetail) VerifyResultDetail {
 	// load manifest integrity exemption
-	mie, err := self.MieClient.ManifestIntegrityExemptions(self.IShiledNamespace).Get(context.Background(), constraintName, metav1.GetOptions{})
+	mie, err := self.MidClient.ManifestIntegrityDecisions(self.IShiledNamespace).Get(context.Background(), constraintName, metav1.GetOptions{})
 	if err != nil {
 		return res
 	}
@@ -371,7 +371,7 @@ func (self *Observer) exportVerifyResult(vrr vrc.ManifestIntegrityStateSpec, vio
 			return err
 		}
 	} else {
-		log.Infof("updating ManifestIntegrityStatees resource %s ...", vrr.ConstraintName)
+		log.Infof("updating ManifestIntegrityStates resource %s ...", vrr.ConstraintName)
 		obj.Spec = vrr
 		obj.Labels = labels
 		_, err = self.MisClient.ManifestIntegrityStates(self.IShiledNamespace).Update(context.Background(), obj, metav1.UpdateOptions{})
@@ -446,15 +446,17 @@ func (self *Observer) exportResultDetail(results ObservationDetailResults) error
 	return nil
 }
 
-func LoadKeySecret(keySecertNamespace, keySecertName string) (string, error) {
-	obj, err := kubeutil.GetResource("v1", "Secret", keySecertNamespace, keySecertName)
+func LoadKeySecret(keySecretNamespace, keySecretName string) (string, error) {
+	kubeconf, _ := kubeutil.GetKubeConfig()
+	clientset, err := kubeclient.NewForConfig(kubeconf)
 	if err != nil {
-		return "", errors.Wrap(err, fmt.Sprintf("failed to get a secret `%s` in `%s` namespace", keySecertName, keySecertNamespace))
+		return "", err
 	}
-	objBytes, _ := json.Marshal(obj.Object)
-	var secret v1.Secret
-	_ = json.Unmarshal(objBytes, &secret)
-	keyDir := fmt.Sprintf("/tmp/%s/%s/", keySecertNamespace, keySecertName)
+	secret, err := clientset.CoreV1().Secrets(keySecretNamespace).Get(context.Background(), keySecretName, metav1.GetOptions{})
+	if err != nil {
+		return "", errors.Wrap(err, fmt.Sprintf("failed to get a secret `%s` in `%s` namespace", keySecretName, keySecretNamespace))
+	}
+	keyDir := fmt.Sprintf("/tmp/%s/%s/", keySecretNamespace, keySecretName)
 	log.Debug("keyDir", keyDir)
 	sumErr := []string{}
 	keyPath := ""
@@ -477,7 +479,7 @@ func LoadKeySecret(keySecertNamespace, keySecertName string) (string, error) {
 		return "", errors.New(fmt.Sprintf("failed to save secret data as a file; %s", strings.Join(sumErr, "; ")))
 	}
 	if keyPath == "" {
-		return "", errors.New(fmt.Sprintf("no key files are found in the secret `%s` in `%s` namespace", keySecertName, keySecertNamespace))
+		return "", errors.New(fmt.Sprintf("no key files are found in the secret `%s` in `%s` namespace", keySecretName, keySecretNamespace))
 	}
 
 	return keyPath, nil
