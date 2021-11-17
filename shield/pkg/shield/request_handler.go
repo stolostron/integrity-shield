@@ -53,7 +53,7 @@ const (
 	EventTypeAnnotationValueDeny = "deny"
 )
 const rekorServerEnvKey = "REKOR_SERVER"
-const timeFormat = "2006-01-02T15:04:05Z07:00"
+const timeFormat = "2006-01-02T15:04:05Z"
 
 func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObject) *ResultFromRequestHandler {
 

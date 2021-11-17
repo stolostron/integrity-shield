@@ -35,7 +35,7 @@ import (
 )
 
 const defaultIntervalSecondsStr = "10"
-const timeFormat = "2006-01-02T15:04:05Z07:00"
+const timeFormat = "2006-01-02T15:04:05Z"
 
 type IntegrityShieldReporter struct {
 	IShiledNamespace string

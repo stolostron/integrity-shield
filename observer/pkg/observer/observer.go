@@ -44,7 +44,7 @@ import (
 	kubeclient "k8s.io/client-go/kubernetes"
 )
 
-const timeFormat = "2006-01-02T15:04:05Z07:00"
+const timeFormat = "2006-01-02T15:04:05Z"
 
 const exportDetailResult = "ENABLE_DETAIL_RESULT"
 const detailResultConfigName = "OBSERVER_RESULT_CONFIG_NAME"
