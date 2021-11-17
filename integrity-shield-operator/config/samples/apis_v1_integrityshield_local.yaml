@@ -49,7 +49,7 @@ spec:
     sideEffect:
       createDenyEvent: true
     log:
-      level: trace
+      level: info
       manifestSigstoreLogLevel: info
       format: json
     decisionReporterConfig:

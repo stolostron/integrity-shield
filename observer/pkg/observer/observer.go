@@ -243,7 +243,7 @@ func (self *Observer) Run() {
 					result.Message = fmt.Sprintf("%s, [Image]%s", result.Message, imgMsg)
 				}
 			}
-			result = self.checkExemption(constraintName, result)
+			result = self.checkDecisionLog(constraintName, result)
 			log.Debug("Verify result: ", result)
 			results = append(results, result)
 		}
@@ -324,8 +324,8 @@ func (self *Observer) Run() {
 	_ = self.exportResultDetail(res)
 }
 
-func (self *Observer) checkExemption(constraintName string, res VerifyResultDetail) VerifyResultDetail {
-	// load manifest integrity exemption
+func (self *Observer) checkDecisionLog(constraintName string, res VerifyResultDetail) VerifyResultDetail {
+	// load manifest integrity decision
 	mie, err := self.MidClient.ManifestIntegrityDecisions(self.IShiledNamespace).Get(context.Background(), constraintName, metav1.GetOptions{})
 	if err != nil {
 		return res
@@ -336,7 +336,7 @@ func (self *Observer) checkExemption(constraintName string, res VerifyResultDeta
 			if ex.Allow {
 				res.Violation = false
 				res.Message = fmt.Sprintf("Created by skipUser: %s", ex.UserName)
-				log.Debug("Exemption log found. Created by skipUser: ", res)
+				log.Debug("Decision log found. Created by skipUser: ", res)
 				return res
 			}
 		}
