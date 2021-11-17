@@ -23,7 +23,7 @@ spec:
   shieldApiServicePort: 8123
   shieldApi:
     name: integrity-shield-api
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     image: quay.io/open-cluster-management/integrity-shield-api
     # image: localhost:5000/integrity-shield-api
     port: 8080
@@ -31,12 +31,12 @@ spec:
       app: integrity-shield-api
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
-  logging:
-    name: integrity-shield-logger
-    imagePullPolicy: Always
-    image: quay.io/open-cluster-management/integrity-shield-logging
+        cpu: 250m
+        memory: 256Mi
+  reporter:
+    name: integrity-shield-reporter
+    imagePullPolicy: IfNotPresent
+    image: quay.io/open-cluster-management/integrity-shield-reporter
     intervalSeconds: "10"
     resources:
       limits:
@@ -53,6 +53,8 @@ spec:
       level: info
       manifestSigstoreLogLevel: info
       format: json
+    decisionReporterConfig:
+      enabled: true
     requestFilterProfile: 
       skipObjects:
       - kind: ConfigMap
@@ -88,7 +90,6 @@ spec:
         - metadata.annotations.cosign.sigstore.dev/message
         - metadata.annotations.cosign.sigstore.dev/certificate
         - metadata.annotations.cosign.sigstore.dev/signature
-        - metadata.annotations.deployment.kubernetes.io/revision
         objects:
         - name: '*'
       - fields:
@@ -419,15 +420,15 @@ spec:
   observer: 
     enabled: true
     name: integrity-shield-observer
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     image: quay.io/open-cluster-management/integrity-shield-observer
     # image: localhost:5000/integrity-shield-observer
     selector:     
       app: integrity-shield-observer
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 250m
+        memory: 256Mi
     logLevel: info
     interval: "5"
     exportDetailResult: true

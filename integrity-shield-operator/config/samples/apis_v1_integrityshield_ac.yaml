@@ -27,6 +27,8 @@ spec:
       level: info
       manifestSigstoreLogLevel: info
       format: json
+    decisionReporterConfig:
+      enabled: true
     requestFilterProfile: 
       skipObjects:
       - kind: ConfigMap
@@ -240,7 +242,7 @@ spec:
         - system:serviceaccount:openshift-operator-lifecycle-manager:olm-operator-serviceaccount
   admissionController: 
     name: integrity-shield-validator
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
      # image: quay.io/open-cluster-management/integrity-shield-admission-controller
     image: localhost:5000/integrity-shield-admission-controller
     port: 9443
@@ -251,12 +253,12 @@ spec:
       app: integrity-shield-validator
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
-  logging:
-    name: integrity-shield-logger
-    imagePullPolicy: Always
-    image: localhost:5000/integrity-shield-logging
+        cpu: 250m
+        memory: 256Mi
+  reporter:
+    name: integrity-shield-reporter
+    imagePullPolicy: IfNotPresent
+    image: localhost:5000/integrity-shield-reporter
     intervalSeconds: "10"
     resources:
       limits:
@@ -362,7 +364,7 @@ spec:
   observer: 
     enabled: true
     name: integrity-shield-observer
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     # image: quay.io/open-cluster-management/integrity-shield-observer
     image: localhost:5000/integrity-shield-observer
     selector:     
@@ -374,6 +376,6 @@ spec:
     resultDetailConfigKey: "config.yaml"
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 250m
+        memory: 256Mi
 

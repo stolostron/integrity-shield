@@ -59,7 +59,7 @@ func buildCRD(name, namespace string, crdNames extv1.CustomResourceDefinitionNam
 	return newCRD
 }
 
-//constraint crd for ac2
+//manifest integrity profile crd for custom admission controller (equivalent to manifest integrity constraint)
 func BuildManifestIntegrityProfileCRD(cr *apiv1.IntegrityShield) *extv1.CustomResourceDefinition {
 	crdNames := extv1.CustomResourceDefinitionNames{
 		Kind:       "ManifestIntegrityProfile",
@@ -72,7 +72,7 @@ func BuildManifestIntegrityProfileCRD(cr *apiv1.IntegrityShield) *extv1.CustomRe
 }
 
 //manifest integrity state crd
-func BuildObserverResultCRD(cr *apiv1.IntegrityShield) *extv1.CustomResourceDefinition {
+func BuildManifestIntegrityStateCRD(cr *apiv1.IntegrityShield) *extv1.CustomResourceDefinition {
 	crdNames := extv1.CustomResourceDefinitionNames{
 		Kind:       "ManifestIntegrityState",
 		Plural:     "manifestintegritystates",
@@ -83,14 +83,14 @@ func BuildObserverResultCRD(cr *apiv1.IntegrityShield) *extv1.CustomResourceDefi
 	return buildCRD("manifestintegritystates.apis.integrityshield.io", cr.Namespace, crdNames, true)
 }
 
-//manifest integrity exemption crd
-func BuildExemptionCRD(cr *apiv1.IntegrityShield) *extv1.CustomResourceDefinition {
+//manifest integrity decision crd
+func BuildManifestIntegrityDecisionCRD(cr *apiv1.IntegrityShield) *extv1.CustomResourceDefinition {
 	crdNames := extv1.CustomResourceDefinitionNames{
-		Kind:       "ManifestIntegrityExemption",
-		Plural:     "manifestintegrityexemptions",
-		ListKind:   "ManifestIntegrityExemptionList",
-		Singular:   "manifestintegrityexemption",
-		ShortNames: []string{"mie"},
+		Kind:       "ManifestIntegrityDecision",
+		Plural:     "manifestintegritydecisions",
+		ListKind:   "ManifestIntegrityDecisionList",
+		Singular:   "manifestintegritydecision",
+		ShortNames: []string{"mid"},
 	}
-	return buildCRD("manifestintegrityexemptions.apis.integrityshield.io", cr.Namespace, crdNames, true)
+	return buildCRD("manifestintegritydecisions.apis.integrityshield.io", cr.Namespace, crdNames, true)
 }
