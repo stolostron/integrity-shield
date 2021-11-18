@@ -280,10 +280,9 @@ spec:
       reqdata := json.marshal(ishield_input)
       url := "https://integrity-shield-api.REPLACE_WITH_SERVER_NAMESPSCE.svc:8123/api/request"
       resp := http_post(url, reqdata)
-      resp.status_code == 200
-      result := json.unmarshal(resp.raw_body)
-      result.allow == false
+      should_be_denied(resp)
       not is_detect_mode
+      result := get_result(resp)
       msg := sprintf("denied; %v", [result])
     }
 
@@ -296,8 +295,43 @@ spec:
           "Content-type": "application/json",
         },
         "raw_body": postdata,
+        "timeout": "2500ms",
+        "raise_error": false,
         "tls_insecure_skip_verify": true
       })
+    }
+
+    # get decision result from API response
+    get_result(resp) = result {
+      raw_body := object.get(resp, "raw_body", null)
+      not is_null(raw_body)
+      result := json.unmarshal(raw_body)
+    }
+    # if error, return it as result
+    get_result(resp) = result {
+      raw_body := object.get(resp, "raw_body", null)
+      is_null(raw_body)
+      error_msg := object.get(resp, "error", "")
+      result := {"http_error":error_msg}
+    }
+
+    # if API response is null, deny
+    should_be_denied(resp) {
+      is_null(resp)
+    }
+
+    # if API response has status_code other than 200, deny
+    should_be_denied(resp) {
+      not is_null(resp)
+      resp.status_code != 200
+    }
+
+    # if decision result is "allow == false" or not set, then deny
+    should_be_denied(resp) {
+      not is_null(resp)
+      result := get_result(resp)
+      allow := object.get(result, "allow", false)
+      allow == false
     }
     
     # request check
@@ -431,3 +465,7 @@ spec:
     exportDetailResult: true
     resultDetailConfigName: verify-resource-result
     resultDetailConfigKey: "config.yaml"
+  # registryConfig: 
+  #   manifestPullSecret: regcred
+  # rekorServerConfig:
+  #   url: http://rekor-server.rekor.svc.cluster.local:3000

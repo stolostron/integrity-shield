@@ -791,8 +791,20 @@ spec:
                       type: string
                     type: object
                 type: object
+              registryConfig:
+                description: oci registry
+                properties:
+                  manifestPullSecret:
+                    type: string
+                type: object
               rego:
                 type: string
+              rekorServerConfig:
+                description: rekor
+                properties:
+                  url:
+                    type: string
+                type: object
               replicaCount:
                 format: int32
                 type: integer

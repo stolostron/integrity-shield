@@ -75,6 +75,12 @@ type IntegrityShieldSpec struct {
 	// gatekeeper
 	UseGatekeeper bool   `json:"useGatekeeper,omitempty"`
 	Rego          string `json:"rego,omitempty"`
+
+	// rekor
+	RekorServerConfig RekorServerConfig `json:"rekorServerConfig,omitempty"`
+
+	// oci registry
+	OCIRegistryConfig OCIRegistryConfig `json:"registryConfig,omitempty"`
 }
 
 type APIContainer struct {
@@ -141,6 +147,14 @@ type Observer struct {
 	ResultDetailConfigName string                  `json:"resultDetailConfigName,omitempty"`
 	ResultDetailConfigKey  string                  `json:"resultDetailConfigKey,omitempty"`
 	Resources              v1.ResourceRequirements `json:"resources,omitempty"`
+}
+
+type RekorServerConfig struct {
+	URL string `json:"url,omitempty"`
+}
+
+type OCIRegistryConfig struct {
+	ManifestPullSecret string `json:"manifestPullSecret,omitempty"`
 }
 
 // IntegrityShieldStatus defines the observed state of IntegrityShield

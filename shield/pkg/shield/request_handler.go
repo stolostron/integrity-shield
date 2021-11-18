@@ -52,7 +52,6 @@ const (
 	EventTypeValueVerifyResult   = "verify-result"
 	EventTypeAnnotationValueDeny = "deny"
 )
-const rekorServerEnvKey = "REKOR_SERVER"
 const timeFormat = "2006-01-02T15:04:05Z"
 
 func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObject) *ResultFromRequestHandler {
@@ -131,17 +130,6 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 		log.Info("enforce action is enabled.")
 	} else {
 		log.Info("enforce action is disabled.")
-	}
-
-	// setup env value for sigstore
-	if rhconfig.SigStoreConfig.RekorServer != "" {
-		_ = os.Setenv(rekorServerEnvKey, rhconfig.SigStoreConfig.RekorServer)
-		debug := os.Getenv(rekorServerEnvKey)
-		log.Debug("REKOR_SERVER is set as ", debug)
-	} else {
-		_ = os.Setenv(rekorServerEnvKey, "")
-		debug := os.Getenv(rekorServerEnvKey)
-		log.Debug("REKOR_SERVER is set as ", debug)
 	}
 
 	commonSkipUserMatched := false

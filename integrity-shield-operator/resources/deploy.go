@@ -47,6 +47,9 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 		EmptyDirVolume("tmp"),
 		EmptyDirVolume("report-volume"),
 	}
+	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
+		volumes = append(volumes, SecretVolume("regirty-access", cr.Spec.OCIRegistryConfig.ManifestPullSecret))
+	}
 
 	volumemounts = []v1.VolumeMount{
 		{
@@ -62,6 +65,13 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 			MountPath: "/ishield-app/shared",
 			Name:      "report-volume",
 		},
+	}
+	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
+		volumemounts = append(volumemounts, v1.VolumeMount{
+			MountPath: "/run/secrets/docker",
+			Name:      "regirty-access",
+			ReadOnly:  true,
+		})
 	}
 
 	loggerVolumemounts := []v1.VolumeMount{
@@ -81,6 +91,35 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 	} else {
 		version := GetVersion(cr.Spec.API.Name)
 		image = SetImageVersion(cr.Spec.API.Image, version, cr.Spec.API.Name)
+	}
+
+	env := []v1.EnvVar{
+		{
+			Name:  "POD_NAMESPACE",
+			Value: cr.Namespace,
+		},
+		{
+			Name:  "REQUEST_HANDLER_CONFIG_KEY",
+			Value: cr.Spec.RequestHandlerConfigKey,
+		},
+		{
+			Name:  "REQUEST_HANDLER_CONFIG_NAME",
+			Value: cr.Spec.RequestHandlerConfigName,
+		},
+		{
+			Name:  "DECISION_FILE_PATH",
+			Value: apiv1.DefaultFilePath,
+		},
+		{
+			Name:  "REKOR_SERVER",
+			Value: cr.Spec.RekorServerConfig.URL,
+		},
+	}
+	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
+		env = append(env, v1.EnvVar{
+			Name:  "DOCKER_CONFIG",
+			Value: "/run/secrets/docker",
+		})
 	}
 
 	var reporterImage string
@@ -125,25 +164,8 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 			},
 		},
 		VolumeMounts: volumemounts,
-		Env: []v1.EnvVar{
-			{
-				Name:  "POD_NAMESPACE",
-				Value: cr.Namespace,
-			},
-			{
-				Name:  "REQUEST_HANDLER_CONFIG_KEY",
-				Value: cr.Spec.RequestHandlerConfigKey,
-			},
-			{
-				Name:  "REQUEST_HANDLER_CONFIG_NAME",
-				Value: cr.Spec.RequestHandlerConfigName,
-			},
-			{
-				Name:  "DECISION_FILE_PATH",
-				Value: apiv1.DefaultFilePath,
-			},
-		},
-		Resources: cr.Spec.API.Resources,
+		Env:          env,
+		Resources:    cr.Spec.API.Resources,
 	}
 	reporterContainer := v1.Container{
 		Name:            cr.Spec.Reporter.Name,
@@ -238,6 +260,9 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 		EmptyDirVolume("tmp"),
 		EmptyDirVolume("report-volume"),
 	}
+	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
+		volumes = append(volumes, SecretVolume("regirty-access", cr.Spec.OCIRegistryConfig.ManifestPullSecret))
+	}
 
 	servervolumemounts := []v1.VolumeMount{
 		{
@@ -246,13 +271,21 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 			ReadOnly:  true,
 		},
 		{
+			MountPath: "/run/secrets/docker",
+			Name:      "regirty-access",
+			ReadOnly:  true,
+		},
+		{
 			MountPath: "/tmp",
 			Name:      "tmp",
 		},
-		{
-			MountPath: "/ishield-app/shared",
-			Name:      "report-volume",
-		},
+	}
+	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
+		servervolumemounts = append(servervolumemounts, v1.VolumeMount{
+			MountPath: "/run/secrets/docker",
+			Name:      "regirty-access",
+			ReadOnly:  true,
+		})
 	}
 
 	var image string
@@ -261,6 +294,47 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 	} else {
 		version := GetVersion(cr.Spec.ControllerContainer.Name)
 		image = SetImageVersion(cr.Spec.ControllerContainer.Image, version, cr.Spec.ControllerContainer.Name)
+	}
+
+	env := []v1.EnvVar{
+		{
+			Name:  "POD_NAMESPACE",
+			Value: cr.Namespace,
+		},
+		{
+			Name:  "LOG_LEVEL",
+			Value: cr.Spec.ControllerContainer.Log.LogLevel,
+		},
+		{
+			Name:  "LOG_FORMAT",
+			Value: cr.Spec.ControllerContainer.Log.LogFormat,
+		},
+		{
+			Name:  "CONTROLLER_CONFIG_KEY",
+			Value: cr.Spec.AdmissionControllerConfigKey,
+		},
+		{
+			Name:  "CONTROLLER_CONFIG_NAME",
+			Value: cr.Spec.AdmissionControllerConfigName,
+		},
+		{
+			Name:  "REQUEST_HANDLER_CONFIG_KEY",
+			Value: cr.Spec.RequestHandlerConfigKey,
+		},
+		{
+			Name:  "REQUEST_HANDLER_CONFIG_NAME",
+			Value: cr.Spec.RequestHandlerConfigName,
+		},
+		{
+			Name:  "REKOR_SERVER",
+			Value: cr.Spec.RekorServerConfig.URL,
+		},
+	}
+	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
+		env = append(env, v1.EnvVar{
+			Name:  "DOCKER_CONFIG",
+			Value: "/run/secrets/docker",
+		})
 	}
 
 	serverContainer := v1.Container{
@@ -297,37 +371,8 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 			},
 		},
 		VolumeMounts: servervolumemounts,
-		Env: []v1.EnvVar{
-			{
-				Name:  "POD_NAMESPACE",
-				Value: cr.Namespace,
-			},
-			{
-				Name:  "LOG_LEVEL",
-				Value: cr.Spec.ControllerContainer.Log.LogLevel,
-			},
-			{
-				Name:  "LOG_FORMAT",
-				Value: cr.Spec.ControllerContainer.Log.LogFormat,
-			},
-			{
-				Name:  "CONTROLLER_CONFIG_KEY",
-				Value: cr.Spec.AdmissionControllerConfigKey,
-			},
-			{
-				Name:  "CONTROLLER_CONFIG_NAME",
-				Value: cr.Spec.AdmissionControllerConfigName,
-			},
-			{
-				Name:  "REQUEST_HANDLER_CONFIG_KEY",
-				Value: cr.Spec.RequestHandlerConfigKey,
-			},
-			{
-				Name:  "REQUEST_HANDLER_CONFIG_NAME",
-				Value: cr.Spec.RequestHandlerConfigName,
-			},
-		},
-		Resources: cr.Spec.ControllerContainer.Resources,
+		Env:          env,
+		Resources:    cr.Spec.ControllerContainer.Resources,
 	}
 
 	containers := []v1.Container{
@@ -372,14 +417,26 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 // Observer
 func BuildDeploymentForObserver(cr *apiv1.IntegrityShield) *appsv1.Deployment {
 	labels := cr.Spec.MetaLabels
+
 	volumes := []v1.Volume{
 		EmptyDirVolume("tmp"),
 	}
+	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
+		volumes = append(volumes, SecretVolume("regirty-access", cr.Spec.OCIRegistryConfig.ManifestPullSecret))
+	}
+
 	servervolumemounts := []v1.VolumeMount{
 		{
 			MountPath: "/tmp",
 			Name:      "tmp",
 		},
+	}
+	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
+		servervolumemounts = append(servervolumemounts, v1.VolumeMount{
+			MountPath: "/run/secrets/docker",
+			Name:      "regirty-access",
+			ReadOnly:  true,
+		})
 	}
 
 	var image string
@@ -390,47 +447,59 @@ func BuildDeploymentForObserver(cr *apiv1.IntegrityShield) *appsv1.Deployment {
 		image = SetImageVersion(cr.Spec.Observer.Image, version, cr.Spec.Observer.Name)
 	}
 
+	env := []v1.EnvVar{
+		{
+			Name:  "POD_NAMESPACE",
+			Value: cr.Namespace,
+		},
+		{
+			Name:  "LOG_LEVEL",
+			Value: cr.Spec.Observer.LogLevel,
+		},
+		{
+			Name:  "REQUEST_HANDLER_CONFIG_KEY",
+			Value: cr.Spec.RequestHandlerConfigKey,
+		},
+		{
+			Name:  "REQUEST_HANDLER_CONFIG_NAME",
+			Value: cr.Spec.RequestHandlerConfigName,
+		},
+		{
+			Name:  "ENABLE_DETAIL_RESULT",
+			Value: strconv.FormatBool(cr.Spec.Observer.ExportDetailResult),
+		},
+		{
+			Name:  "OBSERVER_RESULT_CONFIG_NAME",
+			Value: cr.Spec.Observer.ResultDetailConfigName,
+		},
+		{
+			Name:  "OBSERVER_RESULT_CONFIG_KEY",
+			Value: cr.Spec.Observer.ResultDetailConfigKey,
+		},
+		{
+			Name:  "INTERVAL",
+			Value: cr.Spec.Observer.Interval,
+		},
+		{
+			Name:  "REKOR_SERVER",
+			Value: cr.Spec.RekorServerConfig.URL,
+		},
+	}
+	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
+		env = append(env, v1.EnvVar{
+			Name:  "DOCKER_CONFIG",
+			Value: "/run/secrets/docker",
+		})
+	}
+
 	serverContainer := v1.Container{
 		Name:            cr.Spec.Observer.Name,
 		SecurityContext: cr.Spec.Observer.SecurityContext,
 		Image:           image,
 		ImagePullPolicy: cr.Spec.Observer.ImagePullPolicy,
 		VolumeMounts:    servervolumemounts,
-		Env: []v1.EnvVar{
-			{
-				Name:  "POD_NAMESPACE",
-				Value: cr.Namespace,
-			},
-			{
-				Name:  "LOG_LEVEL",
-				Value: cr.Spec.Observer.LogLevel,
-			},
-			{
-				Name:  "REQUEST_HANDLER_CONFIG_KEY",
-				Value: cr.Spec.RequestHandlerConfigKey,
-			},
-			{
-				Name:  "REQUEST_HANDLER_CONFIG_NAME",
-				Value: cr.Spec.RequestHandlerConfigName,
-			},
-			{
-				Name:  "ENABLE_DETAIL_RESULT",
-				Value: strconv.FormatBool(cr.Spec.Observer.ExportDetailResult),
-			},
-			{
-				Name:  "OBSERVER_RESULT_CONFIG_NAME",
-				Value: cr.Spec.Observer.ResultDetailConfigName,
-			},
-			{
-				Name:  "OBSERVER_RESULT_CONFIG_KEY",
-				Value: cr.Spec.Observer.ResultDetailConfigKey,
-			},
-			{
-				Name:  "INTERVAL",
-				Value: cr.Spec.Observer.Interval,
-			},
-		},
-		Resources: cr.Spec.Observer.Resources,
+		Env:             env,
+		Resources:       cr.Spec.Observer.Resources,
 	}
 
 	containers := []v1.Container{
