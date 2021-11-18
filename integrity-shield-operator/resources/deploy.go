@@ -271,11 +271,6 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 			ReadOnly:  true,
 		},
 		{
-			MountPath: "/run/secrets/docker",
-			Name:      "docker-creds",
-			ReadOnly:  true,
-		},
-		{
 			MountPath: "/tmp",
 			Name:      "tmp",
 		},
