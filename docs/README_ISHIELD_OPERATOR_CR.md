@@ -71,6 +71,13 @@ Image version will automatically be set to the same version as Integrity Shield.
     tag: 0.1.0
 ```
 
+### Define secret for private manifest regsitry 
+If you use private OCI registry, please set secret name which includes Docker credentials.
+```yaml
+  registryConfig: 
+    manifestPullSecret: regcred
+```
+
 ## Observer configuration
 ### Enable observer
 If you don't want to install observer, set false here.
@@ -140,6 +147,7 @@ exclude_namespaces = [
                       "openshift-vsphere-infra"
                   ]
 ```
+
 ## Admission controller configuration
 If you want to try Integrity shield with its own admission controller, you can install it by this IntegrityShield custom resource [apis_v1_integrityshield_ac.yaml](https://github.com/open-cluster-management/integrity-shield/blob/master/integrity-shield-operator/config/samples/apis_v1_integrityshield_ac.yaml).
 
