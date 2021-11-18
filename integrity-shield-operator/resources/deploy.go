@@ -48,7 +48,7 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 		EmptyDirVolume("report-volume"),
 	}
 	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
-		volumes = append(volumes, SecretVolume("regirty-access", cr.Spec.OCIRegistryConfig.ManifestPullSecret))
+		volumes = append(volumes, SecretVolume("docker-creds", cr.Spec.OCIRegistryConfig.ManifestPullSecret))
 	}
 
 	volumemounts = []v1.VolumeMount{
@@ -69,7 +69,7 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
 		volumemounts = append(volumemounts, v1.VolumeMount{
 			MountPath: "/run/secrets/docker",
-			Name:      "regirty-access",
+			Name:      "docker-creds",
 			ReadOnly:  true,
 		})
 	}
@@ -261,7 +261,7 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 		EmptyDirVolume("report-volume"),
 	}
 	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
-		volumes = append(volumes, SecretVolume("regirty-access", cr.Spec.OCIRegistryConfig.ManifestPullSecret))
+		volumes = append(volumes, SecretVolume("docker-creds", cr.Spec.OCIRegistryConfig.ManifestPullSecret))
 	}
 
 	servervolumemounts := []v1.VolumeMount{
@@ -272,7 +272,7 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 		},
 		{
 			MountPath: "/run/secrets/docker",
-			Name:      "regirty-access",
+			Name:      "docker-creds",
 			ReadOnly:  true,
 		},
 		{
@@ -283,7 +283,7 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
 		servervolumemounts = append(servervolumemounts, v1.VolumeMount{
 			MountPath: "/run/secrets/docker",
-			Name:      "regirty-access",
+			Name:      "docker-creds",
 			ReadOnly:  true,
 		})
 	}
@@ -422,7 +422,7 @@ func BuildDeploymentForObserver(cr *apiv1.IntegrityShield) *appsv1.Deployment {
 		EmptyDirVolume("tmp"),
 	}
 	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
-		volumes = append(volumes, SecretVolume("regirty-access", cr.Spec.OCIRegistryConfig.ManifestPullSecret))
+		volumes = append(volumes, SecretVolume("docker-creds", cr.Spec.OCIRegistryConfig.ManifestPullSecret))
 	}
 
 	servervolumemounts := []v1.VolumeMount{
@@ -434,7 +434,7 @@ func BuildDeploymentForObserver(cr *apiv1.IntegrityShield) *appsv1.Deployment {
 	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
 		servervolumemounts = append(servervolumemounts, v1.VolumeMount{
 			MountPath: "/run/secrets/docker",
-			Name:      "regirty-access",
+			Name:      "docker-creds",
 			ReadOnly:  true,
 		})
 	}
