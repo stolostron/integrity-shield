@@ -11,7 +11,7 @@ This document will guide you through:
 
 ### Prerequisite
 You must authenticate with a registry in order to pull a private image.
-After login your private registry, you can see an authorization token in  `config.json` file. 
+After login your private registry, you can see authorization tokens in  `config.json` file. 
 
 ```
 cat ~/.docker/config.json
@@ -20,25 +20,27 @@ The output is similar to this:
 ```
 {
 	"auths": {
-		"gcr.io": {
-			"auth": "b2F...1dG"
-		},
-        "https://index.docker.io/v1/": {
-            "auth": "c3R...zE2"
-        }
+    "gcr.io": {
+      "auth": "b2F...1dG"
+    },
+    "https://index.docker.io/v1/": {
+      "auth": "c3R...zE2"
     }
+  }
 }
 ```
 ### Store Docker credentials as a Kubernetes Secret
 
-Create a secret with following command.
+Please set secret name and the path to your docker config.json file, then create a secret with the following command.  
 You must create this secret in `integrity-shield-operator-system`.
 ```
-kubectl create secret generic <secret name> -n integrity-shield-operator-system --from-file=config.json=<path/to/.docker/config.json>
+kubectl create secret generic <secret name> \
+-n integrity-shield-operator-system \
+--from-file=config.json=<path/to/.docker/config.json>
 ```
 
 ### Configure IntegrityShield Custom Resource
-Please set secret name in CustomResource before installing Integrity Shield. In order to verify Kubernetes manifest using signature image, the Docker credentials secret should be mounted on Integrity Shield pod.
+Please set secret name in IntegrityShield CR before installing Integrity Shield. In order to verify Kubernetes manifest using signature image, the Docker credentials secret should be mounted on Integrity Shield pod.
 
 ```yaml
 apiVersion: apis.integrityshield.io/v1
