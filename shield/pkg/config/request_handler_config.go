@@ -77,11 +77,6 @@ type SideEffectConfig struct {
 	CreateDenyEvent bool `json:"createDenyEvent"`
 }
 
-type RegistryAccessConfig struct {
-	SecretName      string `json:"secretName,omitempty"`
-	SecretNameSpace string `json:"secretNameSpace,omitempty"`
-}
-
 type RequestFilterProfile struct {
 	SkipObjects  k8smanifest.ObjectReferenceList    `json:"skipObjects,omitempty"`
 	SkipUsers    ObjectUserBindingList              `json:"skipUsers,omitempty"`
