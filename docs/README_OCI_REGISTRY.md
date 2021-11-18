@@ -19,7 +19,7 @@ cat ~/.docker/config.json
 The output is similar to this:
 ```
 {
-	"auths": {
+  "auths": {
     "gcr.io": {
       "auth": "b2F...1dG"
     },
