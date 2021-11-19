@@ -299,7 +299,7 @@ spec:
         "raw_body": postdata,
         "timeout": "2500ms",
         "raise_error": false,
-        "tls_insecure_skip_verify": true
+        "tls_ca_cert": REPLACE_WITH_CA_CERT
       })
     }
 

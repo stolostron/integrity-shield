@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"strings"
 	"time"
 
 	apiv1 "github.com/open-cluster-management/integrity-shield/integrity-shield-operator/api/v1"
@@ -1103,6 +1104,21 @@ func (r *IntegrityShieldReconciler) createOrUpdateConstraintTemplate(instance *a
 
 	if err != nil && errors.IsNotFound(err) {
 		reqLogger.Info("Creating a new resource")
+		// locad cabundle
+		secret := &corev1.Secret{}
+		err = r.Get(ctx, types.NamespacedName{Name: instance.Spec.APITlsSecretName, Namespace: instance.Namespace}, secret)
+		if err != nil {
+			reqLogger.Error(err, "Fail to load CABundle from Secret")
+		}
+		cabundle, ok := secret.Data["ca.crt"]
+		rego := expected.Spec.Targets[0].Rego
+		if ok {
+			ca_str := fmt.Sprintf("%#v\n", string(cabundle))
+			rego = strings.Replace(rego, "REPLACE_WITH_CA_CERT", ca_str, 1)
+
+		}
+		expected.Spec.Targets[0].Rego = rego
+
 		err = r.Create(ctx, expected)
 		if err != nil && errors.IsAlreadyExists(err) {
 			// Already exists from previous reconcile, requeue.
