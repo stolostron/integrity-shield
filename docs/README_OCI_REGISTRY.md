@@ -10,8 +10,8 @@ This document will guide you through:
 - Configuring IntegrityShield Custom Resource to specify secret
 
 ### Prerequisite
-You must authenticate with a registry in order to pull a private image.
-After login your private registry, you can see authorization tokens in  `config.json` file. 
+You need to authenticate with a registry in order to pull a private image.
+After login the private registry, you can see authorization tokens in  `config.json` file. 
 
 ```
 cat ~/.docker/config.json
@@ -31,8 +31,8 @@ The output is similar to this:
 ```
 ### Store Docker credentials as a Kubernetes Secret
 
-Please set secret name and the path to your docker config.json file, then create a secret with the following command.  
-You must create this secret in `integrity-shield-operator-system`.
+To copy docker credentials into Kubernetes, set secret name and the path to your docker config.json file, then execute the following command. 
+This secret should be created in `integrity-shield-operator-system` namespace.
 ```
 kubectl create secret generic <secret name> \
 -n integrity-shield-operator-system \
@@ -40,7 +40,7 @@ kubectl create secret generic <secret name> \
 ```
 
 ### Configure IntegrityShield Custom Resource
-Please set secret name in IntegrityShield CR before installing Integrity Shield. In order to verify Kubernetes manifest using signature image, the Docker credentials secret should be mounted on Integrity Shield pod.
+You need to set secret name in IntegrityShield CR before installing Integrity Shield. In order to verify Kubernetes manifest using signature image, the Docker credentials secret should be mounted on Integrity Shield pod.
 
 ```yaml
 apiVersion: apis.integrityshield.io/v1
