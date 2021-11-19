@@ -3,7 +3,7 @@
 Integrity Shield supports various signing and verification types for Kubernetes manifests.
 You can use the signature stored in the OCI registry for Kubernetes manifest protection.
 
-When you use a private OCI Registry, you need to provide permission to Integrity Shield for pulling manifest images and signature images.
+If you would like to use a private OCI Registry, you will need to provide permission to Integrity Shield for pulling manifest images and signature images.
  
 This document will guide you through:
 - Storing Docker credentials as a Kubernetes Secret
