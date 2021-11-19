@@ -313,6 +313,11 @@ You can disable the generation of the event by setting false here.</p>
 <span class="hljs-attr">    image:</span> sample-image-registry/integrity-shield-api
 <span class="hljs-attr">    tag:</span> <span class="hljs-number">0.1</span><span class="hljs-number">.0</span>
 </code></pre>
+<h3 id="define-secret-for-private-manifest-regsitry">Define secret for private manifest regsitry</h3>
+<p>If you use private OCI registry, please set secret name which includes Docker credentials.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">  registryConfig:</span> 
+<span class="hljs-attr">    manifestPullSecret:</span> regcred
+</code></pre>
 <h2 id="observer-configuration">Observer configuration</h2>
 <h3 id="enable-observer">Enable observer</h3>
 <p>If you don&apos;t want to install observer, set false here.</p>
@@ -446,7 +451,7 @@ exclude_namespaces = [
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"next":{"title":"Demo","level":"1.9","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_ISHIELD_OPERATOR_CR.md","mtime":"2021-11-17T05:15:39.285Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-11-17T05:16:19.055Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"next":{"title":"Demo","level":"1.9","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_ISHIELD_OPERATOR_CR.md","mtime":"2021-11-19T04:37:40.385Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-11-19T04:38:16.813Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
