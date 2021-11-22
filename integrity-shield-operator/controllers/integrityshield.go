@@ -1104,11 +1104,11 @@ func (r *IntegrityShieldReconciler) createOrUpdateConstraintTemplate(instance *a
 
 	if err != nil && errors.IsNotFound(err) {
 		reqLogger.Info("Creating a new resource")
-		// locad cabundle
+		// load ca cert
 		secret := &corev1.Secret{}
 		err = r.Get(ctx, types.NamespacedName{Name: instance.Spec.APITlsSecretName, Namespace: instance.Namespace}, secret)
 		if err != nil {
-			reqLogger.Error(err, "Fail to load CABundle from Secret")
+			reqLogger.Error(err, "Fail to load CA Cert from Secret")
 		}
 		cabundle, ok := secret.Data["ca.crt"]
 		rego := expected.Spec.Targets[0].Rego

@@ -13,10 +13,7 @@ spec:
   parameters:
     constraintName: configmap-constraint
     action:
-      admissionControl:
-        enforce: false
-      audit:
-        inform: true
+      mode: detect
     objectSelector:
     - name: sample-cm
     signers:

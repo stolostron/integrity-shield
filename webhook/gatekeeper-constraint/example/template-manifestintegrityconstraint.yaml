@@ -1,3 +1,5 @@
+# This is an example of constraint template.
+# This constraint template is installed by Integrity Shield Operator.
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
