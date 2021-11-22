@@ -13,7 +13,7 @@ spec:
   parameters:
     constraintName: deployment-constraint
     action:
-      mode: enforce
+      mode: detect
     objectSelector:
     - name: sample-deploy
     signers:
