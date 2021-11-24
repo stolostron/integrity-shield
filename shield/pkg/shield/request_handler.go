@@ -186,7 +186,7 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 			message = "no mutation found"
 		}
 	}
-	if allow {
+	if !allow { // signature check
 		var signatureAnnotationType string
 		annotations := resource.GetAnnotations()
 		_, found := annotations[ImageRefAnnotationKeyShield]
