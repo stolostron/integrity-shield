@@ -52,7 +52,7 @@ var (
 	observer_name                  = "integrity-shield-observer"
 	ac_server_name                 = "integrity-shield-validator"
 	constraint                     = deploy_dir + "test-manifest-integrity-constraint.yaml"
-	constraint_detect              = deploy_dir + "test-manifest-integrity-constraint-detect.yaml"
+	constraint_detect              = deploy_dir + "test-manifest-integrity-constraint-inform.yaml"
 	constraint_ac                  = deploy_dir + "test-manifest-integrity-profile.yaml"
 	constraint_name                = "configmap-constraint"
 	gatekeeper_ns                  = "gatekeeper-system"
