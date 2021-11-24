@@ -59,6 +59,7 @@ const logLevelEnvKey = "LOG_LEVEL"
 const k8sLogLevelEnvKey = "K8S_MANIFEST_SIGSTORE_LOG_LEVEL"
 
 const VerifyResourceViolationLabel = "integrityshield.io/verifyResourceViolation"
+const SignatureResourceLabel = "integrityshield.io/signatureResource"
 
 var IgnoredKinds = []string{"Event", "Lease", "Endpoints", "TokenReview", "SubjectAccessReview", "SelfSubjectAccessReview", "LocalSubjectAccessReview"}
 
@@ -219,7 +220,22 @@ func (self *Observer) Run() {
 		results := []VerifyResultDetail{}
 		for _, resource := range resources {
 			log.Debugf("Observe new resource; ns:%s, kind:%s, name:%s", resource.GetNamespace(), resource.GetKind(), resource.GetName())
-			// skip object
+			// check if signature resource
+			signatureResource := isSignatureResource(resource)
+			if signatureResource {
+				result := VerifyResultDetail{
+					Time:       time.Now().Format(timeFormat),
+					Kind:       resource.GroupVersionKind().Kind,
+					ApiGroup:   resource.GetObjectKind().GroupVersionKind().Group,
+					ApiVersion: resource.GetObjectKind().GroupVersionKind().Version,
+					Name:       resource.GetName(),
+					Namespace:  resource.GetNamespace(),
+					Message:    "this resource is signatureResource",
+					Violation:  false,
+				}
+				results = append(results, result)
+				continue
+			}
 			result := ObserveResource(resource, constraint.Parameters, ignoreFields, skipObjects, secrets)
 			imgAllow, imgMsg := ObserveImage(resource, constraint.Parameters.ImageProfile)
 			if !imgAllow {
@@ -521,4 +537,17 @@ func (self *Observer) loadConstraints() ([]ConstraintSpec, error) {
 		micList = append(micList, mic)
 	}
 	return micList, nil
+}
+
+func isSignatureResource(resource unstructured.Unstructured) bool {
+	var label bool
+	if !(resource.GetKind() == "ConfigMap") {
+		return label
+	}
+	labelsMap := resource.GetLabels()
+	_, found := labelsMap[SignatureResourceLabel]
+	if found {
+		label = true
+	}
+	return label
 }

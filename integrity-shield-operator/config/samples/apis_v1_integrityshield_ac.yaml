@@ -20,7 +20,7 @@ spec:
   requestHandlerConfigName: request-handler-config
   requestHandlerConfig: |
     defaultConstraintAction:
-      mode: detect
+      mode: inform
     sideEffect: 
       createDenyEvent: true
     log:

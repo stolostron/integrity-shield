@@ -114,6 +114,10 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 			Name:  "REKOR_SERVER",
 			Value: cr.Spec.RekorServerConfig.URL,
 		},
+		{
+			Name:  "COSIGN_EXPERIMENTAL",
+			Value: "1",
+		},
 	}
 	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
 		env = append(env, v1.EnvVar{

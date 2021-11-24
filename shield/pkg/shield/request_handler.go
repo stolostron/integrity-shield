@@ -46,6 +46,7 @@ const defaultPodNamespace = "integrity-shield-operator-system"
 const ImageRefAnnotationKeyShield = "integrityshield.io/signature"
 const AnnotationKeyDomain = "integrityshield.io"
 const SignatureAnnotationTypeShield = "IntegrityShield"
+const SignatureResourceLabel = "integrityshield.io/signatureResource"
 const (
 	EventTypeAnnotationKey       = "integrityshield.io/eventType"
 	EventResultAnnotationKey     = "integrityshield.io/eventResult"
@@ -113,14 +114,14 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 			}
 		}
 	} else {
-		if paramObj.Action.Mode != "enforce" && paramObj.Action.Mode != "detect" {
+		if paramObj.Action.Mode != "enforce" && paramObj.Action.Mode != "inform" {
 			log.WithFields(log.Fields{
 				"namespace": req.Namespace,
 				"name":      req.Name,
 				"kind":      req.Kind.Kind,
 				"operation": req.Operation,
 				"userName":  req.UserInfo.Username,
-			}).Warningf("run mode should be set to 'enforce' or 'detect' in rule,%s", paramObj.ConstraintName)
+			}).Warningf("run mode should be set to 'enforce' or 'inform' in rule,%s", paramObj.ConstraintName)
 		}
 		if paramObj.Action.Mode == "enforce" {
 			enforce = true
@@ -134,6 +135,10 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 
 	commonSkipUserMatched := false
 	skipObjectMatched := false
+	signatureResource := false
+
+	// check if signature resource
+	signatureResource = isAllowedSignatureResource(resource, req.AdmissionRequest.OldObject.Raw, req.Operation)
 
 	//filter by user listed in common profile
 	commonSkipUserMatched = rhconfig.RequestFilterProfile.SkipUsers.Match(resource, req.AdmissionRequest.UserInfo.Username)
@@ -151,23 +156,12 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 	//check scope
 	inScopeObjMatched := paramObj.InScopeObjects.Match(resource)
 
-	// mutation check
-	if isUpdateRequest(req.AdmissionRequest.Operation) {
-		ignoreFields := getMatchedIgnoreFields(paramObj.IgnoreFields, rhconfig.RequestFilterProfile.IgnoreFields, resource)
-		mutated, err := mutationCheck(req.AdmissionRequest.OldObject.Raw, req.AdmissionRequest.Object.Raw, ignoreFields)
-		if err != nil {
-			log.Errorf("failed to check mutation: %s", err.Error())
-			errMsg := "IntegrityShield failed to decide the response. Failed to check mutation: " + err.Error()
-			return makeResultFromRequestHandler(false, errMsg, enforce, req)
-		}
-		if !mutated {
-			return makeResultFromRequestHandler(true, "no mutation found", enforce, req)
-		}
-	}
-
 	allow := false
 	message := ""
-	if (skipUserMatched || commonSkipUserMatched) && !inScopeUserMatched {
+	if signatureResource {
+		allow = true
+		message = "allowed because this resource is signatureResource."
+	} else if (skipUserMatched || commonSkipUserMatched) && !inScopeUserMatched {
 		allow = true
 		message = "SkipUsers rule matched."
 		logRecord["reason"] = message
@@ -179,7 +173,20 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 	} else if skipObjectMatched {
 		allow = true
 		message = "SkipObjects rule matched."
-	} else {
+	} else if isUpdateRequest(req.AdmissionRequest.Operation) {
+		// mutation check
+		ignoreFields := getMatchedIgnoreFields(paramObj.IgnoreFields, rhconfig.RequestFilterProfile.IgnoreFields, resource)
+		mutated, err := mutationCheck(req.AdmissionRequest.OldObject.Raw, req.AdmissionRequest.Object.Raw, ignoreFields)
+		if err != nil {
+			log.Errorf("failed to check mutation: %s", err.Error())
+			message = "IntegrityShield failed to decide the response. Failed to check mutation: " + err.Error()
+		}
+		if !mutated {
+			allow = true
+			message = "no mutation found"
+		}
+	}
+	if allow {
 		var signatureAnnotationType string
 		annotations := resource.GetAnnotations()
 		_, found := annotations[ImageRefAnnotationKeyShield]
@@ -302,6 +309,37 @@ func makeResultFromRequestHandler(allow bool, msg string, enforce bool, req admi
 
 func isUpdateRequest(operation v1.Operation) bool {
 	return (operation == v1.Update)
+}
+
+func isAllowedSignatureResource(resource unstructured.Unstructured, oldObj []byte, operation v1.Operation) bool {
+	var currentResourceLabel bool
+	var label bool
+	if !(resource.GetKind() == "ConfigMap") {
+		return label
+	}
+	label = isSignatureResource(resource)
+	if operation == v1.Create {
+		currentResourceLabel = true
+	} else if operation == v1.Update {
+		// unmarshal admission request object
+		var oldRes unstructured.Unstructured
+		err := json.Unmarshal(oldObj, &oldRes)
+		if err != nil {
+			log.Errorf("failed to Unmarshal a requested object into %T; %s", resource, err.Error())
+		}
+		currentResourceLabel = isSignatureResource(oldRes)
+	}
+	return (label && currentResourceLabel)
+}
+
+func isSignatureResource(resource unstructured.Unstructured) bool {
+	var label bool
+	labelsMap := resource.GetLabels()
+	_, found := labelsMap[SignatureResourceLabel]
+	if found {
+		label = true
+	}
+	return label
 }
 
 func getMatchedIgnoreFields(pi, ci k8smanifest.ObjectFieldBindingList, resource unstructured.Unstructured) []string {
