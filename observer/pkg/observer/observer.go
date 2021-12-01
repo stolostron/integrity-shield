@@ -33,7 +33,6 @@ import (
 	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
 	kubeutil "github.com/open-cluster-management/integrity-shield/shield/pkg/kubernetes"
 	"github.com/pkg/errors"
-	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"
 	v1 "k8s.io/api/core/v1"
@@ -158,10 +157,6 @@ func (self *Observer) Init() error {
 	}
 	os.Setenv(k8sLogLevelEnvKey, logLevelStr)
 	log.SetLevel(logLevel)
-
-	log.Info("initialize cosign.")
-	cmd := cosign.Init()
-	_ = cmd.Exec(context.Background(), []string{})
 
 	return nil
 }

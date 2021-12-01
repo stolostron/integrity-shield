@@ -28,7 +28,8 @@ import (
 	"github.com/pkg/errors"
 
 	ishieldconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
-	cosigncli "github.com/sigstore/cosign/cmd/cosign/cli"
+	"github.com/sigstore/cosign/cmd/cosign/cli/manifest"
+	"github.com/sigstore/cosign/cmd/cosign/cli/verify"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
@@ -82,7 +83,7 @@ func VerifyImageInManifest(resource unstructured.Unstructured, profile ishieldco
 	failReason := ""
 	// overallFailReason := ""
 	for _, keyPath := range keyPathList {
-		cmd := cosigncli.VerifyManifestCommand{VerifyCommand: cosigncli.VerifyCommand{}}
+		cmd := manifest.VerifyManifestCommand{VerifyCommand: verify.VerifyCommand{}}
 		if keyPath != "" {
 			cmd.KeyRef = keyPath
 		}

@@ -141,7 +141,7 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 		ReadinessProbe: &v1.Probe{
 			InitialDelaySeconds: 10,
 			PeriodSeconds:       10,
-			Handler: v1.Handler{
+			ProbeHandler: v1.ProbeHandler{
 				HTTPGet: &v1.HTTPGetAction{
 					Path:   "/health/readiness",
 					Port:   intstr.IntOrString{IntVal: 8080},
@@ -152,7 +152,7 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 		LivenessProbe: &v1.Probe{
 			InitialDelaySeconds: 10,
 			PeriodSeconds:       10,
-			Handler: v1.Handler{
+			ProbeHandler: v1.ProbeHandler{
 				HTTPGet: &v1.HTTPGetAction{
 					Path:   "/health/liveness",
 					Port:   intstr.IntOrString{IntVal: 8080},
@@ -179,7 +179,7 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 		ReadinessProbe: &v1.Probe{
 			InitialDelaySeconds: 10,
 			PeriodSeconds:       10,
-			Handler: v1.Handler{
+			ProbeHandler: v1.ProbeHandler{
 				HTTPGet: &v1.HTTPGetAction{
 					Path:   "/health/readiness",
 					Port:   intstr.IntOrString{IntVal: 8080},
@@ -190,7 +190,7 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 		LivenessProbe: &v1.Probe{
 			InitialDelaySeconds: 10,
 			PeriodSeconds:       10,
-			Handler: v1.Handler{
+			ProbeHandler: v1.ProbeHandler{
 				HTTPGet: &v1.HTTPGetAction{
 					Path:   "/health/liveness",
 					Port:   intstr.IntOrString{IntVal: 8080},
@@ -345,7 +345,7 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 		Image:           image,
 		ImagePullPolicy: cr.Spec.ControllerContainer.ImagePullPolicy,
 		ReadinessProbe: &v1.Probe{
-			Handler: v1.Handler{
+			ProbeHandler: v1.ProbeHandler{
 				Exec: &v1.ExecAction{
 					Command: []string{
 						"ls",
@@ -354,7 +354,7 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 			},
 		},
 		LivenessProbe: &v1.Probe{
-			Handler: v1.Handler{
+			ProbeHandler: v1.ProbeHandler{
 				Exec: &v1.ExecAction{
 					Command: []string{
 						"ls",
