@@ -40,13 +40,13 @@ make docker-push IMG=$DOCKER_IMAGE_AND_TAG
 #    make component/push
 #fi
 
-# Push ${ISHIELD_REPORTER}
-export COMPONENT_NAME=${ISHIELD_REPORTER}
-export DOCKER_IMAGE_AND_TAG=${COMPONENT_DOCKER_REPO}/${COMPONENT_NAME}:${COMPONENT_VERSION}
-make docker-push IMG=$DOCKER_IMAGE_AND_TAG
-#if [ `go env GOOS` == "linux" ]; then
-#    make component/push
-#fi
+# # Push ${ISHIELD_REPORTER}
+# export COMPONENT_NAME=${ISHIELD_REPORTER}
+# export DOCKER_IMAGE_AND_TAG=${COMPONENT_DOCKER_REPO}/${COMPONENT_NAME}:${COMPONENT_VERSION}
+# make docker-push IMG=$DOCKER_IMAGE_AND_TAG
+# #if [ `go env GOOS` == "linux" ]; then
+# #    make component/push
+# #fi
 
 # Push ${ISHIELD_OBSERVER}
 export COMPONENT_NAME=${ISHIELD_OBSERVER}
