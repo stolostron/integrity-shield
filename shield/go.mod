@@ -18,9 +18,3 @@ require (
 require k8s.io/utils v0.0.0-20211116205334-6203023598ed // indirect
 
 replace github.com/open-cluster-management/integrity-shield/shield => ./
-
-// replace (
-// 	k8s.io/api v0.23.0-alpha.4 => k8s.io/api v0.22.3
-// 	k8s.io/apimachinery v0.23.0-alpha.4 => k8s.io/apimachinery v0.22.3
-// 	k8s.io/client-go v0.23.0-alpha.4 => k8s.io/client-go v0.22.3
-// )
