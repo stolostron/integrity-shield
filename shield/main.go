@@ -18,6 +18,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
@@ -26,6 +27,8 @@ import (
 
 	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
 	"github.com/open-cluster-management/integrity-shield/shield/pkg/shield"
+	cosign "github.com/sigstore/cosign/cmd/cosign/cli/initialize"
+	"github.com/sigstore/cosign/cmd/cosign/cli/options"
 	log "github.com/sirupsen/logrus"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
@@ -39,6 +42,10 @@ const (
 func init() {
 	log.SetFormatter(&log.JSONFormatter{})
 	log.Info("Integrity Shield has been started.")
+
+	log.Info("initialize cosign.")
+	o := &options.InitializeOptions{}
+	_ = cosign.DoInitialize(context.Background(), o.Root, o.Mirror, o.Threshold)
 }
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
