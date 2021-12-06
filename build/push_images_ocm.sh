@@ -31,16 +31,22 @@ export COMPONENT_DOCKER_REPO=${REGISTRY}
 # Push ${ISHIELD_IMAGE}
 export COMPONENT_NAME=${ISHIELD_IMAGE}
 export DOCKER_IMAGE_AND_TAG=${COMPONENT_DOCKER_REPO}/${COMPONENT_NAME}:${COMPONENT_VERSION}${COMPONENT_TAG_EXTENSION}
-if [ `go env GOOS` == "linux" ]; then
-    make component/push
-fi
+docker login ${COMPONENT_DOCKER_REPO} -u ${DOCKER_USER} -p ${DOCKER_PASS}
+docker push ${DOCKER_IMAGE_AND_TAG}
+@echo "Pushed the following image: ${DOCKER_IMAGE_AND_TAG}"
+# if [ `go env GOOS` == "linux" ]; then
+#     make component/push
+# fi
 
 # Push ${ISHIELD_OBSERVER}
 export COMPONENT_NAME=${ISHIELD_OBSERVER}
 export DOCKER_IMAGE_AND_TAG=${COMPONENT_DOCKER_REPO}/${COMPONENT_NAME}:${COMPONENT_VERSION}${COMPONENT_TAG_EXTENSION}
-if [ `go env GOOS` == "linux" ]; then
-    make component/push
-fi
+docker login ${COMPONENT_DOCKER_REPO} -u ${DOCKER_USER} -p ${DOCKER_PASS}
+docker push ${DOCKER_IMAGE_AND_TAG}
+@echo "Pushed the following image: ${DOCKER_IMAGE_AND_TAG}"
+# if [ `go env GOOS` == "linux" ]; then
+#     make component/push
+# fi
 
 # Push ${ISHIELD_REPORTER}
 # export COMPONENT_NAME=${ISHIELD_REPORTER}
@@ -52,14 +58,20 @@ fi
 # Push ${ISHIELD_ADMISSION_CONTROLLER}
 export COMPONENT_NAME=${ISHIELD_ADMISSION_CONTROLLER}
 export DOCKER_IMAGE_AND_TAG=${COMPONENT_DOCKER_REPO}/${COMPONENT_NAME}:${COMPONENT_VERSION}${COMPONENT_TAG_EXTENSION}
-if [ `go env GOOS` == "linux" ]; then
-    make component/push
-fi
+docker login ${COMPONENT_DOCKER_REPO} -u ${DOCKER_USER} -p ${DOCKER_PASS}
+docker push ${DOCKER_IMAGE_AND_TAG}
+@echo "Pushed the following image: ${DOCKER_IMAGE_AND_TAG}"
+# if [ `go env GOOS` == "linux" ]; then
+#     make component/push
+# fi
 
 
 # Push ${ISHIELD_OPERATOR}
 export COMPONENT_NAME=${ISHIELD_OPERATOR}
 export DOCKER_IMAGE_AND_TAG=${COMPONENT_DOCKER_REPO}/${COMPONENT_NAME}:${COMPONENT_VERSION}${COMPONENT_TAG_EXTENSION}
-if [ `go env GOOS` == "linux" ]; then
-    make component/push
-fi
+docker login ${COMPONENT_DOCKER_REPO} -u ${DOCKER_USER} -p ${DOCKER_PASS}
+docker push ${DOCKER_IMAGE_AND_TAG}
+@echo "Pushed the following image: ${DOCKER_IMAGE_AND_TAG}"
+# if [ `go env GOOS` == "linux" ]; then
+#     make component/push
+# fi
