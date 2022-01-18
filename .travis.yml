@@ -62,7 +62,6 @@ jobs:
       script:
          - make component/build
          - ./build/sec_scan.sh
-         - make sec-scan
     - stage: test-unit
       name: "Run unit test"
       script:
