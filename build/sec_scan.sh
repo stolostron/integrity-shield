@@ -23,12 +23,13 @@ echo "SECURITY SCAN GOES HERE!"
 # echo "Init"
 # make init
 
-ISHIELD_VERSION=0.3.1
-ISHIELD_IMAGE=integrity-shield-api
-ISHIELD_ADMISSION_CONTROLLER=integrity-shield-admission-controller
-ISHIELD_OBSERVER=integrity-shield-observer
-ISHIELD_REPORTER=integrity-shield-reporter
-ISHIELD_OPERATOR=integrity-shield-operator
+. ${ISHIELD_REPO_ROOT}/ishield-build.conf
+# ISHIELD_VERSION=0.3.1
+# ISHIELD_IMAGE=integrity-shield-api
+# ISHIELD_ADMISSION_CONTROLLER=integrity-shield-admission-controller
+# ISHIELD_OBSERVER=integrity-shield-observer
+# ISHIELD_REPORTER=integrity-shield-reporter
+# ISHIELD_OPERATOR=integrity-shield-operator
 
 echo "Scaning integrity shield images : $(date)"
 
