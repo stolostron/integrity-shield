@@ -61,10 +61,6 @@ jobs:
       name: "Build the image and push it"
       script:
          - make component/build
-         - |
-           echo @@@ security/scans
-           export SECURITYSCANS_IMAGE_NAME=integrity-shield-api:0.3.1
-           make security/scans
          - ./build/sec_scan.sh
          - make sec-scan
     - stage: test-unit
