@@ -47,8 +47,8 @@ stages:
   - test-e2e
   - publish
 
-# before_script:
-#   - make init-debug
+before_script:
+  - make init
 
 jobs:
   include:
@@ -59,15 +59,13 @@ jobs:
            make lint
     - stage: build
       name: "Build the image and push it"
-      env:
-        - SECURITYSCANS_IMAGE_NAME=integrity-shield-api
       script:
+         - make component/build
          - |
-           make init-debug
-           make component/build
            echo @@@ security/scan
+           export SECURITYSCANS_IMAGE_NAME=integrity-shield-api:0.3.1
            make security/scans
-           make sec-scan
+         - make sec-scan
     - stage: test-unit
       name: "Run unit test"
       script:
