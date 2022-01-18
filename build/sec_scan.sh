@@ -16,6 +16,8 @@
 
 set -e
 
+source ../ishield-build.conf
+
 echo "SECURITY SCAN GOES HERE!"
 
 # Run our build target
