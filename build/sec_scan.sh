@@ -16,14 +16,14 @@
 
 set -e
 
-source ../ishield-build.conf
-
 echo "SECURITY SCAN GOES HERE!"
 
 # Run our build target
 
 # echo "Init"
 # make init
+echo @@@@ DEBUG
+tree ${ISHIELD_REPO_ROOT}
 
 echo "Scaning integrity shield images : $(date)"
 
