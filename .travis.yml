@@ -59,10 +59,13 @@ jobs:
            make lint
     - stage: build
       name: "Build the image and push it"
+      env:
+        - SECURITYSCANS_IMAGE_NAME=integrity-shield-api
       script:
          - |
            make init-debug
            make component/build
+           echo @@@ security/scan
            make security/scans
            make sec-scan
     - stage: test-unit
