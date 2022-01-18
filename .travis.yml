@@ -47,6 +47,9 @@ stages:
   - test-e2e
   - publish
 
+before_script:
+  - make init
+
 jobs:
   include:
     - stage: lint
@@ -58,7 +61,6 @@ jobs:
       name: "Build the image and push it"
       script:
          - |
-           make init
            make component/build
            make sec-scan
     - stage: test-unit
@@ -66,7 +68,6 @@ jobs:
       script:
         - set -e
         - |
-          make init
           make component/test/unit
           make test-gpg-annotation
           make sonar-go-test-ishield
@@ -76,7 +77,6 @@ jobs:
       name: "Deploy the image to a cluster and run e2e tests"
       script:
         - |
-          make init
           make component/pull
           make component/test/e2e
     - stage: publish
@@ -84,7 +84,6 @@ jobs:
       if: env(ENABLE_PUBLISH) = true AND branch =~ /^release-[0-9]+\..*$/
       script:
         - |
-          make init
           make component/build
           make publish
           #${TRAVIS_BUILD_DIR}/build/pipeline.sh
