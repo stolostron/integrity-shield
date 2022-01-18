@@ -65,7 +65,7 @@ jobs:
            echo @@@ security/scan
            export SECURITYSCANS_IMAGE_NAME=integrity-shield-api:0.3.1
            make security/scans
-         - make sec-scan
+         - ./build/sec_scan.sh
     - stage: test-unit
       name: "Run unit test"
       script:
