@@ -15,7 +15,9 @@ export BUILD_HARNESS_EXTENSIONS_PATH ?= $(shell until [ -d "$(BUILD_HARNESS_EXTE
 .PHONY : init-debug
 ## Init build-harness
 init-debug::
+	@echo execute init-debug!!!
 	@echo $(shell date)
+	@echo URL: https://raw.githubusercontent.com/$(BUILD_HARNESS_EXTENSIONS_ORG)/$(BUILD_HARNESS_EXTENSIONS_PROJECT)/$(BUILD_HARNESS_EXTENSIONS_BRANCH)/bin/install.sh
 	@curl --retry 5 --fail --silent --retry-delay 1 -H "Accept: application/vnd.github.v3.raw" https://raw.githubusercontent.com/$(BUILD_HARNESS_EXTENSIONS_ORG)/$(BUILD_HARNESS_EXTENSIONS_PROJECT)/$(BUILD_HARNESS_EXTENSIONS_BRANCH)/bin/install.sh | \
 	bash -s "$(BUILD_HARNESS_ORG)" "$(BUILD_HARNESS_PROJECT)" "$(BUILD_HARNESS_BRANCH)" "$(GITHUB_USER)" "$(GITHUB_TOKEN)"
 	# @curl --retry 5 --fail --silent --retry-delay 1 -H "Accept: application/vnd.github.v3.raw" https://raw.githubusercontent.com/stolostron/build-harness-extensions/main/bin/install.sh 

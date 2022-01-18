@@ -47,8 +47,8 @@ stages:
   - test-e2e
   - publish
 
-before_script:
-  - make init-debug
+# before_script:
+#   - make init-debug
 
 jobs:
   include:
@@ -61,6 +61,7 @@ jobs:
       name: "Build the image and push it"
       script:
          - |
+           make init-debug
            make component/build
            make sec-scan
     - stage: test-unit
