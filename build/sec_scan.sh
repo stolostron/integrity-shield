@@ -20,8 +20,8 @@ echo "SECURITY SCAN GOES HERE!"
 
 # Run our build target
 
-echo "Init"
-make init
+# echo "Init"
+# make init
 
 echo "Scaning integrity shield images : $(date)"
 
