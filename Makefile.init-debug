@@ -14,14 +14,15 @@ export BUILD_HARNESS_EXTENSIONS_PATH ?= $(shell until [ -d "$(BUILD_HARNESS_EXTE
 
 .PHONY : init-debug
 ## Init build-harness
-init::
+init-debug::
 	@echo $(shell date)
-	@curl --retry 5 --fail --silent --retry-delay 1 -H "Authorization: token $(GITHUB_TOKEN)" -H "Accept: application/vnd.github.v3.raw" https://raw.githubusercontent.com/$(BUILD_HARNESS_EXTENSIONS_ORG)/$(BUILD_HARNESS_EXTENSIONS_PROJECT)/$(BUILD_HARNESS_EXTENSIONS_BRANCH)/bin/install.sh 
-	@cat install.sh
-	@bash install.sh -s "$(BUILD_HARNESS_ORG)" "$(BUILD_HARNESS_PROJECT)" "$(BUILD_HARNESS_BRANCH)" "$(GITHUB_USER)" "$(GITHUB_TOKEN)"
-	@curl --retry 5 --fail --silent --retry-delay 1 -H "Authorization: token $(GITHUB_TOKEN)" -H "Accept: application/vnd.github.v3.raw" https://raw.githubusercontent.com/$(BUILD_HARNESS_EXTENSIONS_ORG)/$(BUILD_HARNESS_EXTENSIONS_PROJECT)/$(BUILD_HARNESS_EXTENSIONS_BRANCH)/bin/install-extensions.sh 
-	@cat install-extensions.sh
-	@bash install-extensions.sh -s "$(BUILD_HARNESS_EXTENSIONS_ORG)" "$(BUILD_HARNESS_EXTENSIONS_PROJECT)" "$(BUILD_HARNESS_EXTENSIONS_BRANCH)" "$(GITHUB_USER)" "$(GITHUB_TOKEN)"
+	@curl --retry 5 --fail --silent --retry-delay 1 -H "Accept: application/vnd.github.v3.raw" https://raw.githubusercontent.com/$(BUILD_HARNESS_EXTENSIONS_ORG)/$(BUILD_HARNESS_EXTENSIONS_PROJECT)/$(BUILD_HARNESS_EXTENSIONS_BRANCH)/bin/install.sh | \
+	bash -s "$(BUILD_HARNESS_ORG)" "$(BUILD_HARNESS_PROJECT)" "$(BUILD_HARNESS_BRANCH)" "$(GITHUB_USER)" "$(GITHUB_TOKEN)"
+	# @curl --retry 5 --fail --silent --retry-delay 1 -H "Accept: application/vnd.github.v3.raw" https://raw.githubusercontent.com/stolostron/build-harness-extensions/main/bin/install.sh 
+	# @cat install.sh
+	# @bash install.sh -s "$(BUILD_HARNESS_ORG)" "$(BUILD_HARNESS_PROJECT)" "$(BUILD_HARNESS_BRANCH)" "$(GITHUB_USER)" "$(GITHUB_TOKEN)"
+	@curl --retry 5 --fail --silent --retry-delay 1 -H "Accept: application/vnd.github.v3.raw" https://raw.githubusercontent.com/$(BUILD_HARNESS_EXTENSIONS_ORG)/$(BUILD_HARNESS_EXTENSIONS_PROJECT)/$(BUILD_HARNESS_EXTENSIONS_BRANCH)/bin/install-extensions.sh | \
+	bash -s "$(BUILD_HARNESS_EXTENSIONS_ORG)" "$(BUILD_HARNESS_EXTENSIONS_PROJECT)" "$(BUILD_HARNESS_EXTENSIONS_BRANCH)" "$(GITHUB_USER)" "$(GITHUB_TOKEN)"
 
 .PHONY : clean
 ## Clean build-harness
