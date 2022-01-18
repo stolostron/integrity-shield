@@ -22,8 +22,6 @@ echo "SECURITY SCAN GOES HERE!"
 
 # echo "Init"
 # make init
-echo @@@@ DEBUG
-tree ${ISHIELD_REPO_ROOT}
 
 echo "Scaning integrity shield images : $(date)"
 
