@@ -63,6 +63,7 @@ jobs:
          - |
            make init-debug
            make component/build
+           make security/scans
            make sec-scan
     - stage: test-unit
       name: "Run unit test"
