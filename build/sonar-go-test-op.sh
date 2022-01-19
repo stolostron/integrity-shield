@@ -25,9 +25,9 @@ if [ "${ISHIELD_ENV}" = remote ]; then \
 fi
 echo "-> Starting sonar-go-test"
 echo "--> Starting go test"
-cd ${SHIELD_OP_DIR} && go test -coverprofile=coverage.out -json  $(shell cd ${SHIELD_OP_DIR} && go list ./... | grep -v /test/) | tee report.json | grep -v '"Action":"output"'
+cd ${SHIELD_OP_DIR} && go test -coverprofile=coverage.out -json  $(cd ${SHIELD_OP_DIR} && go list ./... | grep -v /test/) | tee report.json | grep -v '"Action":"output"'
 echo "--> Running gosec"
-osec -fmt sonarqube -out gosec.json -no-fail ./...
+gosec -fmt sonarqube -out gosec.json -no-fail ./...
 echo "---> gosec gosec.json"
 cat gosec.json
 if [ "${ISHIELD_ENV}" = remote ]; then \
