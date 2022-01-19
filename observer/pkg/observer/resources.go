@@ -19,6 +19,7 @@ package observer
 import (
 	"context"
 
+	gkmatch "github.com/open-policy-agent/gatekeeper/pkg/mutation/match"
 	k8smnfutil "github.com/sigstore/k8s-manifest-sigstore/pkg/util"
 	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -132,7 +133,7 @@ func (self *Observer) getAllResoucesByGroupResource(gResourceWithTargetNS groupR
 	return resources, nil
 }
 
-func (self *Observer) getPossibleProtectedGVKs(match MatchCondition) []groupResourceWithTargetNS {
+func (self *Observer) getPossibleProtectedGVKs(match gkmatch.Match) []groupResourceWithTargetNS {
 	possibleProtectedGVKs := []groupResourceWithTargetNS{}
 	for _, apiResource := range self.APIResources {
 		matched := self.checkIfRuleMatchWithGVK(match, apiResource)
@@ -145,19 +146,19 @@ func (self *Observer) getPossibleProtectedGVKs(match MatchCondition) []groupReso
 	return possibleProtectedGVKs
 }
 
-func (self *Observer) checkIfRuleMatchWithGVK(match MatchCondition, apiResource groupResource) bool {
+func (self *Observer) checkIfRuleMatchWithGVK(match gkmatch.Match, apiResource groupResource) bool {
 	matched := false
 	// kind
 	if len(match.Kinds) != 0 {
 		for _, kinds := range match.Kinds {
 			kmatch := false
 			agmatch := false
-			if len(kinds.ApiGroups) != 0 {
-				agmatch = Contains(kinds.ApiGroups, apiResource.APIGroup)
+			if len(kinds.APIGroups) != 0 {
+				agmatch = Contains(kinds.APIGroups, apiResource.APIGroup)
 			} else {
 				agmatch = true
 			}
-			if len(kinds.ApiGroups) != 0 {
+			if len(kinds.APIGroups) != 0 {
 				kmatch = Contains(kinds.Kinds, apiResource.APIResource.Kind)
 			} else {
 				kmatch = true
@@ -172,7 +173,7 @@ func (self *Observer) checkIfRuleMatchWithGVK(match MatchCondition, apiResource 
 	return matched
 }
 
-func (self *Observer) getMathedNamespaces(match MatchCondition) []string {
+func (self *Observer) getMathedNamespaces(match gkmatch.Match) []string {
 	// namespace
 	var matchedNamespaces []string
 	if len(match.Namespaces) == 0 {
