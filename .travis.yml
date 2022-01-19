@@ -61,9 +61,7 @@ jobs:
       name: "Build the image and push it"
       script:
          - make component/build
-         - |
-            . ${ISHIELD_REPO_ROOT}/ishield-build.conf
-            ./build/sec_scan.sh
+         - ./build/sec_scan.sh
     - stage: test-unit
       name: "Run unit test"
       script:
@@ -71,8 +69,11 @@ jobs:
         - |
           make component/test/unit
           make test-gpg-annotation
-          make sonar-go-test-ishield
-          make sonar-go-test-op
+        - |
+          ./build/sonar-go-test-ishield.sh
+          ./build/sonar-go-test-op.sh
+          # make sonar-go-test-ishield
+          # make sonar-go-test-op
           # make sonar/go enable it after resolving package references to upstream repo
     - stage: test-e2e
       name: "Deploy the image to a cluster and run e2e tests"
