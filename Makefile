@@ -49,8 +49,6 @@ TMP_DIR = $(ISHIELD_TEMP_DIR)
 $(shell mkdir -p $(TMP_DIR))
 endif
 
-include  Makefile.init-debug
-
 # CICD BUILD HARNESS
 ####################
 ifeq ($(ISHIELD_ENV), remote)
