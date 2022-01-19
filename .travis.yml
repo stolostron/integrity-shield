@@ -61,7 +61,9 @@ jobs:
       name: "Build the image and push it"
       script:
          - make component/build
-         - ./build/sec_scan.sh
+         - |
+            . ${ISHIELD_REPO_ROOT}/ishield-build.conf
+            ./build/sec_scan.sh
     - stage: test-unit
       name: "Run unit test"
       script:
