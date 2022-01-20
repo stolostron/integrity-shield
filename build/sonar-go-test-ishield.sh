@@ -32,5 +32,5 @@ echo "---> gosec gosec.json"
 cat gosec.json
 if [ "${ISHIELD_ENV}" = remote ]; then \
     echo "--> Running sonar-scanner"; \
-    sonar-scanner --debug || echo "Sonar scanner is not available"; \
+    sonar-scanner -Dproject.settings=${ISHIELD_REPO_ROOT}/sonar-project.properties --debug || echo "Sonar scanner is not available"; \
 fi
