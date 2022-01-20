@@ -422,8 +422,11 @@ github.com/charithe/durationcheck v0.0.6/go.mod h1:SSbRIBVfMjCi/kEB6K65XEA83D6pr
 github.com/chavacava/garif v0.0.0-20210405163807-87a70f3d418b/go.mod h1:Qjyv4H3//PWVzTeCezG2b9IRn6myJxJSr4TD/xo6ojU=
 github.com/checkpoint-restore/go-criu/v4 v4.1.0/go.mod h1:xUQBLp4RLc5zJtWY++yjOoMoB5lihDt7fai+75m+rGw=
 github.com/checkpoint-restore/go-criu/v5 v5.0.0/go.mod h1:cfwC0EG7HMUenopBsUf9d89JlCLQIfgVcNsNN0t6T2M=
+github.com/chzyer/logex v1.1.10 h1:Swpa1K6QvQznwJRcfTfQJmTE72DqScAa40E+fbHEXEE=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
+github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e h1:fY5BOSpyZCqRo5OhCuC+XN+r/bBCmeuuJtjz+bCNIf8=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
+github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 h1:q763qf9huN11kDQavWsoZXJNW3xEE4JJyHa5Q25/sd8=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/cilium/ebpf v0.0.0-20200110133405-4032b1d8aae3/go.mod h1:MA5e5Lr8slmEg9bt0VpxxWqJlO4iwu3FBdHUzV7wQVg=
 github.com/cilium/ebpf v0.0.0-20200702112145-1c8d4c9ef775/go.mod h1:7cR51M8ViRLIdUjrmSXlK9pkrsDlLHbO8jiB8X8JnOc=
@@ -1499,6 +1502,7 @@ github.com/mailru/easyjson v0.7.6/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJ
 github.com/mailru/easyjson v0.7.7 h1:UGYAvKxe3sBsEDzO8ZeWOSlIQfWFlxbzLZe7hwFURr0=
 github.com/mailru/easyjson v0.7.7/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
 github.com/manifoldco/promptui v0.8.0/go.mod h1:n4zTdgP0vr0S3w7/O/g98U+e0gwLScEXGwov2nIKuGQ=
+github.com/manifoldco/promptui v0.9.0 h1:3V4HzJk1TtXW1MTZMP7mdlwbBpIinw3HztaIlYthEiA=
 github.com/manifoldco/promptui v0.9.0/go.mod h1:ka04sppxSGFAtxX0qhlYQjISsg9mR4GWtQEhdbn6Pgg=
 github.com/maratori/testpackage v1.0.1/go.mod h1:ddKdw+XG0Phzhx8BFDTKgpWP4i7MpApTE5fXSKAqwDU=
 github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2/go.mod h1:Ld9puTsIW75CHf65OeIOkyKbteujpZVXDpWK6YGZbxE=
@@ -1946,8 +1950,8 @@ github.com/sigstore/cosign v1.4.1/go.mod h1:5lLq1j8mNWFGMIzz1unNmiIfiXK0w4WDimUu
 github.com/sigstore/fulcio v0.0.0-20210720153316-846105495d38/go.mod h1:FZL7iVdWduaZRpXrvjmuWyr7WyXy6KXsaEVhHdITlz4=
 github.com/sigstore/fulcio v0.1.2-0.20211207184413-f4746cc4ff3d h1:IPM24VE576hL6vCuZf4h+5WDDg07O9c26dlPi9IBZhI=
 github.com/sigstore/fulcio v0.1.2-0.20211207184413-f4746cc4ff3d/go.mod h1:4MU8ZIe1hJz85JUaYi7v1kIxG3z9t1T6I8Ae4KFjPV4=
-github.com/sigstore/k8s-manifest-sigstore v0.1.1-0.20220118010220-78aa67750956 h1:LPpa34i7W7wXYJB5/3nLk7fdlKWG8lOwWNa9TVDSmeA=
-github.com/sigstore/k8s-manifest-sigstore v0.1.1-0.20220118010220-78aa67750956/go.mod h1:lVP7wWQodiNgQbBeDbt61FJ8Q6VrBkN6uqu0eeMeFo4=
+github.com/sigstore/k8s-manifest-sigstore v0.1.1-0.20220120024049-a39c4d36036e h1:GV9+sfaKz5R3S0JHx4jSbkSJle6iiaM6YVHb/KcbinM=
+github.com/sigstore/k8s-manifest-sigstore v0.1.1-0.20220120024049-a39c4d36036e/go.mod h1:lVP7wWQodiNgQbBeDbt61FJ8Q6VrBkN6uqu0eeMeFo4=
 github.com/sigstore/rekor v0.2.1-0.20210714185543-38d532d5c0b1/go.mod h1:cL9B3+/gp3BG+/bhkSHBA3MQZMten5xM6BhJYd5b5zU=
 github.com/sigstore/rekor v0.3.1-0.20211203233407-3278f72b78bd h1:/Brk1DcfZDc69cDmWZPlHkwe5e3CK8j3BrfUKr6EO6c=
 github.com/sigstore/rekor v0.3.1-0.20211203233407-3278f72b78bd/go.mod h1:X/YsXRguEJEDfYs2/vSw6zrq0fgFeML99KhZ6arCNaI=

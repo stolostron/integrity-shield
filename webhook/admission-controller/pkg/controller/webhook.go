@@ -27,8 +27,7 @@ import (
 	"github.com/open-cluster-management/integrity-shield/shield/pkg/shield"
 	acconfig "github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/config"
 	"github.com/pkg/errors"
-	cosign "github.com/sigstore/cosign/cmd/cosign/cli/initialize"
-	"github.com/sigstore/cosign/cmd/cosign/cli/options"
+	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/kubeutil"
 	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -71,8 +70,7 @@ func init() {
 	log.SetLevel(logLevel)
 
 	log.Info("initialize cosign.")
-	o := &options.InitializeOptions{}
-	_ = cosign.DoInitialize(context.Background(), o.Root, o.Mirror, o.Threshold)
+	_ = cosign.Initialize()
 }
 
 func ProcessRequest(req admission.Request) admission.Response {

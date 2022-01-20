@@ -34,8 +34,7 @@ import (
 	kubeutil "github.com/open-cluster-management/integrity-shield/shield/pkg/kubernetes"
 	gkmatch "github.com/open-policy-agent/gatekeeper/pkg/mutation/match"
 	"github.com/pkg/errors"
-	cosign "github.com/sigstore/cosign/cmd/cosign/cli/initialize"
-	"github.com/sigstore/cosign/cmd/cosign/cli/options"
+	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"
 	v1 "k8s.io/api/core/v1"
@@ -162,8 +161,7 @@ func (self *Observer) Init() error {
 	log.SetLevel(logLevel)
 
 	log.Info("initialize cosign.")
-	o := &options.InitializeOptions{}
-	_ = cosign.DoInitialize(context.Background(), o.Root, o.Mirror, o.Threshold)
+	_ = cosign.Initialize()
 	return nil
 }
 
