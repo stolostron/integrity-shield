@@ -20,7 +20,7 @@ branches:
 
 addons:
   sonarcloud:
-    organization: "stolostron"
+    organization: "open-cluster-management"
     token:
       secure: "QlLPdt1qmCQHznVrrd8rD/IoDb1RjpC0tmNv4cNw2sdMDbbohIKwjaxQ4CbzZGxLn5DWnLwumwhZtFsikDBEsruR5/yUytI+4luTbm583QUEjswRGVG/Qbiol7R3qJdkDJSgc1dYflXneKh+jCYhnvrIb5No+8+AHZ90kCQ1TDEercbyKIBQgIwxvl3RZIFzhAFUj/hkZSUYcc+45K4BeMDhJL9FQX56vOQeLuraTTs8EzLv9NQZTqj8oePaG4AsfH09F0G+3cGAPKd0uZtlBB6b7QnGb9TB/3NlklhdRwNAd84t4RsYEvaIehA1TsdOfeKtJJRzidj+QZaKTHmKG+//W6RWhoUI73LzXDA1l+Z5x6uYPIx7azvtEVoDkMyBTKqHVVfVsdVCoEB8VUWcfnpSzszFz/m1brfph4X1Ghacr8iCA0uYbqqla+bDZJFuEhbPb22VxPXILQGnyJBuAP0Zj8vOn+x76c1JNFCt4TG36Z12ej3AAbPFRUD38ZzsF/NtJ6UDdPTum8ufSBC22MdHLbxkn+ZFBaolVoReMin8D7ho5rR9KjWsklh97bO7G4TRswIPOdzHHHxSeogO+YloZgR7XlXxDKIm74heOzp0uuOrtdxMklo+8Dm38v08jnagYonmAkh/J7AwAggTFn8KwRWv3bDISb5UsQYuL08="
   
