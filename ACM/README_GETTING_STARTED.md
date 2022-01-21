@@ -4,10 +4,10 @@ Let’s take a look at how to install K8s Integrity Shield by using custom polic
 ### STEP 0. Prerequisite
 #### OPA/Gatekeeper
 
-Before the installation, Gatekeeper should be installed on the cluster. Gatekeeper is also integrated with Red Hat Advanced Cluster Management, so it can be installed by using [this policy](https://github.com/open-cluster-management/policy-collection/blob/main/stable/CM-Configuration-Management/policy-gatekeeper-operator-downstream.yaml).
+Before the installation, Gatekeeper should be installed on the cluster. Gatekeeper is also integrated with Red Hat Advanced Cluster Management, so it can be installed by using [this policy](https://github.com/stolostron/policy-collection/blob/main/stable/CM-Configuration-Management/policy-gatekeeper-operator-downstream.yaml).
 
 #### Verification Key Setup
-You need to have a GPG key pair for signing and verifying signature, and you need to deploy key as keyring-secret secret resource on all target clusters. See [this instruction](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/ACM/README_SETUP_KEY_RING_ACM_ENV.md). 
+You need to have a GPG key pair for signing and verifying signature, and you need to deploy key as keyring-secret secret resource on all target clusters. See [this instruction](https://github.com/stolostron/integrity-shield/blob/master/docs/ACM/README_SETUP_KEY_RING_ACM_ENV.md). 
 
 ### STEP 1. Enable Custom Policy On Target Clusters
 We use three custom policies in the policy-collection repository on GitHub to enable Integrity Shield: policy-integrity-shield.yaml, policy-integrity-shield-observer.yaml and policy-integrity-shield-events.yaml.
@@ -44,7 +44,7 @@ In the following example, there are four policies that are not signed.
 
 ### STEP 3. Sign All Policies
 Let's attach signature to all unsigned policies.
-The following example shows how to sign a policy file policy-xxxxx.yaml with the key of signer signer@enterprise.com. You can use this [script](https://github.com/open-cluster-management/integrity-shield/blob/master/scripts/gpg-annotation-sign.sh) to sign a policy.
+The following example shows how to sign a policy file policy-xxxxx.yaml with the key of signer signer@enterprise.com. You can use this [script](https://github.com/stolostron/integrity-shield/blob/master/scripts/gpg-annotation-sign.sh) to sign a policy.
 ```
 # CAUTION: Specified YAML file is modified with new signature
 ./gpg-annotation-sign.sh signer@enterprise.com policy-xxxxx.yaml

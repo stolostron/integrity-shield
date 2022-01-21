@@ -12,18 +12,18 @@ The following describes how to create the policy only in 3 steps.
 
 ### Create the ACM policy called `policy-integrity-shield-events` in the ACM hub cluster.
    
-  You will use the ACM policy called `policy-integrity-shield-events`, which is specified in [policy-integrity-shield-events.yaml](https://github.com/open-cluster-management/policy-collection/blob/master/community/CM-Configuration-Management/policy-integrity-shield-events.yaml), and the following describes how to create this policy on your ACM hub cluster.
+  You will use the ACM policy called `policy-integrity-shield-events`, which is specified in [policy-integrity-shield-events.yaml](https://github.com/stolostron/policy-collection/blob/master/community/CM-Configuration-Management/policy-integrity-shield-events.yaml), and the following describes how to create this policy on your ACM hub cluster.
    
-  1. Retrieve the source from [policy-collection](https://github.com/open-cluster-management/policy-collection) Git repository.
+  1. Retrieve the source from [policy-collection](https://github.com/stolostron/policy-collection) Git repository.
    
-      Following the [installation doc](../README_ENABLE_ISHIELD_PROTECTION_ACM_ENV.md), a forked repository of [policy-collection](https://github.com/open-cluster-management/policy-collection) should be ready on your machine. (Otherwise, please finish it before this doc.)
+      Following the [installation doc](../README_ENABLE_ISHIELD_PROTECTION_ACM_ENV.md), a forked repository of [policy-collection](https://github.com/stolostron/policy-collection) should be ready on your machine. (Otherwise, please finish it before this doc.)
 
       You can find `policy-integrity-shield-events.yaml` in the directory `community/CM-Configuration-Management/`.
 
       ---
       `Optional Step) Configure the placement rule`
 
-      The [PlacementRule](https://github.com/open-cluster-management/policy-collection) in `policy-integrity-shield-events.yaml` determines which ACM managed clusters Integrity Shield should be deployed. 
+      The [PlacementRule](https://github.com/stolostron/policy-collection) in `policy-integrity-shield-events.yaml` determines which ACM managed clusters Integrity Shield should be deployed. 
 
       If you would like to use your own PlacementRule instead of the default one, please configure it.
 
@@ -51,7 +51,7 @@ The following describes how to create the policy only in 3 steps.
      Here is the example when you sign the policy `policy-integrity-shield-events.yaml` with the key of signer signer@enterprise.com:
 
      ```
-     curl -s  https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
+     curl -s  https://raw.githubusercontent.com/stolostron/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
               signer@enterprise.com \
               policy-integrity-shield-events.yaml
      ```

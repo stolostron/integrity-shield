@@ -270,11 +270,11 @@
 <li>Install Integrity Shield Operator</li>
 </ol>
 <p>This Operator will be installed in the &quot;integrity-shield-operator-system&quot; namespace.</p>
-<pre><code>kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/deploy/integrity-shield-operator-latest.yaml
+<pre><code>kubectl create -f https://raw.githubusercontent.com/stolostron/integrity-shield/master/integrity-shield-operator/deploy/integrity-shield-operator-latest.yaml
 </code></pre><ol>
 <li>Install Integrity Shield CR</li>
 </ol>
-<pre><code>kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
+<pre><code>kubectl create -f https://raw.githubusercontent.com/stolostron/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
 </code></pre><h2 id="operator-lifecycle-manager-olm">Operator Lifecycle Manager (OLM)</h2>
 <ol>
 <li>Install Integrity Shield Operator using OLM</li>
@@ -283,7 +283,7 @@
 <ol>
 <li>Install Integrity Shield CR</li>
 </ol>
-<pre><code>kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
+<pre><code>kubectl create -f https://raw.githubusercontent.com/stolostron/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
 </code></pre><h2 id="verify-installation">Verify installation</h2>
 <p>To verify that installation was completed successfully,
 run the following command.
@@ -293,7 +293,7 @@ NAME                                                            READY   STATUS  
 integrity-shield-api-7b7f768bf7-fhrpg                           1/1     Running   0          20s
 integrity-shield-observer-5bc66f75f7-tn8fw                      1/1     Running   0          25s
 integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running   0          3h5m
-</code></pre><p>After installation, you can protect Kubernetes resources by following this <a href="https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md" target="_blank">document</a>.</p>
+</code></pre><p>After installation, you can protect Kubernetes resources by following this <a href="https://github.com/stolostron/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md" target="_blank">document</a>.</p>
 
                                 
                                 </section>
@@ -337,7 +337,7 @@ integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running 
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Installation","level":"1.3","depth":1,"next":{"title":"Getting Started","level":"1.4","depth":1,"path":"README_GETTING-STARTED-TUTORIAL.md","ref":"README_GETTING-STARTED-TUTORIAL.md","articles":[]},"previous":{"title":"Overview","level":"1.2","depth":1,"path":"README_OVERVIEW.md","ref":"README_OVERVIEW.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_INSTALL.md","mtime":"2022-01-21T06:06:22.668Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-01-21T06:06:52.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Installation","level":"1.3","depth":1,"next":{"title":"Getting Started","level":"1.4","depth":1,"path":"README_GETTING-STARTED-TUTORIAL.md","ref":"README_GETTING-STARTED-TUTORIAL.md","articles":[]},"previous":{"title":"Overview","level":"1.2","depth":1,"path":"README_OVERVIEW.md","ref":"README_OVERVIEW.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_INSTALL.md","mtime":"2022-01-21T22:35:48.447Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-01-21T22:36:20.198Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

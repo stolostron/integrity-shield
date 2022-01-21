@@ -304,9 +304,9 @@ You can disable the generation of the event by setting false here.</p>
 <h3 id="define-images">Define images</h3>
 <p>When you want to use your own images, you can set images like this.</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">  shieldApi:</span>
-<span class="hljs-attr">    image:</span> quay.io/open-cluster-management/integrity-shield-api
+<span class="hljs-attr">    image:</span> quay.io/stolostron/integrity-shield-api
 <span class="hljs-attr">  observer:</span> 
-<span class="hljs-attr">    image:</span> quay.io/open-cluster-management/integrity-shield-observer
+<span class="hljs-attr">    image:</span> quay.io/stolostron/integrity-shield-observer
 </code></pre>
 <p>Image version will automatically be set to the same version as Integrity Shield. If you want to use a different tag, you can define the tag as follows.</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">  shieldApi:</span>
@@ -381,7 +381,7 @@ exclude_namespaces = [
                   ]
 </code></pre>
 <h2 id="admission-controller-configuration">Admission controller configuration</h2>
-<p>If you want to try Integrity shield with its own admission controller, you can install it by this IntegrityShield custom resource <a href="https://github.com/open-cluster-management/integrity-shield/blob/master/integrity-shield-operator/config/samples/apis_v1_integrityshield_ac.yaml" target="_blank">apis_v1_integrityshield_ac.yaml</a>.</p>
+<p>If you want to try Integrity shield with its own admission controller, you can install it by this IntegrityShield custom resource <a href="https://github.com/stolostron/integrity-shield/blob/master/integrity-shield-operator/config/samples/apis_v1_integrityshield_ac.yaml" target="_blank">apis_v1_integrityshield_ac.yaml</a>.</p>
 <h3 id="define-admission-controller-setting">Define admission controller setting</h3>
 <ul>
 <li>allow: You can define Kinds that do not need to be processed by Integrity Shield.</li>
@@ -451,7 +451,7 @@ exclude_namespaces = [
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"next":{"title":"Demo","level":"1.9","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_ISHIELD_OPERATOR_CR.md","mtime":"2022-01-21T06:06:22.668Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-01-21T06:06:52.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"next":{"title":"Demo","level":"1.9","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_ISHIELD_OPERATOR_CR.md","mtime":"2022-01-21T22:35:48.447Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-01-21T22:36:20.198Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

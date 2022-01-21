@@ -2,7 +2,7 @@
 
 Kubernetes resources are represented as YAML files, which are applied to clusters when you create and update the resource. The YAML content is designed carefully to achieve the application desired state and should not be tampered with. If the YAML content is modified maliciously or accidentally, and applied to a cluster without notice, the cluster moves to an unexpected state.
 
-[K8s Integrity Shield](https://github.com/open-cluster-management/integrity-shield) provides preventive control for enforcing signature verification for any requests to create or update resources. This operator supports the installation and management of K8s Integrity Shield on cluster. 
+[K8s Integrity Shield](https://github.com/stolostron/integrity-shield) provides preventive control for enforcing signature verification for any requests to create or update resources. This operator supports the installation and management of K8s Integrity Shield on cluster. 
 
 Two modes are selectively enabled on your cluster. 
 - Enforce (Admission Control): Block to deploy unauthorized Kubernetes resources. K8s Integrity Shield works with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable admission control based on signature verification for Kubernetes resources.
@@ -19,7 +19,7 @@ The installation instructions to deploy OPA/Gatekeeper components is [here](http
 ## Installation
 Install K8s Integrity Shield Operator by following the instruction after clicking Install button at the top right. Then you can create the operator Custom Resource `IntegrityShield` to complete installation.
 
-If you want to change the settings such as default run mode (detection/enforcement) or audit interval,  please check [here](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).
+If you want to change the settings such as default run mode (detection/enforcement) or audit interval,  please check [here](https://github.com/stolostron/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).
 
 To verify that installation was completed successfully,
 run the following command.
@@ -32,7 +32,7 @@ integrity-shield-observer-5bc66f75f7-tn8fw                      1/1     Running 
 integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running   0          3h5m
 ```
 
-After installation, you can protect Kubernetes resources by following this [document](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md).
+After installation, you can protect Kubernetes resources by following this [document](https://github.com/stolostron/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md).
 
 ## Supported Versions
 ### Platform

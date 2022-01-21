@@ -7,7 +7,7 @@ This section describe the steps for deploying Integrity Shield (IShield) on your
     git clone this repository and moved to `integrity-enforcer` directory
 
     ```
-    $ git clone https://github.com/open-cluster-management/integrity-shield.git
+    $ git clone https://github.com/stolostron/integrity-shield.git
     $ cd integrity-shield
     $ pwd /home/repo/integrity-enforcer
     ```
