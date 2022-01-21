@@ -23,9 +23,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/open-cluster-management/integrity-shield/reporter/pkg/client/manifestintegritydecision/clientset/versioned"
-	internalinterfaces "github.com/open-cluster-management/integrity-shield/reporter/pkg/client/manifestintegritydecision/informers/externalversions/internalinterfaces"
-	manifestintegritydecision "github.com/open-cluster-management/integrity-shield/reporter/pkg/client/manifestintegritydecision/informers/externalversions/manifestintegritydecision"
+	versioned "github.com/stolostron/integrity-shield/reporter/pkg/client/manifestintegritydecision/clientset/versioned"
+	internalinterfaces "github.com/stolostron/integrity-shield/reporter/pkg/client/manifestintegritydecision/informers/externalversions/internalinterfaces"
+	manifestintegritydecision "github.com/stolostron/integrity-shield/reporter/pkg/client/manifestintegritydecision/informers/externalversions/manifestintegritydecision"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

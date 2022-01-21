@@ -17,7 +17,7 @@
 package v1
 
 import (
-	manifestintegritystate "github.com/open-cluster-management/integrity-shield/observer/pkg/apis/manifestintegritystate"
+	manifestintegritystate "github.com/stolostron/integrity-shield/observer/pkg/apis/manifestintegritystate"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"

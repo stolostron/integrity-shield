@@ -60,9 +60,9 @@ We prepared this profile to allow internal operations that occur in a typical Ku
 When you want to use your own images, you can set images like this.
 ```yaml
   shieldApi:
-    image: quay.io/open-cluster-management/integrity-shield-api
+    image: quay.io/stolostron/integrity-shield-api
   observer: 
-    image: quay.io/open-cluster-management/integrity-shield-observer
+    image: quay.io/stolostron/integrity-shield-observer
 ```
 Image version will automatically be set to the same version as Integrity Shield. If you want to use a different tag, you can define the tag as follows.
 ```yaml
@@ -149,7 +149,7 @@ exclude_namespaces = [
 ```
 
 ## Admission controller configuration
-If you want to try Integrity shield with its own admission controller, you can install it by this IntegrityShield custom resource [apis_v1_integrityshield_ac.yaml](https://github.com/open-cluster-management/integrity-shield/blob/master/integrity-shield-operator/config/samples/apis_v1_integrityshield_ac.yaml).
+If you want to try Integrity shield with its own admission controller, you can install it by this IntegrityShield custom resource [apis_v1_integrityshield_ac.yaml](https://github.com/stolostron/integrity-shield/blob/master/integrity-shield-operator/config/samples/apis_v1_integrityshield_ac.yaml).
 
 ### Define admission controller setting
 - allow: You can define Kinds that do not need to be processed by Integrity Shield.

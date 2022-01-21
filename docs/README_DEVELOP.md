@@ -28,7 +28,7 @@ This section describes the steps for deploying Integrity Shield on your cluster.
 Git clone this repository and moved to `integrity-shield` directory
 
 ```
-$ git clone https://github.com/open-cluster-management/integrity-shield.git
+$ git clone https://github.com/stolostron/integrity-shield.git
 $ cd integrity-shield
 $ pwd /home/repo/integrity-shield
 ```

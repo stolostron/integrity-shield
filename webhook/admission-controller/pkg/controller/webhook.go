@@ -24,8 +24,8 @@ import (
 	"time"
 
 	"github.com/ghodss/yaml"
-	"github.com/open-cluster-management/integrity-shield/shield/pkg/shield"
-	acconfig "github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/config"
+	"github.com/stolostron/integrity-shield/shield/pkg/shield"
+	acconfig "github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/config"
 	"github.com/pkg/errors"
 	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/kubeutil"

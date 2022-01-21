@@ -19,7 +19,7 @@ limitations under the License.
 package v1
 
 import (
-	internalinterfaces "github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/informers/externalversions/internalinterfaces"
+	internalinterfaces "github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to all the informers in this group version.

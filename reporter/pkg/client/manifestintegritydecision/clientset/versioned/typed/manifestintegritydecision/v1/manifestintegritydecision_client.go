@@ -19,8 +19,8 @@ limitations under the License.
 package v1
 
 import (
-	v1 "github.com/open-cluster-management/integrity-shield/reporter/pkg/apis/manifestintegritydecision/v1"
-	"github.com/open-cluster-management/integrity-shield/reporter/pkg/client/manifestintegritydecision/clientset/versioned/scheme"
+	v1 "github.com/stolostron/integrity-shield/reporter/pkg/apis/manifestintegritydecision/v1"
+	"github.com/stolostron/integrity-shield/reporter/pkg/client/manifestintegritydecision/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 

@@ -23,12 +23,12 @@ import (
 	"strconv"
 	"time"
 
-	mid "github.com/open-cluster-management/integrity-shield/reporter/pkg/apis/manifestintegritydecision/v1"
+	mid "github.com/stolostron/integrity-shield/reporter/pkg/apis/manifestintegritydecision/v1"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/hpcloud/tail"
-	midclient "github.com/open-cluster-management/integrity-shield/reporter/pkg/client/manifestintegritydecision/clientset/versioned/typed/manifestintegritydecision/v1"
-	kubeutil "github.com/open-cluster-management/integrity-shield/shield/pkg/kubernetes"
+	midclient "github.com/stolostron/integrity-shield/reporter/pkg/client/manifestintegritydecision/clientset/versioned/typed/manifestintegritydecision/v1"
+	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"

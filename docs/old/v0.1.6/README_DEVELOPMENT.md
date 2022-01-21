@@ -2,7 +2,7 @@
 
 ## Clone Repo
 ```
-$ git clone git@github.com:open-cluster-management/integrity-shield.git
+$ git clone git@github.com:stolostron/integrity-shield.git
 $ cd integrity-shield
 ```
 

@@ -43,12 +43,12 @@ This Operator will be installed in the "integrity-shield-operator-system" namesp
 If you want to install another namespace, please check this [document](docs/README_DEVELOP.md).
 
 ```
-kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/deploy/integrity-shield-operator-latest.yaml
+kubectl create -f https://raw.githubusercontent.com/stolostron/integrity-shield/master/integrity-shield-operator/deploy/integrity-shield-operator-latest.yaml
 ```
 
 2. Install Integrity Shield CR
 ```
-kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
+kubectl create -f https://raw.githubusercontent.com/stolostron/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
 ```
 
 ## Tutorials

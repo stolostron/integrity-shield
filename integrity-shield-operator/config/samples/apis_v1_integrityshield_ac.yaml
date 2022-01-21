@@ -243,7 +243,7 @@ spec:
   admissionController: 
     name: integrity-shield-validator
     imagePullPolicy: IfNotPresent
-     # image: quay.io/open-cluster-management/integrity-shield-admission-controller
+     # image: quay.io/stolostron/integrity-shield-admission-controller
     image: localhost:5000/integrity-shield-admission-controller
     port: 9443
     log: 
@@ -365,7 +365,7 @@ spec:
     enabled: true
     name: integrity-shield-observer
     imagePullPolicy: IfNotPresent
-    # image: quay.io/open-cluster-management/integrity-shield-observer
+    # image: quay.io/stolostron/integrity-shield-observer
     image: localhost:5000/integrity-shield-observer
     selector:     
       app: integrity-shield-observer

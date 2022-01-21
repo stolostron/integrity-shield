@@ -2088,7 +2088,7 @@ spec:
         - --leader-elect
         command:
         - /ishield-op-app/manager
-        image: quay.io/open-cluster-management/integrity-shield-operator:0.3.0
+        image: quay.io/stolostron/integrity-shield-operator:0.3.0
         imagePullPolicy: Always
         livenessProbe:
           httpGet:

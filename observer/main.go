@@ -20,7 +20,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/open-cluster-management/integrity-shield/observer/pkg/observer"
+	"github.com/stolostron/integrity-shield/observer/pkg/observer"
 )
 
 func main() {

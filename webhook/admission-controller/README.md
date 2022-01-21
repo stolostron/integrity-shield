@@ -2,7 +2,7 @@
 
 You can use an admission controller instead of OPA/Gatekeeper.  
 ### Install
-Integrity shield with its own admission controller can be installed by this operator cr [apis_v1_integrityshield_ac.yaml](https://github.com/open-cluster-management/integrity-shield/blob/master/integrity-shield-operator/config/samples/apis_v1_integrityshield_ac.yaml).
+Integrity shield with its own admission controller can be installed by this operator cr [apis_v1_integrityshield_ac.yaml](https://github.com/stolostron/integrity-shield/blob/master/integrity-shield-operator/config/samples/apis_v1_integrityshield_ac.yaml).
 
 ### Enable protection
 You can decide which resources to be protected in the custom resource called `ManifestIntegrityProfile` instead of OPA/Gatekeeper constraint.

@@ -17,7 +17,7 @@
 package v1
 
 import (
-	mie "github.com/open-cluster-management/integrity-shield/reporter/pkg/apis/manifestintegritydecision"
+	mie "github.com/stolostron/integrity-shield/reporter/pkg/apis/manifestintegritydecision"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"

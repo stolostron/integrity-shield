@@ -19,7 +19,7 @@ package main
 import (
 	"github.com/hpcloud/tail"
 	"github.com/jasonlvhit/gocron"
-	reporter "github.com/open-cluster-management/integrity-shield/reporter/pkg/reporter"
+	reporter "github.com/stolostron/integrity-shield/reporter/pkg/reporter"
 
 	log "github.com/sirupsen/logrus"
 )

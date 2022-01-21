@@ -19,8 +19,8 @@ limitations under the License.
 package manifestintegritydecision
 
 import (
-	internalinterfaces "github.com/open-cluster-management/integrity-shield/reporter/pkg/client/manifestintegritydecision/informers/externalversions/internalinterfaces"
-	v1 "github.com/open-cluster-management/integrity-shield/reporter/pkg/client/manifestintegritydecision/informers/externalversions/manifestintegritydecision/v1"
+	internalinterfaces "github.com/stolostron/integrity-shield/reporter/pkg/client/manifestintegritydecision/informers/externalversions/internalinterfaces"
+	v1 "github.com/stolostron/integrity-shield/reporter/pkg/client/manifestintegritydecision/informers/externalversions/manifestintegritydecision/v1"
 )
 
 // Interface provides access to each of this group's versions.

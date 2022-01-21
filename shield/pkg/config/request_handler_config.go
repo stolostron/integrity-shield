@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/ghodss/yaml"
-	kubeutil "github.com/open-cluster-management/integrity-shield/shield/pkg/kubernetes"
+	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	"github.com/pkg/errors"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"

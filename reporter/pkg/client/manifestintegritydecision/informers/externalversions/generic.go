@@ -21,7 +21,7 @@ package externalversions
 import (
 	"fmt"
 
-	v1 "github.com/open-cluster-management/integrity-shield/reporter/pkg/apis/manifestintegritydecision/v1"
+	v1 "github.com/stolostron/integrity-shield/reporter/pkg/apis/manifestintegritydecision/v1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
 )

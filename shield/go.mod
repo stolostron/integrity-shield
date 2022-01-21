@@ -1,4 +1,4 @@
-module github.com/open-cluster-management/integrity-shield/shield
+module github.com/stolostron/integrity-shield/shield
 
 go 1.16
 
@@ -15,4 +15,4 @@ require (
 	sigs.k8s.io/controller-runtime v0.11.0-beta.0.0.20211115163949-4d10a0615b11
 )
 
-replace github.com/open-cluster-management/integrity-shield/shield => ./
+replace github.com/stolostron/integrity-shield/shield => ./

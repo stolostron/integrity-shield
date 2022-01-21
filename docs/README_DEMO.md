@@ -13,7 +13,7 @@ This section describe how to use demo script for deploying Integrity Shield (ISh
 git clone this repository and moved to `integrity-enforcer` directory
 
 ```
-$ git clone https://github.com/open-cluster-management/integrity-shield.git
+$ git clone https://github.com/stolostron/integrity-shield.git
 $ cd integrity-shield
 $ pwd /home/repo/integrity-enforcer
 ```

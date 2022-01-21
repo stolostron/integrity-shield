@@ -1,4 +1,4 @@
-module github.com/open-cluster-management/integrity-shield/integrity-shield-operator
+module github.com/stolostron/integrity-shield/integrity-shield-operator
 
 go 1.16
 
@@ -7,9 +7,9 @@ require (
 	github.com/go-logr/logr v1.2.0
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.17.0
-	github.com/open-cluster-management/integrity-shield/webhook/admission-controller v0.0.0-00010101000000-000000000000
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20210714212123-82a32eecb70d
 	github.com/openshift/api v3.9.0+incompatible
+	github.com/stolostron/integrity-shield/webhook/admission-controller v0.0.0-00010101000000-000000000000
 	k8s.io/api v0.23.0
 	k8s.io/apiextensions-apiserver v0.23.0-alpha.4
 	k8s.io/apimachinery v0.23.0
@@ -19,7 +19,7 @@ require (
 )
 
 replace (
-	github.com/open-cluster-management/integrity-shield/integrity-shield-operator => ./
-	github.com/open-cluster-management/integrity-shield/shield => ../shield
-	github.com/open-cluster-management/integrity-shield/webhook/admission-controller => ../webhook/admission-controller
+	github.com/stolostron/integrity-shield/integrity-shield-operator => ./
+	github.com/stolostron/integrity-shield/shield => ../shield
+	github.com/stolostron/integrity-shield/webhook/admission-controller => ../webhook/admission-controller
 )

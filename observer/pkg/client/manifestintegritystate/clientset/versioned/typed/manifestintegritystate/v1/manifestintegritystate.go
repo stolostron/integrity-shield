@@ -22,8 +22,8 @@ import (
 	"context"
 	"time"
 
-	v1 "github.com/open-cluster-management/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
-	scheme "github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/scheme"
+	v1 "github.com/stolostron/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
+	scheme "github.com/stolostron/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/scheme"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"

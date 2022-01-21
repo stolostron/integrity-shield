@@ -1,7 +1,7 @@
 
 # How to enable Integrity Shield protection in an ACM managed cluster.
 
-The document describe how to enable Integrity Shield (IShield) protection in an ACM managed cluster to protect integrity of Kubernetes resources. In this usecase, you will see how to protect integrity of [ACM policies](https://github.com/open-cluster-management/policy-collection). 
+The document describe how to enable Integrity Shield (IShield) protection in an ACM managed cluster to protect integrity of Kubernetes resources. In this usecase, you will see how to protect integrity of [ACM policies](https://github.com/stolostron/policy-collection). 
 
 ## Prerequisites
 
@@ -46,13 +46,13 @@ oc create ns <custom namespace>
 
 ### Step 3: Create the ACM policy called `policy-integrity-shield` in the ACM hub cluster.
    
-   You will use the ACM policy called `policy-integrity-shield`, which is specified in [policy-integrity-shield.yaml](https://github.com/open-cluster-management/policy-collection/blob/master/community/CM-Configuration-Management/policy-integrity-shield.yaml), to enable Integrity Shield protection in an ACM managed cluster(s).
+   You will use the ACM policy called `policy-integrity-shield`, which is specified in [policy-integrity-shield.yaml](https://github.com/stolostron/policy-collection/blob/master/community/CM-Configuration-Management/policy-integrity-shield.yaml), to enable Integrity Shield protection in an ACM managed cluster(s).
 
    The following steps shows how to retrive `policy-integrity-shield` and configure it.
    
- 1. Retrive the source from [policy-collection](https://github.com/open-cluster-management/policy-collection) Git repository.
+ 1. Retrive the source from [policy-collection](https://github.com/stolostron/policy-collection) Git repository.
    
-      Fork [policy-collection](https://github.com/open-cluster-management/policy-collection) GitHub repository.  
+      Fork [policy-collection](https://github.com/stolostron/policy-collection) GitHub repository.  
    
       Then, `git clone` the forked repository and move to `policy-collection` directory.
       
@@ -118,7 +118,7 @@ oc create ns <custom namespace>
 
      c)  Configure the placement rule 
 
-      The [placement rule](https://github.com/open-cluster-management/policy-collection) in `policy-integrity-shield.yaml` determines which ACM managed clusters Integrity Shield should be deployed.  
+      The [placement rule](https://github.com/stolostron/policy-collection) in `policy-integrity-shield.yaml` determines which ACM managed clusters Integrity Shield should be deployed.  
 
       By default, `policy-integrity-shield.yaml` includes a `placement rule` as shown in the following example. 
 
@@ -146,7 +146,7 @@ oc create ns <custom namespace>
      Here is the example when you sign the policy `policy-integrity-shield.yaml` with the key of signer signer@enterprise.com:
 
      ```
-     curl -s  https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
+     curl -s  https://raw.githubusercontent.com/stolostron/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
               signer@enterprise.com \
               policy-integrity-shield.yaml
      ```
@@ -177,7 +177,7 @@ oc create ns <custom namespace>
         $ bash ./deploy.sh -u https://github.com/<YOUR-ORG-NAME>/policy-collection.git -p community -n policy-community
       ``` 
     
-      Refer to general instructions to deploy ACM policies to an ACM hub cluster as well as ACM managed cluster(s) using GitOps in [doc](https://github.com/open-cluster-management/policy-collection).
+      Refer to general instructions to deploy ACM policies to an ACM hub cluster as well as ACM managed cluster(s) using GitOps in [doc](https://github.com/stolostron/policy-collection).
 
       After ACM hub cluster syncs the polices in the GitHub repository, an ACM policy called `policy-integrity-shield`  will be created in the ACM hub cluster and in an ACM managed cluster(s) which are selected based on the placement rule in the policy. 
       
@@ -195,7 +195,7 @@ Here is the example when you sign the policy policy-ocp4-certs.yaml with the key
 
 
 ```
-curl -s  https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
+curl -s  https://raw.githubusercontent.com/stolostron/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
               signer@enterprise.com \
               policy-ocp4-certs.yaml
 ```
@@ -213,6 +213,6 @@ dir="$2"
 find $dir -type f -name "*.yaml" | while read file;
 do
   echo Signing  $file
-  curl -s https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s $signer "$file"
+  curl -s https://raw.githubusercontent.com/stolostron/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s $signer "$file"
 done
 ```

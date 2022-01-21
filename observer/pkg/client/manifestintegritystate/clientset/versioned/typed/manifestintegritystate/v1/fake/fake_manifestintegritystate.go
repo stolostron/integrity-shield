@@ -21,7 +21,7 @@ package fake
 import (
 	"context"
 
-	manifestintegritystatev1 "github.com/open-cluster-management/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
+	manifestintegritystatev1 "github.com/stolostron/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

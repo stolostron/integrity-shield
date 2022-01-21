@@ -19,8 +19,8 @@ limitations under the License.
 package v1
 
 import (
-	v1 "github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/apis/manifestintegrityprofile/v1"
-	"github.com/open-cluster-management/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/clientset/versioned/scheme"
+	v1 "github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/apis/manifestintegrityprofile/v1"
+	"github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 

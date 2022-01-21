@@ -26,9 +26,9 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
-	ishieldimage "github.com/open-cluster-management/integrity-shield/shield/pkg/image"
-	kubeutil "github.com/open-cluster-management/integrity-shield/shield/pkg/kubernetes"
+	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
+	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
+	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/mapnode"
 	log "github.com/sirupsen/logrus"

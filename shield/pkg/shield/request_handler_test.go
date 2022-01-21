@@ -22,7 +22,7 @@ import (
 	"testing"
 
 	"github.com/ghodss/yaml"
-	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
+	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"

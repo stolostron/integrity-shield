@@ -39,13 +39,13 @@ You will use `policy-integrity-shield` to disable Integrity Shield protection in
                   name: integrity-shield-server
                 spec:
                   logger:
-                    image: quay.io/open-cluster-management/integrity-shield-logging:0.2.0
+                    image: quay.io/stolostron/integrity-shield-logging:0.2.0
                   server:
-                    image: quay.io/open-cluster-management/integrity-shield-server:0.2.0
+                    image: quay.io/stolostron/integrity-shield-server:0.2.0
       ```
 3.  Create signature annotation in `policy-integrity-shield.yaml` as below.
 
-    Use the utility script [gpg-annotation-sign.sh](https://github.com/open-cluster-management/integrity-shield/blob/master/scripts/gpg-annotation-sign.sh) for signing updated `policy-integrity-shield` to be deployed to an ACM managed cluster.
+    Use the utility script [gpg-annotation-sign.sh](https://github.com/stolostron/integrity-shield/blob/master/scripts/gpg-annotation-sign.sh) for signing updated `policy-integrity-shield` to be deployed to an ACM managed cluster.
 
       The following example shows how to use the utility script `gpg-annotation-sign.sh` to append signature annotations to `policy-integrity-shield.yaml`, with the following parameters:
       - `signer@enterprise.com` - The default `signer` email, or change it to your own `signer` email.
@@ -53,7 +53,7 @@ You will use `policy-integrity-shield` to disable Integrity Shield protection in
 
       ```
       $ cd policy-collection
-      $ curl -s  https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
+      $ curl -s  https://raw.githubusercontent.com/stolostron/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
                     signer@enterprise.com \
                     community/CM-Configuration-Management/policy-integrity-shield.yaml
       ```

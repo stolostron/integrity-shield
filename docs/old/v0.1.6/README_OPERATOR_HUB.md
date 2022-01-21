@@ -100,7 +100,7 @@ You can sign resources with the utility script, which is available from our repo
 For example of singing a YAML file `/tmp/test-cm.yaml` as `signer@enterprise.com`, use the utility script as shown below. This script would modify the original input file (`/tmp/test-cm.yaml`) by adding signature, message annotations to it.
 
 ```
-$ curl -s https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
+$ curl -s https://raw.githubusercontent.com/stolostron/integrity-shield/master/scripts/gpg-annotation-sign.sh | bash -s \
   signer@enterprise.com \
   /tmp/test-cm.yaml
 ```

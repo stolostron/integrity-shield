@@ -19,9 +19,9 @@ limitations under the License.
 package fake
 
 import (
-	clientset "github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned"
-	apisv1 "github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
-	fakeapisv1 "github.com/open-cluster-management/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1/fake"
+	clientset "github.com/stolostron/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned"
+	apisv1 "github.com/stolostron/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
+	fakeapisv1 "github.com/stolostron/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"

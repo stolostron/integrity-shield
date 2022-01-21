@@ -19,7 +19,7 @@ package resources
 import (
 	"strings"
 
-	apiv1 "github.com/open-cluster-management/integrity-shield/integrity-shield-operator/api/v1"
+	apiv1 "github.com/stolostron/integrity-shield/integrity-shield-operator/api/v1"
 	"github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1beta1"
 	extv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

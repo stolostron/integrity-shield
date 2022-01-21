@@ -19,7 +19,7 @@ limitations under the License.
 package scheme
 
 import (
-	apisv1 "github.com/open-cluster-management/integrity-shield/reporter/pkg/apis/manifestintegritydecision/v1"
+	apisv1 "github.com/stolostron/integrity-shield/reporter/pkg/apis/manifestintegritydecision/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

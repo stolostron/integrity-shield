@@ -21,7 +21,7 @@ metadata:
             "observer": {
               "enabled": true,
               "exportDetailResult": true,
-              "image": "quay.io/open-cluster-management/integrity-shield-observer",
+              "image": "quay.io/stolostron/integrity-shield-observer",
               "imagePullPolicy": "Always",
               "interval": "5",
               "logLevel": "info",
@@ -53,7 +53,7 @@ metadata:
               "serviceAccountName": "integrity-shield-sa"
             },
             "shieldApi": {
-              "image": "quay.io/open-cluster-management/integrity-shield-api",
+              "image": "quay.io/stolostron/integrity-shield-api",
               "imagePullPolicy": "Always",
               "name": "integrity-shield-api",
               "port": 8080,
@@ -77,7 +77,7 @@ metadata:
     capabilities: Basic Install
     operators.operatorframework.io/builder: operator-sdk-v1.10.0+git
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
-    containerImage:  quay.io/open-cluster-management/integrity-shield-operator:0.3.1
+    containerImage:  quay.io/stolostron/integrity-shield-operator:0.3.1
   name: integrity-shield-operator.v0.3.1
   namespace: placeholder
 spec:
@@ -92,7 +92,7 @@ spec:
   description: |-
     Kubernetes resources are represented as YAML files, which are applied to clusters when you create and update the resource. The YAML content is designed carefully to achieve the application desired state and should not be tampered with. If the YAML content is modified maliciously or accidentally, and applied to a cluster without notice, the cluster moves to an unexpected state.
 
-    [K8s Integrity Shield](https://github.com/open-cluster-management/integrity-shield) provides preventive control for enforcing signature verification for any requests to create or update resources. This operator supports the installation and management of K8s Integrity Shield on cluster.
+    [K8s Integrity Shield](https://github.com/stolostron/integrity-shield) provides preventive control for enforcing signature verification for any requests to create or update resources. This operator supports the installation and management of K8s Integrity Shield on cluster.
 
     Two modes are selectively enabled on your cluster.
     - Enforce (Admission Control): Block to deploy unauthorized Kubernetes resources. K8s Integrity Shield works with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable admission control based on signature verification for Kubernetes resources.
@@ -109,7 +109,7 @@ spec:
     ## Installation
     Install K8s Integrity Shield Operator by following the instruction after clicking Install button at the top right. Then you can create the operator Custom Resource `IntegrityShield` to complete installation.
 
-    If you want to change the settings such as default run mode (detection/enforcement) or audit interval,  please check [here](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).
+    If you want to change the settings such as default run mode (detection/enforcement) or audit interval,  please check [here](https://github.com/stolostron/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).
 
     To verify that installation was completed successfully,
     run the following command.
@@ -122,7 +122,7 @@ spec:
     integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running   0          3h5m
     ```
 
-    After installation, you can protect Kubernetes resources by following this [document](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md).
+    After installation, you can protect Kubernetes resources by following this [document](https://github.com/stolostron/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md).
 
     ## Supported Versions
     ### Platform
@@ -272,7 +272,7 @@ spec:
                       - --leader-elect
                     command:
                       - /ishield-op-app/manager
-                    image: quay.io/open-cluster-management/integrity-shield-operator:0.3.1
+                    image: quay.io/stolostron/integrity-shield-operator:0.3.1
                     imagePullPolicy: Always
                     livenessProbe:
                       httpGet:
@@ -336,9 +336,9 @@ spec:
     - integrity
   links:
     - name: Integrity Shield Operator
-      url: https://github.com/open-cluster-management/integrity-shield
+      url: https://github.com/stolostron/integrity-shield
     - name: Operator Documentation
-      url: https://github.com/open-cluster-management/integrity-shield/tree/master/docs
+      url: https://github.com/stolostron/integrity-shield/tree/master/docs
   maintainers:
     - email: acm-contact@redhat.com
       name: Community

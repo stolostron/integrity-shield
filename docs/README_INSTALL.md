@@ -12,13 +12,13 @@ You can install Integrity Shield the following two steps.
 
 This Operator will be installed in the "integrity-shield-operator-system" namespace.
 ```
-kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/deploy/integrity-shield-operator-latest.yaml
+kubectl create -f https://raw.githubusercontent.com/stolostron/integrity-shield/master/integrity-shield-operator/deploy/integrity-shield-operator-latest.yaml
 ```
 
 2. Install Integrity Shield CR
 
 ```
-kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
+kubectl create -f https://raw.githubusercontent.com/stolostron/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
 ```
 
 
@@ -30,7 +30,7 @@ Please click the `Install` button in the upper right corner of this [document](h
 2. Install Integrity Shield CR
 
 ```
-kubectl create -f https://raw.githubusercontent.com/open-cluster-management/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
+kubectl create -f https://raw.githubusercontent.com/stolostron/integrity-shield/master/integrity-shield-operator/config/samples/apis_v1_integrityshield.yaml -n integrity-shield-operator-system
 ```
 
 
@@ -46,4 +46,4 @@ integrity-shield-observer-5bc66f75f7-tn8fw                      1/1     Running 
 integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running   0          3h5m
 ```
 
-After installation, you can protect Kubernetes resources by following this [document](https://github.com/open-cluster-management/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md).
+After installation, you can protect Kubernetes resources by following this [document](https://github.com/stolostron/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md).

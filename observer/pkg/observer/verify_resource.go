@@ -22,8 +22,8 @@ import (
 	"strings"
 	"time"
 
-	k8smnfconfig "github.com/open-cluster-management/integrity-shield/shield/pkg/config"
-	ishieldimage "github.com/open-cluster-management/integrity-shield/shield/pkg/image"
+	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
+	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
