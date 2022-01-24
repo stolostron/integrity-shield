@@ -271,7 +271,7 @@ spec:
                       - --leader-elect
                     command:
                       - /ishield-op-app/manager
-                    image: localhost:5000/integrity-shield-operator:0.3.2
+                    image: quay.io/stolostron/integrity-shield-operator:0.3.2
                     imagePullPolicy: Always
                     livenessProbe:
                       httpGet:
