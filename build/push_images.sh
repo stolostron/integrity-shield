@@ -36,10 +36,10 @@ if [ -z "$ISHIELD_OBSERVER_IMAGE_NAME_AND_VERSION" ]; then
     exit 1
 fi
 
-# if [ -z "$ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION" ]; then
-#     echo "ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
-#     exit 1
-# fi
+if [ -z "$ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION" ]; then
+    echo "ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
+    exit 1
+fi
 
 if [ -z "$ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION" ]; then
     echo "ISHIELD_OPERATOR_IMAGE_NAME_AND_VERSION is empty. Please set IShield build env settings."
@@ -66,12 +66,12 @@ echo -----------------------------
 echo ""
 
 # Push integrity-shield-reporter image
-# echo -----------------------------
-# echo [3/5] Pushing integrity-shield-reporter image.
-# docker push ${ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION}
-# echo done.
-# echo -----------------------------
-# echo ""
+echo -----------------------------
+echo [3/5] Pushing integrity-shield-reporter image.
+docker push ${ISHIELD_REPORTER_IMAGE_NAME_AND_VERSION}
+echo done.
+echo -----------------------------
+echo ""
 
 
 # Push integrity-shield-admission-controller image
