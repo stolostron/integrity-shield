@@ -1,12 +1,3 @@
-
-setting image
-cp /Users/rkudo/go/src/github.com/rurikudo/ocm/integrity-shield-1/integrity-shield-operator/config/manager/kustomization.yaml /tmp/manager-kustomization.yaml  #copy original file to tmp dir.
-cd /Users/rkudo/go/src/github.com/rurikudo/ocm/integrity-shield-1/integrity-shield-operator/config/manager && kustomize edit set image controller=quay.io/stolostron/integrity-shield-operator:0.3.2
-setting namespace
-cp /Users/rkudo/go/src/github.com/rurikudo/ocm/integrity-shield-1/integrity-shield-operator/config/default/kustomization.yaml /tmp/default-kustomization.yaml  
-cd /Users/rkudo/go/src/github.com/rurikudo/ocm/integrity-shield-1/integrity-shield-operator/config/default && kustomize edit set namespace integrity-shield-operator-system
-installing operator
-kustomize build /Users/rkudo/go/src/github.com/rurikudo/ocm/integrity-shield-1/integrity-shield-operator/config/default 
 apiVersion: v1
 kind: Namespace
 metadata:
