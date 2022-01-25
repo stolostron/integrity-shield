@@ -20,7 +20,7 @@ echo "INSTALL DEPENDENCIES GOES HERE!"
 
 OS_NAME=$(uname -s)
 
-OPERATOR_SDK_VERSION=v1.1.0
+OPERATOR_SDK_VERSION=v1.15.0
 
 if ! [ -x "$(command -v operator-sdk)" ]; then
 	echo "installing operator-sdk"
