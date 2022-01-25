@@ -15,12 +15,12 @@
 #
 
 FROM registry.access.redhat.com/ubi7/ubi-minimal:7.9
-RUN mkdir /myapp 
+RUN mkdir /ishield-app 
 
-COPY build/_bin/k8s-manifest-sigstore /myapp/k8s-manifest-sigstore
+COPY build/_bin/k8s-manifest-sigstore /ishield-app/k8s-manifest-sigstore
 
-RUN chgrp -R 0 /myapp && chmod -R g=u /myapp
+RUN chgrp -R 0 /ishield-app && chmod -R g=u /ishield-app
 
-WORKDIR /myapp
+WORKDIR /ishield-app
 
-ENTRYPOINT ["/myapp/k8s-manifest-sigstore"]
+ENTRYPOINT ["/ishield-app/k8s-manifest-sigstore"]

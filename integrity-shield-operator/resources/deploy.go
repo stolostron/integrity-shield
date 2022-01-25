@@ -118,6 +118,10 @@ func BuildDeploymentForIShieldAPI(cr *apiv1.IntegrityShield) *appsv1.Deployment 
 			Name:  "COSIGN_EXPERIMENTAL",
 			Value: "1",
 		},
+		{
+			Name:  "TUF_ROOT",
+			Value: "/ishield-app/sigstore",
+		},
 	}
 	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
 		env = append(env, v1.EnvVar{
@@ -328,6 +332,10 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 			Name:  "REKOR_SERVER",
 			Value: cr.Spec.RekorServerConfig.URL,
 		},
+		{
+			Name:  "TUF_ROOT",
+			Value: "/ishield-app/sigstore",
+		},
 	}
 	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {
 		env = append(env, v1.EnvVar{
@@ -338,7 +346,7 @@ func BuildDeploymentForAdmissionController(cr *apiv1.IntegrityShield) *appsv1.De
 
 	serverContainer := v1.Container{
 		Command: []string{
-			"/myapp/k8s-manifest-sigstore",
+			"/ishield-app/k8s-manifest-sigstore",
 		},
 		Name:            cr.Spec.ControllerContainer.Name,
 		SecurityContext: cr.Spec.ControllerContainer.SecurityContext,
@@ -482,6 +490,10 @@ func BuildDeploymentForObserver(cr *apiv1.IntegrityShield) *appsv1.Deployment {
 		{
 			Name:  "REKOR_SERVER",
 			Value: cr.Spec.RekorServerConfig.URL,
+		},
+		{
+			Name:  "TUF_ROOT",
+			Value: "/ishield-app/sigstore",
 		},
 	}
 	if cr.Spec.OCIRegistryConfig.ManifestPullSecret != "" {

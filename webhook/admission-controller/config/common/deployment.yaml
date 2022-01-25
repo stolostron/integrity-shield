@@ -18,7 +18,7 @@ spec:
       serviceAccountName: validator
       containers:
       - command:
-        - /myapp/k8s-manifest-sigstore
+        - /ishield-app/k8s-manifest-sigstore
         image: k8s-manifest-sigstore
         imagePullPolicy: Always
         name: manager

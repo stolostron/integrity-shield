@@ -24,10 +24,10 @@ import (
 	"net/http"
 	"path"
 
-	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
-	"github.com/stolostron/integrity-shield/shield/pkg/shield"
 	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	log "github.com/sirupsen/logrus"
+	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
+	"github.com/stolostron/integrity-shield/shield/pkg/shield"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
@@ -42,6 +42,7 @@ func init() {
 	log.Info("Integrity Shield has been started.")
 
 	log.Info("initialize cosign.")
+	//  "TUF_ROOT" is set to "/ishield-app/sigstore"
 	_ = cosign.Initialize()
 }
 
