@@ -25,9 +25,9 @@ OPERATOR_SDK_VERSION=v1.15.0
 if ! [ -x "$(command -v operator-sdk)" ]; then
 	echo "installing operator-sdk"
 	if [[ "$OS_NAME" == "Linux" ]]; then
-		curl -L https://github.com/operator-framework/operator-sdk/releases/download/$OPERATOR_SDK_VERSION/operator-sdk-$OPERATOR_SDK_VERSION-x86_64-linux-gnu -o operator-sdk
+		curl -L https://github.com/operator-framework/operator-sdk/releases/download/$OPERATOR_SDK_VERSION/operator-sdk_linux_gnu -o operator-sdk
 	elif [[ "$OS_NAME" == "Darwin" ]]; then
-		curl -L https://github.com/operator-framework/operator-sdk/releases/download/$OPERATOR_SDK_VERSION/operator-sdk-$OPERATOR_SDK_VERSION-x86_64-apple-darwin -o operator-sdk
+		curl -L https://github.com/operator-framework/operator-sdk/releases/download/$OPERATOR_SDK_VERSION/operator-sdk_darwin_amd64 -o operator-sdk
 	fi
 	chmod +x operator-sdk
 	sudo mv operator-sdk /usr/local/bin/operator-sdk
