@@ -269,7 +269,7 @@ Please update IntegrityShield custom resource as necessary.</p>
 <h3 id="define-default-run-mode">Define default run mode</h3>
 <p>Integrity shield enforce/monitor resources according to ManifestIntegrityConstraint. The behavior when Integrity Shield verify resources is defined in action field. See <a href="README_CONSTRAINT.md#define-run-mode">Define run mode</a>.<br>When you want to change the default value, please edit here.</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">  requestHandlerConfig:</span> <span class="hljs-string">|
-</span><span class="hljs-attr">    mode:</span> detect
+</span><span class="hljs-attr">    mode:</span> inform
 </code></pre>
 <h3 id="enabledisable-side-effect">Enable/Disable side effect</h3>
 <p>Integrity Shield generates an event by default when it blocks a request because it fails to verify the signature. 
@@ -336,7 +336,7 @@ You can disable the generation of the event by setting false here.</p>
 <h3 id="define-rego-policy">Define rego policy</h3>
 <p>Integrity shield uses rego policy to work with Gatekeeper.</p>
 <ul>
-<li>enforce mode: If you want to use Integrity Shield on detection mode, please change this field to &quot;detect.&quot;</li>
+<li>enforce mode: If you want to use Integrity Shield on inform mode, please change this field to &quot;detect.&quot;</li>
 <li>skip kinds: You can define Kinds that do not need to be processed by Integrity Shield.</li>
 <li>exclude_namespaces: All resources in the listed namespace will not be processed by Integrity Shield.</li>
 </ul>
@@ -385,7 +385,7 @@ exclude_namespaces = [
 <h3 id="define-admission-controller-setting">Define admission controller setting</h3>
 <ul>
 <li>allow: You can define Kinds that do not need to be processed by Integrity Shield.</li>
-<li>mode: If you want to use Integrity Shield on detection mode, please change this field to &quot;detect.&quot;</li>
+<li>mode: If you want to use Integrity Shield on inform mode, please change this field to &quot;inform.&quot;</li>
 <li>inScopeNamespaceSelector: You can define which namespace is not checked by Integrity Shield. All resources in the exclude namespaces will not be processed by Integrity Shield.</li>
 </ul>
 <pre><code class="lang-yaml"><span class="hljs-attr"> admissionControllerConfig:</span> <span class="hljs-string">|
@@ -451,7 +451,7 @@ exclude_namespaces = [
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"next":{"title":"Demo","level":"1.9","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_ISHIELD_OPERATOR_CR.md","mtime":"2022-01-24T08:10:05.526Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-01-24T08:10:44.148Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Integrity Shield Custom Resource","level":"1.8","depth":1,"next":{"title":"Demo","level":"1.9","depth":1,"path":"README_DEMO.md","ref":"README_DEMO.md","articles":[]},"previous":{"title":"Security","level":"1.7","depth":1,"path":"README_SECURITY.md","ref":"README_SECURITY.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"style.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_ISHIELD_OPERATOR_CR.md","mtime":"2022-01-25T05:16:42.255Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-01-25T05:17:13.423Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

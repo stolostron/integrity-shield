@@ -31,10 +31,7 @@ spec:
     - sample-ns
   parameters:
     action:
-      admissionControl:
-        enforce: false
-      audit:
-        inform: true
+      mode: inform
     constraintName: configmap-constraint
     ignoreFields:
     - fields:
@@ -57,8 +54,8 @@ $ kubectl get mis --show-labels -n integrity-shield-operator-system
 
 ```
 NAME                        AGE   LABELS
-configmap-constraint        4d    integrityshield.io/verifyResourceIgnored=false,integrityshield.io/verifyResourceViolation=true
-deployment-constraint       17h   integrityshield.io/verifyResourceIgnored=false,integrityshield.io/verifyResourceViolation=false
+configmap-constraint        4d    integrityshield.io/verifyResourceViolation=true
+deployment-constraint       17h   integrityshield.io/verifyResourceViolation=false
 ```
 
 You can see whether each constraint has violations by checking `integrityshield.io/verifyResourceViolation` label.
@@ -79,7 +76,6 @@ kind: ManifestIntegrityState
 metadata:
   creationTimestamp: "2021-10-08T01:49:45Z"
   labels:
-    integrityshield.io/verifyResourceIgnored: "false"
     integrityshield.io/verifyResourceViolation: "true"
   name: configmap-constraint
   namespace: integrity-shield-operator-system
