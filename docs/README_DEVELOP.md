@@ -105,7 +105,7 @@ After successful installation, you should see a pod running in the namespace `in
 ```
 $ kubectl get pod -n integrity-shield-operator-system                                                                    
 NAME                                                            READY   STATUS    RESTARTS   AGE
-integrity-shield-api-7b7f768bf7-ppj86                           1/1     Running   0          20s
+integrity-shield-api-7b7f768bf7-ppj86                           2/2     Running   0          20s
 integrity-shield-observer-66ffcfc544-j7wqf                      1/1     Running   0          23s
 integrity-shield-operator-controller-manager-6df99c6c58-79tdn   2/2     Running   0          2m39s
 ```

@@ -168,10 +168,7 @@ spec:
   parameters:
     constraintName: configmap-constraint
     action:
-      admissionControl:
-        enforce: false
-      audit:
-        inform: true
+      mode: inform
     signers:
     - sample@signer.com
     skipObjects:

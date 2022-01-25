@@ -106,23 +106,23 @@ spec:
     [K8s Integrity Shield](https://github.com/stolostron/integrity-shield) provides preventive control for enforcing signature verification for any requests to create or update resources. This operator supports the installation and management of K8s Integrity Shield on cluster.
     Two modes are selectively enabled on your cluster.
     - Enforce (Admission Control): Block to deploy unauthorized Kubernetes resources. K8s Integrity Shield works with [OPA/Gatekeeper](https://github.com/open-policy-agent/gatekeeper) to enable admission control based on signature verification for Kubernetes resources.
-    - Detect (Continuous Monitoring): monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster
+    - Inform (Continuous Monitoring): monitor Kubernetes resource integrity and report if unauthorized Kubernetes resources are deployed on cluster
     X509, PGP and Sigstore signing are supported for singing Kubernetes manifest YAML. K8s Integrity Shield supports Sigstore signing by using [k8s-manifest-sigstore](https://github.com/sigstore/k8s-manifest-sigstore).
     ## Preparations before installation
     OPA/Gatekeeper should be deployed before installing K8s Integrity Shield.
     The installation instructions to deploy OPA/Gatekeeper components is [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/).
     ## Installation
     Install K8s Integrity Shield Operator by following the instruction after clicking Install button at the top right. Then you can create the operator Custom Resource `IntegrityShield` to complete installation.
-    If you want to change the settings such as default run mode (detection/enforcement) or audit interval,  please check [here](https://github.com/stolostron/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).
+    If you want to change the settings such as default run mode (inform/enforce) or audit interval,  please check [here](https://github.com/stolostron/integrity-shield/blob/master/docs/README_ISHIELD_OPERATOR_CR.md).
     To verify that installation was completed successfully,
     run the following command.
     The following three pods will be installed with default CR.
     ```
     $ kubectl get pod -n integrity-shield-operator-system
     NAME                                                            READY   STATUS    RESTARTS   AGE
-    integrity-shield-api-7b7f768bf7-fhrpg                           1/1     Running   0          20s
-    integrity-shield-observer-5bc66f75f7-tn8fw                      1/1     Running   0          25s
-    integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running   0          3h5m
+    integrity-shield-api-5799f69896-zbcjs                           2/2     Running   0          88s
+    integrity-shield-observer-757f58f7d7-7pf5h                      1/1     Running   0          55s
+    integrity-shield-operator-controller-manager-6f94d7d684-dg5bt   2/2     Running   0          4m27s
     ```
     After installation, you can protect Kubernetes resources by following this [document](https://github.com/stolostron/integrity-shield/blob/master/docs/README_GETTING-STARTED-TUTORIAL.md).
     ## Supported Versions

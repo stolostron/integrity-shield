@@ -41,7 +41,7 @@ The following three pods will be installed with default CR.
 ```
 $ kubectl get pod -n integrity-shield-operator-system                                                                                                                  
 NAME                                                            READY   STATUS    RESTARTS   AGE
-integrity-shield-api-7b7f768bf7-fhrpg                           1/1     Running   0          20s
+integrity-shield-api-7b7f768bf7-fhrpg                           2/2     Running   0          20s
 integrity-shield-observer-5bc66f75f7-tn8fw                      1/1     Running   0          25s
 integrity-shield-operator-controller-manager-65b7fb58f7-j25zd   2/2     Running   0          3h5m
 ```

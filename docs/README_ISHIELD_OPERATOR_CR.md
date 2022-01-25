@@ -17,7 +17,7 @@ Integrity shield enforce/monitor resources according to ManifestIntegrityConstra
 When you want to change the default value, please edit here.
 ```yaml
   requestHandlerConfig: |
-    mode: detect
+    mode: inform
 ```
 
 ### Enable/Disable side effect
@@ -102,7 +102,7 @@ When you use Gatekeeper as admission controller, this parameter should be set `t
 
 ### Define rego policy
 Integrity shield uses rego policy to work with Gatekeeper.
-- enforce mode: If you want to use Integrity Shield on detection mode, please change this field to "detect."
+- enforce mode: If you want to use Integrity Shield on inform mode, please change this field to "detect."
 - skip kinds: You can define Kinds that do not need to be processed by Integrity Shield.
 - exclude_namespaces: All resources in the listed namespace will not be processed by Integrity Shield.
 
@@ -153,7 +153,7 @@ If you want to try Integrity shield with its own admission controller, you can i
 
 ### Define admission controller setting
 - allow: You can define Kinds that do not need to be processed by Integrity Shield.
-- mode: If you want to use Integrity Shield on detection mode, please change this field to "detect."
+- mode: If you want to use Integrity Shield on inform mode, please change this field to "inform."
 - inScopeNamespaceSelector: You can define which namespace is not checked by Integrity Shield. All resources in the exclude namespaces will not be processed by Integrity Shield.
 
 ```yaml
