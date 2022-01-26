@@ -121,15 +121,31 @@ fi
 echo -----------------------------
 echo [3/4] Adding bundle to index
 
-if [ "$pull_status" = "failed" ]; then
-     sudo /usr/local/bin/opm index add -c docker --generate --bundles ${TARGET_BUNDLE_IMG} \
-                      --tag ${TARGET_INDEX_IMG} --out-dockerfile tmp.Dockerfile
-else
-     echo "Succesfulling pulled previous index"
-     sudo /usr/local/bin/opm index add -c docker --generate --bundles ${TARGET_BUNDLE_IMG} \
-                      --from-index ${TARGET_INDEX_IMG_PREVIOUS_VERSION} \
-                      --tag ${TARGET_INDEX_IMG} --out-dockerfile tmp.Dockerfile
+if [ "${ISHIELD_ENV}" = "remote" ]; then
+    # use docker as an image build/pull tool
+    if [ "$pull_status" = "failed" ]; then
+        sudo /usr/local/bin/opm index add -c docker --generate --bundles ${TARGET_BUNDLE_IMG} \
+                        --tag ${TARGET_INDEX_IMG} --out-dockerfile tmp.Dockerfile
+    else
+        echo "Succesfulling pulled previous index"
+        sudo /usr/local/bin/opm index add -c docker --generate --bundles ${TARGET_BUNDLE_IMG} \
+                        --from-index ${TARGET_INDEX_IMG_PREVIOUS_VERSION} \
+                        --tag ${TARGET_INDEX_IMG} --out-dockerfile tmp.Dockerfile
+    fi
+elif [ "${ISHIELD_ENV}" = "local" ]; then
+    # use containerd as an image build/pull tool
+    if [ "$pull_status" = "failed" ]; then
+        sudo /usr/local/bin/opm index add --generate --bundles ${TARGET_BUNDLE_IMG} \
+                        --tag ${TARGET_INDEX_IMG} --out-dockerfile tmp.Dockerfile
+    else
+        echo "Succesfulling pulled previous index"
+        sudo /usr/local/bin/opm index add --generate --bundles ${TARGET_BUNDLE_IMG} \
+                        --from-index ${TARGET_INDEX_IMG_PREVIOUS_VERSION} \
+                        --tag ${TARGET_INDEX_IMG} --out-dockerfile tmp.Dockerfile
+    fi
 fi
+
+
 
 rm -f tmp.Dockerfile
 
