@@ -27,16 +27,16 @@ import (
 	"strings"
 	"time"
 
-	vrc "github.com/stolostron/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
-	misclient "github.com/stolostron/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
-	midclient "github.com/stolostron/integrity-shield/reporter/pkg/client/manifestintegritydecision/clientset/versioned/typed/manifestintegritydecision/v1"
-	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
-	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	gkmatch "github.com/open-policy-agent/gatekeeper/pkg/mutation/match"
 	"github.com/pkg/errors"
 	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"
+	vrc "github.com/stolostron/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
+	misclient "github.com/stolostron/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
+	midclient "github.com/stolostron/integrity-shield/reporter/pkg/client/manifestintegritydecision/clientset/versioned/typed/manifestintegritydecision/v1"
+	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
+	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -60,6 +60,7 @@ const logLevelEnvKey = "LOG_LEVEL"
 const k8sLogLevelEnvKey = "K8S_MANIFEST_SIGSTORE_LOG_LEVEL"
 
 const VerifyResourceViolationLabel = "integrityshield.io/verifyResourceViolation"
+const VerifyResourceIgnoredLabel = "integrityshield.io/verifyResourceIgnored"
 const SignatureResourceLabel = "integrityshield.io/signatureResource"
 
 var IgnoredKinds = []string{"Event", "Lease", "Endpoints", "TokenReview", "SubjectAccessReview", "SelfSubjectAccessReview", "LocalSubjectAccessReview"}
@@ -195,11 +196,15 @@ func (self *Observer) Run() {
 	for _, constraint := range constraints {
 		constraintName := constraint.Parameters.ConstraintName
 		log.Infof("Process new constraint %s ...", constraintName)
+		admissionOnly := constraint.Parameters.Action.AdmissionOnly
+		if admissionOnly {
+			log.Info("Reporting observation result is disabled.")
+		}
 		var violations []vrc.VerifyResult
 		var nonViolations []vrc.VerifyResult
 		narrowedGVKList := self.getPossibleProtectedGVKs(constraint.Match)
 		if narrowedGVKList == nil {
-			log.Info("there is no resources to observe in the constraint: ", constraint.Parameters.ConstraintName)
+			log.Infof("No resources to validate in the constraint: %s ", constraintName)
 			return
 		}
 		log.Debug("possible Protected GVKs: ", narrowedGVKList)
@@ -306,7 +311,7 @@ func (self *Observer) Run() {
 		}
 
 		// export VerifyResult
-		_ = self.exportVerifyResult(vrr, violated)
+		_ = self.exportVerifyResult(vrr, violated, admissionOnly)
 		// VerifyResultDetail
 		cres := ConstraintResult{
 			ConstraintName:  constraintName,
@@ -346,14 +351,19 @@ func (self *Observer) checkDecisionLog(constraintName string, res VerifyResultDe
 	return res
 }
 
-func (self *Observer) exportVerifyResult(vrr vrc.ManifestIntegrityStateSpec, violated bool) error {
+func (self *Observer) exportVerifyResult(vrr vrc.ManifestIntegrityStateSpec, violated, admissionOnly bool) error {
 	// label
-	vv := "false"
+	vrv := "false"
+	vri := "false"
 	if violated {
-		vv = "true"
+		vrv = "true"
+	}
+	if admissionOnly {
+		vri = "true"
 	}
 	labels := map[string]string{
-		VerifyResourceViolationLabel: vv,
+		VerifyResourceViolationLabel: vrv,
+		VerifyResourceIgnoredLabel:   vri,
 	}
 
 	obj, err := self.MisClient.ManifestIntegrityStates(self.IShiledNamespace).Get(context.Background(), vrr.ConstraintName, metav1.GetOptions{})

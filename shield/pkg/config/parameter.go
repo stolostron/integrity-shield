@@ -37,7 +37,8 @@ type ParameterObject struct {
 }
 
 type Action struct {
-	Mode string `json:"mode,omitempty"`
+	Mode          string `json:"mode,omitempty"`
+	AdmissionOnly bool   `json:"admissionOnly,omitempty"`
 }
 
 type SignatureRef struct {
