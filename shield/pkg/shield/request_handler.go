@@ -26,12 +26,12 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
-	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
-	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/mapnode"
 	log "github.com/sirupsen/logrus"
+	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
+	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
+	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	v1 "k8s.io/api/admission/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	kubeclient "k8s.io/client-go/kubernetes"
@@ -80,7 +80,7 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjec
 	}
 
 	// setup log
-	k8smnfconfig.SetupLogger(rhconfig.Log, req)
+	k8smnfconfig.SetupLogger(rhconfig.Log)
 	decisionReporter := k8smnfconfig.InitDecisionReporter(rhconfig.DecisionReporterConfig)
 	if paramObj.ConstraintName == "" {
 		log.Warning("ConstraintName is empty. Please set constraint name in parameter field.")

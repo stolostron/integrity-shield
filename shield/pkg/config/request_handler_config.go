@@ -26,13 +26,12 @@ import (
 	"time"
 
 	"github.com/ghodss/yaml"
-	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	"github.com/pkg/errors"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"
+	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kubeclient "k8s.io/client-go/kubernetes"
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 const k8sLogLevelEnvKey = "K8S_MANIFEST_SIGSTORE_LOG_LEVEL"
@@ -83,7 +82,7 @@ type RequestFilterProfile struct {
 	IgnoreFields k8smanifest.ObjectFieldBindingList `json:"ignoreFields,omitempty"`
 }
 
-func SetupLogger(config LogConfig, req admission.Request) {
+func SetupLogger(config LogConfig) {
 	logLevelStr := config.Level
 	k8sLogLevelStr := config.ManifestSigstoreLogLevel
 	if logLevelStr == "" && k8sLogLevelStr == "" {

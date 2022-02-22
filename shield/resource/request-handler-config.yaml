@@ -2,23 +2,35 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: request-handler-config
-  namespace: k8s-manifest-sigstore
 data:
   config.yaml: |
+    defaultConstraintAction:
+      mode: inform
+    sideEffect: 
+      createDenyEvent: true
     log:
       level: info
       manifestSigstoreLogLevel: info
       format: json
+    decisionReporterConfig:
+      enabled: true
     requestFilterProfile: 
       skipObjects:
       - kind: ConfigMap
         name: kube-root-ca.crt
+      - kind: ConfigMap
+        name: openshift-service-ca.crt
       ignoreFields:
+      - fields:
+        - spec.host
+        objects:
+        - kind: Route
       - fields:
         - metadata.namespace
         objects:
         - kind: ClusterServiceVersion
       - fields:
+        - metadata.labels.app.kubernetes.io/instance
         - metadata.managedFields.*
         - metadata.resourceVersion
         - metadata.selfLink
@@ -31,6 +43,7 @@ data:
         - metadata.uid
         - metadata.generation
         - status
+        - metadata.annotations.deployment.kubernetes.io/revision
         - metadata.annotations.cosign.sigstore.dev/imageRef
         - metadata.annotations.cosign.sigstore.dev/bundle
         - metadata.annotations.cosign.sigstore.dev/message
