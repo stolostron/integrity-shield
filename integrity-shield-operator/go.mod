@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/ghodss/yaml v1.0.0
-	github.com/go-logr/logr v1.2.0
+	github.com/go-logr/logr v1.2.2
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.17.0
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20210714212123-82a32eecb70d

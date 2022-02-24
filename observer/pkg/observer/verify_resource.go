@@ -22,17 +22,17 @@ import (
 	"strings"
 	"time"
 
-	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
-	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"
+	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
+	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
 const AnnotationKeyDomain = "integrityshield.io"
 const ImageRefAnnotationKeyShield = "integrityshield.io/signature"
 
-func ObserveResource(resource unstructured.Unstructured, paramObj k8smnfconfig.ParameterObject, ignoreFields k8smanifest.ObjectFieldBindingList, skipObjects k8smanifest.ObjectReferenceList, secrets []k8smnfconfig.KeyConfig) VerifyResultDetail {
+func ObserveResource(resource unstructured.Unstructured, paramObj k8smnfconfig.ManifestIntegrityConstraint, ignoreFields k8smanifest.ObjectFieldBindingList, skipObjects k8smanifest.ObjectReferenceList, secrets []k8smnfconfig.KeyConfig) VerifyResultDetail {
 	namespace := os.Getenv("POD_NAMESPACE")
 	if namespace == "" {
 		namespace = defaultPodNamespace

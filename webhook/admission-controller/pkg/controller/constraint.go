@@ -20,13 +20,13 @@ import (
 	"context"
 	"encoding/json"
 
+	k8smnfutil "github.com/sigstore/k8s-manifest-sigstore/pkg/util"
+	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/kubeutil"
+	log "github.com/sirupsen/logrus"
 	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
 	"github.com/stolostron/integrity-shield/shield/pkg/shield"
 	miprofile "github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/apis/manifestintegrityprofile/v1"
 	mipclient "github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/clientset/versioned/typed/manifestintegrityprofile/v1"
-	k8smnfutil "github.com/sigstore/k8s-manifest-sigstore/pkg/util"
-	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/kubeutil"
-	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/labels"
@@ -34,7 +34,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-func GetParametersFromConstraint(constraint miprofile.ManifestIntegrityProfileSpec) *k8smnfconfig.ParameterObject {
+func GetParametersFromConstraint(constraint miprofile.ManifestIntegrityProfileSpec) *k8smnfconfig.ManifestIntegrityConstraint {
 	return &constraint.Parameters
 }
 

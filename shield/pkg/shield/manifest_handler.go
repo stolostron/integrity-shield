@@ -27,7 +27,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
-func ManifestVerify(resource, oldResource unstructured.Unstructured, username, operation string, paramObj *k8smnfconfig.ParameterObject) (error, bool, string) {
+func ManifestVerify(resource, oldResource unstructured.Unstructured, username, operation string, paramObj *k8smnfconfig.ManifestIntegrityConstraint) (error, bool, string) {
 	var rawObject, rawOldObject []byte
 	rawObject, err := json.Marshal(resource)
 	if err != nil {

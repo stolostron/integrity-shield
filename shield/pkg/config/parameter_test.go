@@ -64,7 +64,7 @@ func TestImageProfile(t *testing.T) {
 	}
 }
 
-func TestParameterObject(t *testing.T) {
+func TestManifestIntegrityConstraint(t *testing.T) {
 	adreqBytes, err := ioutil.ReadFile(adreqPath)
 	if err != nil {
 		t.Error(err)
@@ -83,7 +83,7 @@ func TestParameterObject(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	testParam1 := ParameterObject{
+	testParam1 := ManifestIntegrityConstraint{
 		SkipUsers: ObjectUserBindingList{
 			{
 				Users: []string{
@@ -98,7 +98,7 @@ func TestParameterObject(t *testing.T) {
 			},
 		},
 	}
-	testParam2 := ParameterObject{
+	testParam2 := ManifestIntegrityConstraint{
 		InScopeUsers: ObjectUserBindingList{
 			{
 				Users: []string{

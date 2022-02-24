@@ -31,8 +31,8 @@ const maxHistoryLength = 10
 
 // ManifestIntegrityProfileSpec defines the desired state of AppEnforcePolicy
 type ManifestIntegrityProfileSpec struct {
-	Match      MatchCondition               `json:"match,omitempty"`
-	Parameters k8smnfconfig.ParameterObject `json:"parameters,omitempty"`
+	Match      MatchCondition                           `json:"match,omitempty"`
+	Parameters k8smnfconfig.ManifestIntegrityConstraint `json:"parameters,omitempty"`
 }
 
 type MatchCondition struct {

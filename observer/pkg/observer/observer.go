@@ -502,8 +502,8 @@ func LoadKeySecret(keySecretNamespace, keySecretName string) (string, error) {
 //
 
 type ConstraintSpec struct {
-	Match      gkmatch.Match                `json:"match,omitempty"`
-	Parameters k8smnfconfig.ParameterObject `json:"parameters,omitempty"`
+	Match      gkmatch.Match                            `json:"match,omitempty"`
+	Parameters k8smnfconfig.ManifestIntegrityConstraint `json:"parameters,omitempty"`
 }
 
 type Kinds struct {

@@ -55,7 +55,7 @@ const (
 )
 const timeFormat = "2006-01-02T15:04:05Z"
 
-func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObject) *ResultFromRequestHandler {
+func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ManifestIntegrityConstraint) *ResultFromRequestHandler {
 
 	// unmarshal admission request object
 	var resource unstructured.Unstructured
@@ -396,7 +396,7 @@ func mutationCheck(rawOldObject, rawObject []byte, IgnoreFields []string) (bool,
 	return true, nil
 }
 
-func setVerifyOption(paramObj *k8smnfconfig.ParameterObject, config *k8smnfconfig.RequestHandlerConfig, signatureAnnotationType string) *k8smanifest.VerifyResourceOption {
+func setVerifyOption(paramObj *k8smnfconfig.ManifestIntegrityConstraint, config *k8smnfconfig.RequestHandlerConfig, signatureAnnotationType string) *k8smanifest.VerifyResourceOption {
 	// get verifyOption and imageRef from Parameter
 	vo := &paramObj.VerifyResourceOption
 

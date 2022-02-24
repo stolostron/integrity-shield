@@ -23,7 +23,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
-type ParameterObject struct {
+type ManifestIntegrityConstraint struct {
 	ConstraintName                   string                          `json:"constraintName"`
 	SignatureRef                     SignatureRef                    `json:"signatureRef,omitempty"`
 	KeyConfigs                       []KeyConfig                     `json:"keyConfigs,omitempty"`
@@ -89,7 +89,7 @@ type ImageProfile struct {
 	Exclude    ImageRefList `json:"exclude,omitempty"`
 }
 
-func (p *ParameterObject) DeepCopyInto(p2 *ParameterObject) {
+func (p *ManifestIntegrityConstraint) DeepCopyInto(p2 *ManifestIntegrityConstraint) {
 	_ = copier.Copy(&p2, &p)
 }
 
@@ -127,4 +127,21 @@ func (p ImageProfile) MatchWith(imageRef string) bool {
 		excluded = p.Exclude.Match(imageRef)
 	}
 	return matched && !excluded
+}
+
+// validate ManifestIntegrityConstraint
+
+func ValidateManifestConstraint(p *ManifestIntegrityConstraint) error {
+	// hasKey := i.Key != ""
+	// hasRoots := i.Roots != ""
+	// hasSubject := i.Subject != ""
+
+	// if (hasKey && !hasRoots && !hasSubject) || (hasRoots && hasSubject) {
+	// 	return nil
+	// }
+
+	// return fmt.Errorf("either a public key, or root certificates and an email, are required")
+
+	// TODO: fix
+	return nil
 }

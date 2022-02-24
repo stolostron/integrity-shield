@@ -75,7 +75,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	body := bufbody.Bytes()
 	var inputMap map[string]interface{}
 	var request *admission.Request
-	var parameters *k8smnfconfig.ParameterObject
+	var parameters *k8smnfconfig.ManifestIntegrityConstraint
 	err := json.Unmarshal(body, &inputMap)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("unmarshaling input data as map[string]interface{}: %v", err), http.StatusInternalServerError)
