@@ -55,7 +55,7 @@ const (
 )
 const timeFormat = "2006-01-02T15:04:05Z"
 
-func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ManifestIntegrityConstraint) *ResultFromRequestHandler {
+func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObj) *ResultFromRequestHandler {
 
 	// unmarshal admission request object
 	var resource unstructured.Unstructured
@@ -67,8 +67,21 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ManifestIntegr
 		return makeResultFromRequestHandler(false, errMsg, false, req)
 	}
 
+	var oldResource unstructured.Unstructured
+	oldObjectBytes := req.AdmissionRequest.OldObject.Raw
+	if oldObjectBytes != nil {
+		err = json.Unmarshal(oldObjectBytes, &oldResource)
+		if err != nil {
+			log.Errorf("failed to Unmarshal a requested oldObject into %T; %s", resource, err.Error())
+			errMsg := "IntegrityShield failed to decide the response. Failed to Unmarshal a requested object: " + err.Error()
+			return makeResultFromRequestHandler(false, errMsg, false, req)
+		}
+	}
+
 	// load request handler config
-	rhconfig, err := k8smnfconfig.LoadRequestHandlerConfig()
+	namespace := os.Getenv("POD_NAMESPACE")
+	rhcm := os.Getenv("REQUEST_HANDLER_CONFIG_NAME")
+	rhconfig, err := k8smnfconfig.LoadRequestHandlerConfig(namespace, rhcm)
 	if err != nil {
 		log.Errorf("failed to load request handler config: %s", err.Error())
 		errMsg := "IntegrityShield failed to decide the response. Failed to load request handler config: " + err.Error()
@@ -132,148 +145,59 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ManifestIntegr
 	} else {
 		log.Info("enforce action is disabled.")
 	}
-
-	commonSkipUserMatched := false
-	skipObjectMatched := false
-	signatureResource := false
-
-	// check if signature resource
-	signatureResource = isAllowedSignatureResource(resource, req.AdmissionRequest.OldObject.Raw, req.Operation)
-
-	//filter by user listed in common profile
-	commonSkipUserMatched = rhconfig.RequestFilterProfile.SkipUsers.Match(resource, req.AdmissionRequest.UserInfo.Username)
-
-	// skip object
-	skipObjectMatched = skipObjectsMatch(rhconfig.RequestFilterProfile.SkipObjects, resource)
-
-	// Proccess with parameter
-	//filter by user
-	skipUserMatched := paramObj.SkipUsers.Match(resource, req.AdmissionRequest.UserInfo.Username)
-
-	//force check user
-	inScopeUserMatched := paramObj.InScopeUsers.Match(resource, req.AdmissionRequest.UserInfo.Username)
-
-	//check scope
-	inScopeObjMatched := paramObj.InScopeObjects.Match(resource)
-
 	allow := false
 	message := ""
+	signatureResource := false
+	// check if signature resource
+	signatureResource = isAllowedSignatureResource(resource, req.AdmissionRequest.OldObject.Raw, req.Operation)
 	if signatureResource {
 		allow = true
 		message = "allowed because this resource is signatureResource."
-	} else if (skipUserMatched || commonSkipUserMatched) && !inScopeUserMatched {
-		allow = true
-		message = "SkipUsers rule matched."
+		return makeResultFromRequestHandler(allow, message, enforce, req)
+	}
+
+	// verify resource
+	err, allow, message = ResourceVerify(resource, oldResource, req.UserInfo.Username, string(req.Operation), rhconfig.RequestFilterProfile, &paramObj.ManifestIntegrityConstraint)
+	if err != nil {
+		log.Errorf("IntegrityShield failed to decide the response. ", err.Error())
+		return makeResultFromRequestHandler(allow, message, enforce, req)
+	}
+
+	// report decision log if skip user
+	if allow && message == "SkipUsers rule matched." {
 		logRecord["reason"] = message
 		logRecord["allow"] = allow
 		decisionReporter.SendLog(logRecord)
-	} else if !inScopeObjMatched {
-		allow = true
-		message = "ObjectSelector rule did not match. Out of scope of verification."
-	} else if skipObjectMatched {
-		allow = true
-		message = "SkipObjects rule matched."
-	} else if isUpdateRequest(req.AdmissionRequest.Operation) {
-		// mutation check
-		ignoreFields := getMatchedIgnoreFields(paramObj.IgnoreFields, rhconfig.RequestFilterProfile.IgnoreFields, resource)
-		mutated, err := mutationCheck(req.AdmissionRequest.OldObject.Raw, req.AdmissionRequest.Object.Raw, ignoreFields)
+	}
+
+	// verify image
+	imageAllow := true
+	imageMessage := ""
+	var imageVerifyResults []ishieldimage.ImageVerifyResult
+	if paramObj.ImageProfile.Enabled() {
+		_, err = ishieldimage.VerifyImageInManifest(resource, paramObj.ImageProfile)
 		if err != nil {
-			log.Errorf("failed to check mutation: %s", err.Error())
-			message = "IntegrityShield failed to decide the response. Failed to check mutation: " + err.Error()
-		}
-		if !mutated {
-			allow = true
-			message = "no mutation found"
+			log.Errorf("failed to verify images: %s", err.Error())
+			imageAllow = false
+			imageMessage = "Image signature verification is required, but failed to verify signature: " + err.Error()
+
+		} else {
+			for _, res := range imageVerifyResults {
+				if res.InScope && !res.Verified {
+					imageAllow = false
+					imageMessage = "Image signature verification is required, but failed to verify signature: " + res.FailReason
+					break
+				}
+			}
 		}
 	}
-	if !allow { // signature check
-		var signatureAnnotationType string
-		annotations := resource.GetAnnotations()
-		_, found := annotations[ImageRefAnnotationKeyShield]
-		if found {
-			signatureAnnotationType = SignatureAnnotationTypeShield
-		}
-		vo := setVerifyOption(paramObj, rhconfig, signatureAnnotationType)
-		log.WithFields(log.Fields{
-			"namespace": req.Namespace,
-			"name":      req.Name,
-			"kind":      req.Kind.Kind,
-			"operation": req.Operation,
-			"userName":  req.UserInfo.Username,
-		}).Debug("VerifyOption: ", vo)
-		// call VerifyResource with resource, verifyOption, keypath, imageRef
-		result, err := k8smanifest.VerifyResource(resource, vo)
-		log.WithFields(log.Fields{
-			"namespace": req.Namespace,
-			"name":      req.Name,
-			"kind":      req.Kind.Kind,
-			"operation": req.Operation,
-			"userName":  req.UserInfo.Username,
-		}).Debug("VerifyResource result: ", result)
-		if err != nil {
-			log.WithFields(log.Fields{
-				"namespace": req.Namespace,
-				"name":      req.Name,
-				"kind":      req.Kind.Kind,
-				"operation": req.Operation,
-				"userName":  req.UserInfo.Username,
-			}).Warningf("Signature verification is required for this request, but verifyResource return error ; %s", err.Error())
-			r := makeResultFromRequestHandler(false, err.Error(), enforce, req)
-			// generate events
-			if rhconfig.SideEffectConfig.CreateDenyEvent {
-				_ = createOrUpdateEvent(req, r, paramObj.ConstraintName)
-			}
-			return r
-		}
 
-		if result.InScope {
-			if result.Verified {
-				allow = true
-				message = fmt.Sprintf("singed by a valid signer: %s", result.Signer)
-			} else {
-				allow = false
-				message = "Signature verification is required for this request, but no signature is found."
-				if result.Diff != nil && result.Diff.Size() > 0 {
-					message = fmt.Sprintf("Signature verification is required for this request, but failed to verify signature. diff found: %s", result.Diff.String())
-				} else if result.Signer != "" {
-					message = fmt.Sprintf("Signature verification is required for this request, but no signer config matches with this resource. This is signed by %s", result.Signer)
-				}
-			}
-		} else {
-			allow = true
-			message = "not protected"
-		}
-
-		// image verify
-		imageAllow := true
-		imageMessage := ""
-		var imageVerifyResults []ishieldimage.ImageVerifyResult
-		if paramObj.ImageProfile.Enabled() {
-			_, err = ishieldimage.VerifyImageInManifest(resource, paramObj.ImageProfile)
-			if err != nil {
-				log.Errorf("failed to verify images: %s", err.Error())
-				imageAllow = false
-				imageMessage = "Image signature verification is required, but failed to verify signature: " + err.Error()
-
-			} else {
-				for _, res := range imageVerifyResults {
-					if res.InScope && !res.Verified {
-						imageAllow = false
-						imageMessage = "Image signature verification is required, but failed to verify signature: " + res.FailReason
-						break
-					}
-				}
-			}
-		}
-
-		if allow && !imageAllow {
-			message = imageMessage
-			allow = false
-		}
+	if allow && !imageAllow {
+		message = imageMessage
+		allow = false
 	}
 
 	r := makeResultFromRequestHandler(allow, message, enforce, req)
-
 	// generate events
 	if rhconfig.SideEffectConfig.CreateDenyEvent {
 		_ = createOrUpdateEvent(req, r, paramObj.ConstraintName)
@@ -284,7 +208,7 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ManifestIntegr
 type ResultFromRequestHandler struct {
 	Allow   bool   `json:"allow"`
 	Message string `json:"message"`
-	Profile string `json:"profile,omitempty"`
+	// Profile string `json:"profile,omitempty"`
 }
 
 func makeResultFromRequestHandler(allow bool, msg string, enforce bool, req admission.Request) *ResultFromRequestHandler {
@@ -396,7 +320,7 @@ func mutationCheck(rawOldObject, rawObject []byte, IgnoreFields []string) (bool,
 	return true, nil
 }
 
-func setVerifyOption(paramObj *k8smnfconfig.ManifestIntegrityConstraint, config *k8smnfconfig.RequestHandlerConfig, signatureAnnotationType string) *k8smanifest.VerifyResourceOption {
+func setVerifyOption(paramObj *k8smnfconfig.ManifestIntegrityConstraint, commonProfile *k8smnfconfig.RequestFilterProfile, signatureAnnotationType string) *k8smanifest.VerifyResourceOption {
 	// get verifyOption and imageRef from Parameter
 	vo := &paramObj.VerifyResourceOption
 
@@ -441,13 +365,13 @@ func setVerifyOption(paramObj *k8smnfconfig.ManifestIntegrityConstraint, config 
 			vo.KeyPath = keyPathString
 		}
 	}
-	// merge params in request handler config
-	if len(config.RequestFilterProfile.IgnoreFields) == 0 {
+	// merge params in common profile
+	if len(commonProfile.IgnoreFields) == 0 {
 		return vo
 	}
 	fields := k8smanifest.ObjectFieldBindingList{}
 	fields = append(fields, vo.IgnoreFields...)
-	fields = append(fields, config.RequestFilterProfile.IgnoreFields...)
+	fields = append(fields, commonProfile.IgnoreFields...)
 	vo.IgnoreFields = fields
 	return vo
 }

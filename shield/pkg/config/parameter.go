@@ -23,17 +23,21 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
+type ParameterObj struct {
+	ConstraintName              string `json:"constraintName"`
+	ManifestIntegrityConstraint `json:""`
+	ImageProfile                ImageProfile `json:"imageProfile,omitempty"`
+	Action                      *Action      `json:"action,omitempty"`
+	GetProvenance               bool         `json:"getProvenance,omitempty"`
+}
+
 type ManifestIntegrityConstraint struct {
-	ConstraintName                   string                          `json:"constraintName"`
 	SignatureRef                     SignatureRef                    `json:"signatureRef,omitempty"`
 	KeyConfigs                       []KeyConfig                     `json:"keyConfigs,omitempty"`
 	InScopeObjects                   k8smanifest.ObjectReferenceList `json:"objectSelector,omitempty"`
 	SkipUsers                        ObjectUserBindingList           `json:"skipUsers,omitempty"`
 	InScopeUsers                     ObjectUserBindingList           `json:"inScopeUsers,omitempty"`
-	ImageProfile                     ImageProfile                    `json:"imageProfile,omitempty"`
 	k8smanifest.VerifyResourceOption `json:""`
-	Action                           *Action `json:"action,omitempty"`
-	GetProvenance                    bool    `json:"getProvenance,omitempty"`
 }
 
 type Action struct {
@@ -89,7 +93,7 @@ type ImageProfile struct {
 	Exclude    ImageRefList `json:"exclude,omitempty"`
 }
 
-func (p *ManifestIntegrityConstraint) DeepCopyInto(p2 *ManifestIntegrityConstraint) {
+func (p *ParameterObj) DeepCopyInto(p2 *ParameterObj) {
 	_ = copier.Copy(&p2, &p)
 }
 

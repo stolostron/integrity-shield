@@ -168,7 +168,9 @@ func (self *Observer) Init() error {
 
 func (self *Observer) Run() {
 	// load requestHandlerConfig
-	rhconfig, err := k8smnfconfig.LoadRequestHandlerConfig()
+	namespace := os.Getenv("POD_NAMESPACE")
+	rhcm := os.Getenv("REQUEST_HANDLER_CONFIG_NAME")
+	rhconfig, err := k8smnfconfig.LoadRequestHandlerConfig(namespace, rhcm)
 	if err != nil {
 		log.Error("Failed to load RequestHandlerConfig; err: ", err.Error())
 	}
@@ -502,8 +504,8 @@ func LoadKeySecret(keySecretNamespace, keySecretName string) (string, error) {
 //
 
 type ConstraintSpec struct {
-	Match      gkmatch.Match                            `json:"match,omitempty"`
-	Parameters k8smnfconfig.ManifestIntegrityConstraint `json:"parameters,omitempty"`
+	Match      gkmatch.Match             `json:"match,omitempty"`
+	Parameters k8smnfconfig.ParameterObj `json:"parameters,omitempty"`
 }
 
 type Kinds struct {

@@ -51,7 +51,7 @@ var logLevelMap = map[string]log.Level{
 
 type RequestHandlerConfig struct {
 	KeyPathList             []string               `json:"keyPathList,omitempty"`
-	RequestFilterProfile    RequestFilterProfile   `json:"requestFilterProfile,omitempty"`
+	RequestFilterProfile    *RequestFilterProfile  `json:"requestFilterProfile,omitempty"`
 	Log                     LogConfig              `json:"log,omitempty"`
 	DecisionReporterConfig  DecisionReporterConfig `json:"decisionReporterConfig,omitempty"`
 	SideEffectConfig        SideEffectConfig       `json:"sideEffect,omitempty"`
@@ -145,8 +145,7 @@ func LoadKeySecret(keySecretNamespace, keySecretName string) (string, error) {
 	return keyPath, nil
 }
 
-func LoadRequestHandlerConfig() (*RequestHandlerConfig, error) {
-	namespace := os.Getenv("POD_NAMESPACE")
+func LoadRequestHandlerConfig(namespace, name string) (*RequestHandlerConfig, error) {
 	if namespace == "" {
 		namespace = defaultPodNamespace
 	}

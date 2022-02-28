@@ -24,7 +24,6 @@ import (
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/kubeutil"
 	log "github.com/sirupsen/logrus"
 	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
-	"github.com/stolostron/integrity-shield/shield/pkg/shield"
 	miprofile "github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/apis/manifestintegrityprofile/v1"
 	mipclient "github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/client/manifestintegrityprofile/clientset/versioned/typed/manifestintegrityprofile/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -34,7 +33,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-func GetParametersFromConstraint(constraint miprofile.ManifestIntegrityProfileSpec) *k8smnfconfig.ManifestIntegrityConstraint {
+func GetParametersFromConstraint(constraint miprofile.ManifestIntegrityProfileSpec) *k8smnfconfig.ParameterObj {
 	return &constraint.Parameters
 }
 
@@ -211,12 +210,12 @@ func updateConstraintStatus(constraint string, req admission.Request, errMsg str
 	return nil
 }
 
-func updateConstraints(isDetectMode bool, req admission.Request, results []shield.ResultFromRequestHandler) {
+func updateConstraints(isDetectMode bool, req admission.Request, results []Result) {
 	for _, res := range results {
-		if !res.Allow {
-			errMsg := res.Message
+		if !res.ReqHandlerResult.Allow {
+			errMsg := res.ReqHandlerResult.Message
 			if isDetectMode {
-				errMsg = "[Detection] " + res.Message
+				errMsg = "[Detection] " + res.ReqHandlerResult.Message
 			}
 			// update status
 			_ = updateConstraintStatus(res.Profile, req, errMsg)

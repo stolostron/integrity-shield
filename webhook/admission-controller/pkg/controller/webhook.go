@@ -24,12 +24,12 @@ import (
 	"time"
 
 	"github.com/ghodss/yaml"
-	"github.com/stolostron/integrity-shield/shield/pkg/shield"
-	acconfig "github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/config"
 	"github.com/pkg/errors"
 	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/kubeutil"
 	log "github.com/sirupsen/logrus"
+	"github.com/stolostron/integrity-shield/shield/pkg/shield"
+	acconfig "github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/config"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kubeclient "k8s.io/client-go/kubernetes"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
@@ -99,16 +99,18 @@ func ProcessRequest(req admission.Request) admission.Response {
 		return admission.Allowed("error but allow for development")
 	}
 
-	results := []shield.ResultFromRequestHandler{}
+	results := []Result{}
 
 	for _, constraint := range constraints {
-
+		res := Result{}
 		//match check: kind, namespace, label
 		isMatched := matchCheck(req, constraint.Spec.Match)
 		if !isMatched {
-			r := shield.ResultFromRequestHandler{
-				Allow:   true,
-				Message: "not protected",
+			r := Result{
+				ReqHandlerResult: &shield.ResultFromRequestHandler{
+					Allow:   true,
+					Message: "not protected",
+				},
 				Profile: constraint.Name,
 			}
 			results = append(results, r)
@@ -119,10 +121,10 @@ func ProcessRequest(req admission.Request) admission.Response {
 		paramObj := GetParametersFromConstraint(constraint.Spec)
 
 		// call request handler & receive result from request handler (allow, message)
-		r := shield.RequestHandler(req, paramObj)
-
-		r.Profile = constraint.Name
-		results = append(results, *r)
+		rhr := shield.RequestHandler(req, paramObj)
+		res.ReqHandlerResult = rhr
+		res.Profile = constraint.Name
+		results = append(results, res)
 	}
 
 	// accumulate results from constraints
@@ -198,16 +200,16 @@ func loadAdmissionControllerConfig() (*acconfig.AdmissionControllerConfig, error
 	return sc, nil
 }
 
-func getAccumulatedResult(results []shield.ResultFromRequestHandler) *AccumulatedResult {
+func getAccumulatedResult(results []Result) *AccumulatedResult {
 	denyMessages := []string{}
 	allowMessages := []string{}
 	accumulatedRes := &AccumulatedResult{}
 	for _, result := range results {
-		if !result.Allow {
-			msg := "[" + result.Profile + "]" + result.Message
+		if !result.ReqHandlerResult.Allow {
+			msg := "[" + result.Profile + "]" + result.ReqHandlerResult.Message
 			denyMessages = append(denyMessages, msg)
 		} else {
-			msg := "[" + result.Profile + "]" + result.Message
+			msg := "[" + result.Profile + "]" + result.ReqHandlerResult.Message
 			allowMessages = append(allowMessages, msg)
 		}
 	}
@@ -219,4 +221,9 @@ func getAccumulatedResult(results []shield.ResultFromRequestHandler) *Accumulate
 	accumulatedRes.Allow = true
 	accumulatedRes.Message = strings.Join(allowMessages, ";")
 	return accumulatedRes
+}
+
+type Result struct {
+	ReqHandlerResult *shield.ResultFromRequestHandler
+	Profile          string `json:"profile,omitempty"`
 }
