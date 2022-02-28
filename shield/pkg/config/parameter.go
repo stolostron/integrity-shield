@@ -97,6 +97,10 @@ func (p *ParameterObj) DeepCopyInto(p2 *ParameterObj) {
 	_ = copier.Copy(&p2, &p)
 }
 
+func (p *ManifestIntegrityConstraint) DeepCopyInto(p2 *ManifestIntegrityConstraint) {
+	_ = copier.Copy(&p2, &p)
+}
+
 func (u ObjectUserBinding) Match(obj unstructured.Unstructured, username string) bool {
 	if u.Objects.Match(obj) {
 		if k8smnfutil.MatchWithPatternArray(username, u.Users) {
