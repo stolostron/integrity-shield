@@ -32,19 +32,6 @@ import (
 )
 
 func ResourceVerify(resource, oldResource unstructured.Unstructured, username, operation string, commonProfile *k8smnfconfig.RequestFilterProfile, constraint *k8smnfconfig.ManifestIntegrityConstraint) (error, bool, string) {
-	var rawObject, rawOldObject []byte
-	rawObject, err := json.Marshal(resource)
-	if err != nil {
-		errMsg := "failed to marshal new resource: " + err.Error()
-		return err, false, errMsg
-	}
-	if operation == "Update" {
-		rawOldObject, err = json.Marshal(oldResource)
-		if err != nil {
-			errMsg := "failed to marshal old resource: " + err.Error()
-			return err, false, errMsg
-		}
-	}
 	commonSkipUserMatched := false
 	skipObjectMatched := false
 
@@ -77,11 +64,25 @@ func ResourceVerify(resource, oldResource unstructured.Unstructured, username, o
 		message = "SkipObjects rule matched."
 	} else if operation == "UPDATE" {
 		// mutation check
+		var rawObject, rawOldObject []byte
+		rawObject, err := json.Marshal(resource)
+		if err != nil {
+			errMsg := "failed to marshal new resource: " + err.Error()
+			return err, false, errMsg
+		}
+
+		rawOldObject, err = json.Marshal(oldResource)
+		if err != nil {
+			errMsg := "failed to marshal old resource: " + err.Error()
+			return err, false, errMsg
+		}
+
 		ignoreFields := getMatchedIgnoreFields(constraint.IgnoreFields, commonProfile.IgnoreFields, resource)
 		mutated, err := mutationCheck(rawOldObject, rawObject, ignoreFields)
 		if err != nil {
 			log.Errorf("failed to check mutation: %s", err.Error())
 			message = "IntegrityShield failed to decide the response. Failed to check mutation: " + err.Error()
+			return err, false, message
 		}
 		if !mutated {
 			allow = true
