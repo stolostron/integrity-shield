@@ -26,8 +26,6 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
-	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/mapnode"
 	log "github.com/sirupsen/logrus"
 	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
 	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
@@ -208,7 +206,6 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObj) 
 type ResultFromRequestHandler struct {
 	Allow   bool   `json:"allow"`
 	Message string `json:"message"`
-	// Profile string `json:"profile,omitempty"`
 }
 
 func makeResultFromRequestHandler(allow bool, msg string, enforce bool, req admission.Request) *ResultFromRequestHandler {
@@ -229,10 +226,6 @@ func makeResultFromRequestHandler(allow bool, msg string, enforce bool, req admi
 		"allow":     res.Allow,
 	}).Info(res.Message)
 	return res
-}
-
-func isUpdateRequest(operation v1.Operation) bool {
-	return (operation == v1.Update)
 }
 
 func isAllowedSignatureResource(resource unstructured.Unstructured, oldObj []byte, operation v1.Operation) bool {
@@ -264,128 +257,6 @@ func isSignatureResource(resource unstructured.Unstructured) bool {
 		label = true
 	}
 	return label
-}
-
-func getMatchedIgnoreFields(pi, ci k8smanifest.ObjectFieldBindingList, resource unstructured.Unstructured) []string {
-	var allIgnoreFields []string
-	_, fields := pi.Match(resource)
-	_, commonfields := ci.Match(resource)
-	allIgnoreFields = append(allIgnoreFields, fields...)
-	allIgnoreFields = append(allIgnoreFields, commonfields...)
-	return allIgnoreFields
-}
-
-func mutationCheck(rawOldObject, rawObject []byte, IgnoreFields []string) (bool, error) {
-	var oldObject *mapnode.Node
-	var newObject *mapnode.Node
-	mask := []string{
-		"metadata.annotations.namespace",
-		"metadata.annotations.kubectl.\"kubernetes.io/last-applied-configuration\"",
-		"metadata.annotations.deprecated.daemonset.template.generation",
-		"metadata.creationTimestamp",
-		"metadata.uid",
-		"metadata.generation",
-		"metadata.managedFields",
-		"metadata.selfLink",
-		"metadata.resourceVersion",
-		"status",
-	}
-	if v, err := mapnode.NewFromBytes(rawObject); err != nil || v == nil {
-		return false, err
-	} else {
-		v = v.Mask(mask)
-		obj := v.ToMap()
-		newObject, _ = mapnode.NewFromMap(obj)
-	}
-	if v, err := mapnode.NewFromBytes(rawOldObject); err != nil || v == nil {
-		return false, err
-	} else {
-		v = v.Mask(mask)
-		oldObj := v.ToMap()
-		oldObject, _ = mapnode.NewFromMap(oldObj)
-	}
-	// diff
-	dr := oldObject.Diff(newObject)
-	if dr == nil || dr.Size() == 0 {
-		return false, nil
-	}
-	// ignoreField check
-	unfiltered := &mapnode.DiffResult{}
-	if dr != nil && dr.Size() > 0 {
-		_, unfiltered, _ = dr.Filter(IgnoreFields)
-	}
-	if unfiltered.Size() == 0 {
-		return false, nil
-	}
-	return true, nil
-}
-
-func setVerifyOption(paramObj *k8smnfconfig.ManifestIntegrityConstraint, commonProfile *k8smnfconfig.RequestFilterProfile, signatureAnnotationType string) *k8smanifest.VerifyResourceOption {
-	// get verifyOption and imageRef from Parameter
-	vo := &paramObj.VerifyResourceOption
-
-	// set Signature ref
-	if paramObj.SignatureRef.ImageRef != "" {
-		vo.ImageRef = paramObj.SignatureRef.ImageRef
-	}
-	if paramObj.SignatureRef.SignatureResourceRef.Name != "" && paramObj.SignatureRef.SignatureResourceRef.Namespace != "" {
-		ref := fmt.Sprintf("k8s://ConfigMap/%s/%s", paramObj.SignatureRef.SignatureResourceRef.Namespace, paramObj.SignatureRef.SignatureResourceRef.Name)
-		vo.SignatureResourceRef = ref
-	}
-	if paramObj.SignatureRef.ProvenanceResourceRef.Name != "" && paramObj.SignatureRef.ProvenanceResourceRef.Namespace != "" {
-		ref := fmt.Sprintf("k8s://ConfigMap/%s/%s", paramObj.SignatureRef.ProvenanceResourceRef.Namespace, paramObj.SignatureRef.ProvenanceResourceRef.Name)
-		vo.ProvenanceResourceRef = ref
-	}
-
-	// set DryRun namespace
-	namespace := os.Getenv("POD_NAMESPACE")
-	if namespace == "" {
-		namespace = defaultPodNamespace
-	}
-	vo.DryRunNamespace = namespace
-
-	// set Signature type
-	if signatureAnnotationType == SignatureAnnotationTypeShield {
-		vo.AnnotationConfig.AnnotationKeyDomain = AnnotationKeyDomain
-	}
-	// prepare local key for verifyResource
-	if len(paramObj.KeyConfigs) != 0 {
-		keyPathList := []string{}
-		for _, keyconfig := range paramObj.KeyConfigs {
-			if keyconfig.KeySecretName != "" {
-				keyPath, err := k8smnfconfig.LoadKeySecret(keyconfig.KeySecretNamespace, keyconfig.KeySecretName)
-				if err != nil {
-					log.Errorf("failed to load key secret: %s", err.Error())
-				}
-				keyPathList = append(keyPathList, keyPath)
-			}
-		}
-		keyPathString := strings.Join(keyPathList, ",")
-		if keyPathString != "" {
-			vo.KeyPath = keyPathString
-		}
-	}
-	// merge params in common profile
-	if len(commonProfile.IgnoreFields) == 0 {
-		return vo
-	}
-	fields := k8smanifest.ObjectFieldBindingList{}
-	fields = append(fields, vo.IgnoreFields...)
-	fields = append(fields, commonProfile.IgnoreFields...)
-	vo.IgnoreFields = fields
-	return vo
-}
-
-func skipObjectsMatch(l k8smanifest.ObjectReferenceList, obj unstructured.Unstructured) bool {
-	if len(l) == 0 {
-		return false
-	}
-	for _, r := range l {
-		if r.Match(obj) {
-			return true
-		}
-	}
-	return false
 }
 
 func createOrUpdateEvent(req admission.Request, ar *ResultFromRequestHandler, constraintName string) error {

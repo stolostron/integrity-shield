@@ -140,16 +140,6 @@ func (p ImageProfile) MatchWith(imageRef string) bool {
 // validate ManifestIntegrityConstraint
 
 func ValidateManifestConstraint(p *ManifestIntegrityConstraint) error {
-	// hasKey := i.Key != ""
-	// hasRoots := i.Roots != ""
-	// hasSubject := i.Subject != ""
-
-	// if (hasKey && !hasRoots && !hasSubject) || (hasRoots && hasSubject) {
-	// 	return nil
-	// }
-
-	// return fmt.Errorf("either a public key, or root certificates and an email, are required")
-
 	// TODO: fix
 	return nil
 }
