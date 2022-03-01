@@ -51,7 +51,7 @@ const (
 )
 const timeFormat = "2006-01-02T15:04:05Z"
 
-func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObj) *ResultFromRequestHandler {
+func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjct) *ResultFromRequestHandler {
 
 	// unmarshal admission request object
 	var resource unstructured.Unstructured

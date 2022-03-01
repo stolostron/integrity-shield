@@ -23,7 +23,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
-type ParameterObj struct {
+type ParameterObjct struct {
 	ConstraintName              string `json:"constraintName"`
 	ManifestIntegrityConstraint `json:""`
 	ImageProfile                ImageProfile `json:"imageProfile,omitempty"`
@@ -93,7 +93,7 @@ type ImageProfile struct {
 	Exclude    ImageRefList `json:"exclude,omitempty"`
 }
 
-func (p *ParameterObj) DeepCopyInto(p2 *ParameterObj) {
+func (p *ParameterObjct) DeepCopyInto(p2 *ParameterObjct) {
 	_ = copier.Copy(&p2, &p)
 }
 
