@@ -27,7 +27,6 @@ import (
 
 	"github.com/ghodss/yaml"
 	"github.com/pkg/errors"
-	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"
 	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -74,12 +73,6 @@ type DecisionReporterConfig struct {
 type SideEffectConfig struct {
 	// Event
 	CreateDenyEvent bool `json:"createDenyEvent"`
-}
-
-type RequestFilterProfile struct {
-	SkipObjects  k8smanifest.ObjectReferenceList    `json:"skipObjects,omitempty"`
-	SkipUsers    ObjectUserBindingList              `json:"skipUsers,omitempty"`
-	IgnoreFields k8smanifest.ObjectFieldBindingList `json:"ignoreFields,omitempty"`
 }
 
 func SetupLogger(config LogConfig) {

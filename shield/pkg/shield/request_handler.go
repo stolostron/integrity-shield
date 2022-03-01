@@ -28,9 +28,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
-	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
 	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
-	v1 "k8s.io/api/admission/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	kubeclient "k8s.io/client-go/kubernetes"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
@@ -143,19 +141,23 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObj) 
 	} else {
 		log.Info("enforce action is disabled.")
 	}
+
+	// start request verification
 	allow := false
 	message := ""
-	signatureResource := false
-	// check if signature resource
-	signatureResource = isAllowedSignatureResource(resource, req.AdmissionRequest.OldObject.Raw, req.Operation)
-	if signatureResource {
-		allow = true
-		message = "allowed because this resource is signatureResource."
-		return makeResultFromRequestHandler(allow, message, enforce, req)
+
+	// prepare manifest verify config
+	dryRunNs := os.Getenv("POD_NAMESPACE")
+	if dryRunNs == "" {
+		dryRunNs = defaultPodNamespace
+	}
+	maniConfig := &k8smnfconfig.ManifestVerifyConfig{
+		RequestFilterProfile: rhconfig.RequestFilterProfile,
+		DryRunNamespcae:      dryRunNs,
 	}
 
 	// verify resource
-	err, allow, message = ResourceVerify(resource, oldResource, req.UserInfo.Username, string(req.Operation), rhconfig.RequestFilterProfile, &paramObj.ManifestIntegrityConstraint)
+	err, allow, message = VerifyResource(resource, oldResource, req.UserInfo.Username, string(req.Operation), maniConfig, &paramObj.ManifestIntegrityConstraint)
 	if err != nil {
 		log.Errorf("IntegrityShield failed to decide the response. ", err.Error())
 		return makeResultFromRequestHandler(allow, message, enforce, req)
@@ -169,26 +171,7 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObj) 
 	}
 
 	// verify image
-	imageAllow := true
-	imageMessage := ""
-	var imageVerifyResults []ishieldimage.ImageVerifyResult
-	if paramObj.ImageProfile.Enabled() {
-		_, err = ishieldimage.VerifyImageInManifest(resource, paramObj.ImageProfile)
-		if err != nil {
-			log.Errorf("failed to verify images: %s", err.Error())
-			imageAllow = false
-			imageMessage = "Image signature verification is required, but failed to verify signature: " + err.Error()
-
-		} else {
-			for _, res := range imageVerifyResults {
-				if res.InScope && !res.Verified {
-					imageAllow = false
-					imageMessage = "Image signature verification is required, but failed to verify signature: " + res.FailReason
-					break
-				}
-			}
-		}
-	}
+	imageAllow, imageMessage := VerifyImagesInManifest(resource, paramObj.ImageProfile)
 
 	if allow && !imageAllow {
 		message = imageMessage
@@ -226,37 +209,6 @@ func makeResultFromRequestHandler(allow bool, msg string, enforce bool, req admi
 		"allow":     res.Allow,
 	}).Info(res.Message)
 	return res
-}
-
-func isAllowedSignatureResource(resource unstructured.Unstructured, oldObj []byte, operation v1.Operation) bool {
-	var currentResourceLabel bool
-	var label bool
-	if !(resource.GetKind() == "ConfigMap") {
-		return label
-	}
-	label = isSignatureResource(resource)
-	if operation == v1.Create {
-		currentResourceLabel = true
-	} else if operation == v1.Update {
-		// unmarshal admission request object
-		var oldRes unstructured.Unstructured
-		err := json.Unmarshal(oldObj, &oldRes)
-		if err != nil {
-			log.Errorf("failed to Unmarshal a requested object into %T; %s", resource, err.Error())
-		}
-		currentResourceLabel = isSignatureResource(oldRes)
-	}
-	return (label && currentResourceLabel)
-}
-
-func isSignatureResource(resource unstructured.Unstructured) bool {
-	var label bool
-	labelsMap := resource.GetLabels()
-	_, found := labelsMap[SignatureResourceLabel]
-	if found {
-		label = true
-	}
-	return label
 }
 
 func createOrUpdateEvent(req admission.Request, ar *ResultFromRequestHandler, constraintName string) error {
