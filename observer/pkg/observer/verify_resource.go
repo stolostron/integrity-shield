@@ -24,7 +24,7 @@ import (
 
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"
-	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
+	config "github.com/stolostron/integrity-shield/shield/pkg/config"
 	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
@@ -32,7 +32,7 @@ import (
 const AnnotationKeyDomain = "integrityshield.io"
 const ImageRefAnnotationKeyShield = "integrityshield.io/signature"
 
-func ObserveResource(resource unstructured.Unstructured, paramObj k8smnfconfig.ParameterObj, ignoreFields k8smanifest.ObjectFieldBindingList, skipObjects k8smanifest.ObjectReferenceList, secrets []k8smnfconfig.KeyConfig) VerifyResultDetail {
+func ObserveResource(resource unstructured.Unstructured, paramObj config.ParameterObject, ignoreFields k8smanifest.ObjectFieldBindingList, skipObjects k8smanifest.ObjectReferenceList, secrets []config.KeyConfig) VerifyResultDetail {
 	namespace := os.Getenv("POD_NAMESPACE")
 	if namespace == "" {
 		namespace = defaultPodNamespace
@@ -128,7 +128,7 @@ func ObserveResource(resource unstructured.Unstructured, paramObj k8smnfconfig.P
 	}
 }
 
-func ObserveImage(resource unstructured.Unstructured, profile k8smnfconfig.ImageProfile) (bool, string) {
+func ObserveImage(resource unstructured.Unstructured, profile config.ImageProfile) (bool, string) {
 	// image verify
 	imageAllow := true
 	imageMessage := ""

@@ -4,7 +4,7 @@ metadata:
   name: manifest-verify-config
 data:
   config.yaml: |
-    dryRunNamespcae: default
+    dryRunNamespcae: ishield-dryrun-ns
     requestFilterProfile: 
       skipObjects:
       - kind: ConfigMap

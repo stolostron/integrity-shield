@@ -83,7 +83,7 @@ func TestManifestIntegrityConstraint(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	testParam1 := ManifestIntegrityConstraint{
+	testParam1 := ManifestVerifyRule{
 		SkipUsers: ObjectUserBindingList{
 			{
 				Users: []string{
@@ -98,7 +98,7 @@ func TestManifestIntegrityConstraint(t *testing.T) {
 			},
 		},
 	}
-	testParam2 := ManifestIntegrityConstraint{
+	testParam2 := ManifestVerifyRule{
 		InScopeUsers: ObjectUserBindingList{
 			{
 				Users: []string{

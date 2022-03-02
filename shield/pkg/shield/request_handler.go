@@ -18,7 +18,6 @@ package shield
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -29,9 +28,10 @@ import (
 	log "github.com/sirupsen/logrus"
 	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
 	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	kubeclient "k8s.io/client-go/kubernetes"
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+
+	// "sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+	admission "k8s.io/api/admission/v1beta1"
 
 	corev1 "k8s.io/api/core/v1"
 
@@ -51,29 +51,7 @@ const (
 )
 const timeFormat = "2006-01-02T15:04:05Z"
 
-func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjct) *ResultFromRequestHandler {
-
-	// unmarshal admission request object
-	var resource unstructured.Unstructured
-	objectBytes := req.AdmissionRequest.Object.Raw
-	err := json.Unmarshal(objectBytes, &resource)
-	if err != nil {
-		log.Errorf("failed to Unmarshal a requested object into %T; %s", resource, err.Error())
-		errMsg := "IntegrityShield failed to decide the response. Failed to Unmarshal a requested object: " + err.Error()
-		return makeResultFromRequestHandler(false, errMsg, false, req)
-	}
-
-	var oldResource unstructured.Unstructured
-	oldObjectBytes := req.AdmissionRequest.OldObject.Raw
-	if oldObjectBytes != nil {
-		err = json.Unmarshal(oldObjectBytes, &oldResource)
-		if err != nil {
-			log.Errorf("failed to Unmarshal a requested oldObject into %T; %s", resource, err.Error())
-			errMsg := "IntegrityShield failed to decide the response. Failed to Unmarshal a requested object: " + err.Error()
-			return makeResultFromRequestHandler(false, errMsg, false, req)
-		}
-	}
-
+func RequestHandler(req *admission.AdmissionRequest, paramObj *k8smnfconfig.ParameterObject) *ResultFromRequestHandler {
 	// load request handler config
 	namespace := os.Getenv("POD_NAMESPACE")
 	rhcm := os.Getenv("REQUEST_HANDLER_CONFIG_NAME")
@@ -130,16 +108,16 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjct
 				"kind":      req.Kind.Kind,
 				"operation": req.Operation,
 				"userName":  req.UserInfo.Username,
-			}).Warningf("run mode should be set to 'enforce' or 'inform' in rule,%s", paramObj.ConstraintName)
+			}).Warningf("Run mode should be set to 'enforce' or 'inform' in rule,%s", paramObj.ConstraintName)
 		}
 		if paramObj.Action.Mode == "enforce" {
 			enforce = true
 		}
 	}
 	if enforce {
-		log.Info("enforce action is enabled.")
+		log.Info("Enforce action is enabled.")
 	} else {
-		log.Info("enforce action is disabled.")
+		log.Info("Enforce action is disabled.")
 	}
 
 	// start request verification
@@ -151,28 +129,27 @@ func RequestHandler(req admission.Request, paramObj *k8smnfconfig.ParameterObjct
 	if dryRunNs == "" {
 		dryRunNs = defaultPodNamespace
 	}
-	maniConfig := &k8smnfconfig.ManifestVerifyConfig{
+	mvConfig := &k8smnfconfig.ManifestVerifyConfig{
 		RequestFilterProfile: rhconfig.RequestFilterProfile,
 		DryRunNamespcae:      dryRunNs,
 	}
 
 	// verify resource
-	err, allow, message = VerifyResource(resource, oldResource, req.UserInfo.Username, string(req.Operation), maniConfig, &paramObj.ManifestIntegrityConstraint)
+	allow, message, err = VerifyResource(req, mvConfig, &paramObj.ManifestVerifyRule)
 	if err != nil {
 		log.Errorf("IntegrityShield failed to decide the response. ", err.Error())
 		return makeResultFromRequestHandler(allow, message, enforce, req)
 	}
 
 	// report decision log if skip user
-	if allow && message == "SkipUsers rule matched." {
+	if allow && message == SkipUser {
 		logRecord["reason"] = message
 		logRecord["allow"] = allow
 		decisionReporter.SendLog(logRecord)
 	}
 
 	// verify image
-	imageAllow, imageMessage := VerifyImagesInManifest(resource, paramObj.ImageProfile)
-
+	imageAllow, imageMessage := VerifyImagesInManifest(req, paramObj.ImageProfile)
 	if allow && !imageAllow {
 		message = imageMessage
 		allow = false
@@ -191,7 +168,7 @@ type ResultFromRequestHandler struct {
 	Message string `json:"message"`
 }
 
-func makeResultFromRequestHandler(allow bool, msg string, enforce bool, req admission.Request) *ResultFromRequestHandler {
+func makeResultFromRequestHandler(allow bool, msg string, enforce bool, req *admission.AdmissionRequest) *ResultFromRequestHandler {
 	res := &ResultFromRequestHandler{}
 	res.Allow = allow
 	res.Message = msg
@@ -211,7 +188,7 @@ func makeResultFromRequestHandler(allow bool, msg string, enforce bool, req admi
 	return res
 }
 
-func createOrUpdateEvent(req admission.Request, ar *ResultFromRequestHandler, constraintName string) error {
+func createOrUpdateEvent(req *admission.AdmissionRequest, ar *ResultFromRequestHandler, constraintName string) error {
 	// no event is generated for allowed request
 	if ar.Allow {
 		return nil

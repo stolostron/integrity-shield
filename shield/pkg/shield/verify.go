@@ -19,78 +19,106 @@ package shield
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/util/mapnode"
 	log "github.com/sirupsen/logrus"
-	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
+	config "github.com/stolostron/integrity-shield/shield/pkg/config"
 	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
+	admission "k8s.io/api/admission/v1beta1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
-func VerifyResource(resource, oldResource unstructured.Unstructured, username, operation string, maniconfig *k8smnfconfig.ManifestVerifyConfig, constraint *k8smnfconfig.ManifestIntegrityConstraint) (error, bool, string) {
+// Allow message
+var (
+	SkipUser          = "Allowed by skipUsers rule."
+	NoMutation        = "Allowed because no mutation found."
+	SkipObject        = "Allowed by skipObjects rule."
+	NonScopeObject    = "Allowed because this resource is not in-scope."
+	SignatureResource = "Allowed because this resource is signatureResource."
+)
+
+// VerifyResource checks if manifest is valid based on signature, ManifestVerifyRule and RequestFilterProfile which is included in ManifestVerifyConfig.
+// VerifyResource uses the default profile if ManifestVerifyConfig input is nil.
+func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.ManifestVerifyConfig, rule *config.ManifestVerifyRule) (allow bool, message string, err error) {
+	// prepare ManifestVerifyConfig/RequestFilterProfile if nil
+	if mvconfig == nil {
+		log.Info("ManifestVerifyConfig is nil. Use default config.")
+		mvconfig = config.NewManifestVerifyConfig("ishield-dryrun-ns")
+	}
+	if mvconfig.RequestFilterProfile == nil {
+		log.Info("RequestFilterProfile is nil. Use default profile.")
+		mvconfig = config.NewManifestVerifyConfig(mvconfig.DryRunNamespcae)
+	}
+
+	log.WithFields(log.Fields{
+		"namespace": request.Namespace,
+		"name":      request.Name,
+		"kind":      request.Kind.Kind,
+		"operation": request.Operation,
+		"userName":  request.UserInfo.Username,
+	}).Info("Start manifest verification.")
+
+	// unmarshal admission request object
+	var resource unstructured.Unstructured
+	objectBytes := request.Object.Raw
+	err = json.Unmarshal(objectBytes, &resource)
+	if err != nil {
+		log.Errorf("Failed to Unmarshal a requested object into %T; %s", resource, err.Error())
+		errMsg := "IntegrityShield failed to decide the response. Failed to Unmarshal a requested object: " + err.Error()
+		return false, errMsg, err
+	}
+
 	commonSkipUserMatched := false
 	skipObjectMatched := false
 	signatureResource := false
 
 	// check if signature resource
-	signatureResource = isAllowedSignatureResource(resource, oldResource, operation)
+	signatureResource = isAllowedSignatureResource(resource, request.OldObject.Raw, request.Operation)
 
 	//filter by user listed in common profile
-	commonSkipUserMatched = maniconfig.RequestFilterProfile.SkipUsers.Match(resource, username)
+	commonSkipUserMatched = mvconfig.RequestFilterProfile.SkipUsers.Match(resource, request.UserInfo.Username)
 
 	// skip object
-	skipObjectMatched = skipObjectsMatch(maniconfig.RequestFilterProfile.SkipObjects, resource)
+	skipObjectMatched = skipObjectsMatch(mvconfig.RequestFilterProfile.SkipObjects, resource)
 
 	// Proccess with parameter
 	//filter by user
-	skipUserMatched := constraint.SkipUsers.Match(resource, username)
+	skipUserMatched := rule.SkipUsers.Match(resource, request.UserInfo.Username)
 
 	//force check user
-	inScopeUserMatched := constraint.InScopeUsers.Match(resource, username)
+	inScopeUserMatched := rule.InScopeUsers.Match(resource, request.UserInfo.Username)
 
 	//check scope
-	inScopeObjMatched := constraint.InScopeObjects.Match(resource)
+	inScopeObjMatched := rule.InScopeObjects.Match(resource)
 
-	allow := false
-	message := ""
+	allow = false
+	message = ""
 	if signatureResource {
 		allow = true
-		message = "Allowed because this resource is signatureResource."
+		message = SignatureResource
 	} else if (skipUserMatched || commonSkipUserMatched) && !inScopeUserMatched {
 		allow = true
-		message = "SkipUsers rule matched."
+		message = SkipUser
 	} else if !inScopeObjMatched {
 		allow = true
-		message = "ObjectSelector rule did not match. Out of scope of verification."
+		message = NonScopeObject
 	} else if skipObjectMatched {
 		allow = true
-		message = "SkipObjects rule matched."
-	} else if operation == "UPDATE" {
+		message = SkipObject
+	} else if isUpdateRequest(request.Operation) {
 		// mutation check
-		var rawObject, rawOldObject []byte
-		rawObject, err := json.Marshal(resource)
-		if err != nil {
-			errMsg := "Failed to check mutation: Failed to marshal new resource: " + err.Error()
-			return err, false, errMsg
-		}
-
-		rawOldObject, err = json.Marshal(oldResource)
-		if err != nil {
-			errMsg := "Failed to check mutation: Failed to marshal old resource: " + err.Error()
-			return err, false, errMsg
-		}
-
-		ignoreFields := getMatchedIgnoreFields(constraint.IgnoreFields, maniconfig.RequestFilterProfile.IgnoreFields, resource)
-		mutated, err := mutationCheck(rawOldObject, rawObject, ignoreFields)
+		ignoreFields := getMatchedIgnoreFields(rule.IgnoreFields, mvconfig.RequestFilterProfile.IgnoreFields, resource)
+		mutated, err := mutationCheck(request.Object.Raw, request.OldObject.Raw, ignoreFields)
 		if err != nil {
 			log.Errorf("Failed to check mutation: %s", err.Error())
 			message = "IntegrityShield failed to decide the response. Failed to check mutation: " + err.Error()
 		}
 		if !mutated {
 			allow = true
-			message = "No mutation found"
+			message = NoMutation
 		}
 	}
 
@@ -101,13 +129,13 @@ func VerifyResource(resource, oldResource unstructured.Unstructured, username, o
 		if found {
 			signatureAnnotationType = SignatureAnnotationTypeShield
 		}
-		vo := setVerifyOption(constraint, maniconfig, signatureAnnotationType)
+		vo := setVerifyOption(rule, mvconfig, signatureAnnotationType)
 		log.WithFields(log.Fields{
 			"namespace": resource.GetNamespace(),
 			"name":      resource.GetName(),
 			"kind":      resource.GetKind(),
-			"operation": operation,
-			"userName":  username,
+			"operation": request.Operation,
+			"userName":  request.UserInfo.Username,
 		}).Debug("VerifyOption: ", vo)
 		// call VerifyResource with resource, verifyOption, keypath, imageRef
 		result, err := k8smanifest.VerifyResource(resource, vo)
@@ -115,24 +143,24 @@ func VerifyResource(resource, oldResource unstructured.Unstructured, username, o
 			"namespace": resource.GetNamespace(),
 			"name":      resource.GetName(),
 			"kind":      resource.GetKind(),
-			"operation": operation,
-			"userName":  username,
+			"operation": request.Operation,
+			"userName":  request.UserInfo.Username,
 		}).Debug("VerifyResource result: ", result)
 		if err != nil {
 			log.WithFields(log.Fields{
 				"namespace": resource.GetNamespace(),
 				"name":      resource.GetName(),
 				"kind":      resource.GetKind(),
-				"operation": operation,
-				"userName":  username,
+				"operation": request.Operation,
+				"userName":  request.UserInfo.Username,
 			}).Warningf("Signature verification is required for this request, but verifyResource return error ; %s", err.Error())
-			return nil, false, err.Error()
+			return false, err.Error(), nil
 		}
 
 		if result.InScope {
 			if result.Verified {
 				allow = true
-				message = fmt.Sprintf("singed by a valid signer: %s", result.Signer)
+				message = fmt.Sprintf("Singed by a valid signer: %s", result.Signer)
 			} else {
 				allow = false
 				message = "Signature verification is required for this request, but no signature is found."
@@ -144,33 +172,18 @@ func VerifyResource(resource, oldResource unstructured.Unstructured, username, o
 			}
 		} else {
 			allow = true
-			message = "Not protected"
+			message = NonScopeObject
 		}
 
 	}
-
-	return nil, allow, message
-}
-
-func skipObjectsMatch(l k8smanifest.ObjectReferenceList, obj unstructured.Unstructured) bool {
-	if len(l) == 0 {
-		return false
-	}
-	for _, r := range l {
-		if r.Match(obj) {
-			return true
-		}
-	}
-	return false
-}
-
-func getMatchedIgnoreFields(pi, ci k8smanifest.ObjectFieldBindingList, resource unstructured.Unstructured) []string {
-	var allIgnoreFields []string
-	_, fields := pi.Match(resource)
-	_, commonfields := ci.Match(resource)
-	allIgnoreFields = append(allIgnoreFields, fields...)
-	allIgnoreFields = append(allIgnoreFields, commonfields...)
-	return allIgnoreFields
+	log.WithFields(log.Fields{
+		"namespace": request.Namespace,
+		"name":      request.Name,
+		"kind":      request.Kind.Kind,
+		"operation": request.Operation,
+		"userName":  request.UserInfo.Username,
+	}).Infof("Completed manifest verification: allow %s: %s", strconv.FormatBool(allow), message)
+	return allow, message, nil
 }
 
 func mutationCheck(rawOldObject, rawObject []byte, IgnoreFields []string) (bool, error) {
@@ -218,7 +231,7 @@ func mutationCheck(rawOldObject, rawObject []byte, IgnoreFields []string) (bool,
 	return true, nil
 }
 
-func setVerifyOption(constraint *k8smnfconfig.ManifestIntegrityConstraint, maniConfig *k8smnfconfig.ManifestVerifyConfig, signatureAnnotationType string) *k8smanifest.VerifyResourceOption {
+func setVerifyOption(constraint *config.ManifestVerifyRule, mvconfig *config.ManifestVerifyConfig, signatureAnnotationType string) *k8smanifest.VerifyResourceOption {
 	// get verifyOption and imageRef from Parameter
 	vo := &constraint.VerifyResourceOption
 
@@ -236,7 +249,10 @@ func setVerifyOption(constraint *k8smnfconfig.ManifestIntegrityConstraint, maniC
 	}
 
 	// set DryRun namespace
-	vo.DryRunNamespace = maniConfig.DryRunNamespcae
+	vo.DryRunNamespace = mvconfig.DryRunNamespcae
+	if vo.DryRunNamespace == "" {
+		vo.DryRunNamespace = config.DefaultDryRunNS
+	}
 
 	// set Signature type
 	if signatureAnnotationType == SignatureAnnotationTypeShield {
@@ -247,9 +263,9 @@ func setVerifyOption(constraint *k8smnfconfig.ManifestIntegrityConstraint, maniC
 		keyPathList := []string{}
 		for _, keyconfig := range constraint.KeyConfigs {
 			if keyconfig.KeySecretName != "" {
-				keyPath, err := k8smnfconfig.LoadKeySecret(keyconfig.KeySecretNamespace, keyconfig.KeySecretName)
+				keyPath, err := config.LoadKeySecret(keyconfig.KeySecretNamespace, keyconfig.KeySecretName)
 				if err != nil {
-					log.Errorf("failed to load key secret: %s", err.Error())
+					log.Errorf("Failed to load key secret: %s", err.Error())
 				}
 				keyPathList = append(keyPathList, keyPath)
 			}
@@ -260,49 +276,89 @@ func setVerifyOption(constraint *k8smnfconfig.ManifestIntegrityConstraint, maniC
 		}
 	}
 	// merge params in common profile
-	if len(maniConfig.RequestFilterProfile.IgnoreFields) == 0 {
+	if len(mvconfig.RequestFilterProfile.IgnoreFields) == 0 {
 		return vo
 	}
 	fields := k8smanifest.ObjectFieldBindingList{}
 	fields = append(fields, vo.IgnoreFields...)
-	fields = append(fields, maniConfig.RequestFilterProfile.IgnoreFields...)
+	fields = append(fields, mvconfig.RequestFilterProfile.IgnoreFields...)
 	vo.IgnoreFields = fields
 	return vo
 }
 
-func isAllowedSignatureResource(resource, oldResource unstructured.Unstructured, operation string) bool {
-	var currentResourceLabel bool
-	var label bool
-	if !(resource.GetKind() == "ConfigMap") {
-		return label
+func skipObjectsMatch(l k8smanifest.ObjectReferenceList, obj unstructured.Unstructured) bool {
+	if len(l) == 0 {
+		return false
 	}
-	label = isSignatureResource(resource)
-	if operation == "CREATE" {
-		currentResourceLabel = true
-	} else if operation == "UPDATE" {
-		currentResourceLabel = isSignatureResource(oldResource)
+	for _, r := range l {
+		if r.Match(obj) {
+			return true
+		}
 	}
-	return (label && currentResourceLabel)
+	return false
+}
+
+func getMatchedIgnoreFields(pi, ci k8smanifest.ObjectFieldBindingList, resource unstructured.Unstructured) []string {
+	var allIgnoreFields []string
+	_, fields := pi.Match(resource)
+	_, commonfields := ci.Match(resource)
+	allIgnoreFields = append(allIgnoreFields, fields...)
+	allIgnoreFields = append(allIgnoreFields, commonfields...)
+	return allIgnoreFields
+}
+
+func isAllowedSignatureResource(resource unstructured.Unstructured, oldResourceRaw []byte, operation admission.Operation) bool {
+	if resource.GetKind() != "ConfigMap" {
+		return false
+	}
+	if isCreateRequest(operation) {
+		return isSignatureResource(resource)
+	} else if isUpdateRequest(operation) {
+		// unmarshal admission request object
+		var oldResource unstructured.Unstructured
+		err := json.Unmarshal(oldResourceRaw, &resource)
+		if err != nil {
+			log.Errorf("Failed to signature resource check: Unmarshal a requested old object into %T; %s", resource, err.Error())
+			return false
+		}
+		return (isSignatureResource(resource) && isSignatureResource(oldResource))
+	}
+	return false
 }
 
 func isSignatureResource(resource unstructured.Unstructured) bool {
-	var label bool
 	labelsMap := resource.GetLabels()
 	_, found := labelsMap[SignatureResourceLabel]
-	if found {
-		label = true
-	}
-	return label
+	return found
 }
 
-func VerifyImagesInManifest(resource unstructured.Unstructured, imageProfile k8smnfconfig.ImageProfile) (bool, string) {
+func isUpdateRequest(operation admission.Operation) bool {
+	return (operation == admission.Update)
+}
+
+func isCreateRequest(operation admission.Operation) bool {
+	return (operation == admission.Create)
+}
+
+// Image verification
+func VerifyImagesInManifest(request *admission.AdmissionRequest, imageProfile config.ImageProfile) (bool, string) {
+	// unmarshal admission request object
+	var resource unstructured.Unstructured
+	objectBytes := request.Object.Raw
+	err := json.Unmarshal(objectBytes, &resource)
+	if err != nil {
+		log.Errorf("Failed to Unmarshal a requested object into %T; %s", resource, err.Error())
+		errMsg := "IntegrityShield failed to decide the response. Failed to Unmarshal a requested object: " + err.Error()
+		return false, errMsg
+	}
+
 	imageAllow := true
 	imageMessage := ""
 	var imageVerifyResults []ishieldimage.ImageVerifyResult
 	if imageProfile.Enabled() {
 		_, err := ishieldimage.VerifyImageInManifest(resource, imageProfile)
 		if err != nil {
-			log.Errorf("failed to verify images: %s", err.Error())
+			log.Errorf("Failed to verify images: %s", err.Error())
 			imageAllow = false
 			imageMessage = "Image signature verification is required, but failed to verify signature: " + err.Error()
 		} else {

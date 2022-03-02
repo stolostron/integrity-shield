@@ -2062,13 +2062,13 @@ github.com/shurcooL/go-goon v0.0.0-20170922171312-37c2f522c041/go.mod h1:N5mDOms
 github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f/go.mod h1:AuYgA5Kyo4c7HfUmvRGs/6rGlMMV/6B1bVnB9JxJEEg=
 github.com/shurcooL/sanitized_anchor_name v1.0.0/go.mod h1:1NzhyTcUVG4SuEtjjoZeVRXNmyL/1OwPU0+IJeTBvfc=
 github.com/sigstore/cosign v0.6.1-0.20210723014001-364cadc9e41f/go.mod h1:/mRVq8S+bc2A33yqEEm+Uwy/r01InTgJdvfswbeQPmI=
-github.com/sigstore/cosign v1.5.1 h1:ozQz2uZPKhopvOCgp6Oh3w+W+JOopIFgHpSYdbdSmKA=
-github.com/sigstore/cosign v1.5.1/go.mod h1:USeA+jISR3H86hfgsTn1UJYKC9mgEE7/o+dJ7sk63MY=
+github.com/sigstore/cosign v1.5.2 h1:YMVIjSLQ+6fL8m3deqLcg7aRqGbU/U6sJvcU0aT4fSM=
+github.com/sigstore/cosign v1.5.2/go.mod h1:USeA+jISR3H86hfgsTn1UJYKC9mgEE7/o+dJ7sk63MY=
 github.com/sigstore/fulcio v0.0.0-20210720153316-846105495d38/go.mod h1:FZL7iVdWduaZRpXrvjmuWyr7WyXy6KXsaEVhHdITlz4=
 github.com/sigstore/fulcio v0.1.2-0.20220114150912-86a2036f9bc7 h1:XE7A9lJ+wYhmUFBWYTaw3Ph943zHB4iBYd5R0SX0ZOA=
 github.com/sigstore/fulcio v0.1.2-0.20220114150912-86a2036f9bc7/go.mod h1:ANQivY/lfOp9hN92S813LEthkm/kit96hzeIF3SNoZA=
-github.com/sigstore/k8s-manifest-sigstore v0.1.1-0.20220221005059-7d663276f8f6 h1:HDavNvjXjsQH/n3g7L3YD9rQ3UKVXCKvjPAqxXhXn28=
-github.com/sigstore/k8s-manifest-sigstore v0.1.1-0.20220221005059-7d663276f8f6/go.mod h1:9o37yDKF+aMQJ5p1LRH1KaT+YgJgTKZvk0NZwyNJolY=
+github.com/sigstore/k8s-manifest-sigstore v0.2.1-0.20220302122549-02581eed3420 h1:HgCSxjNirQ0fmCVLfAq0ToDXQPOT9D3Zess/dod6m6c=
+github.com/sigstore/k8s-manifest-sigstore v0.2.1-0.20220302122549-02581eed3420/go.mod h1:fWELceT4GvNZZrC12UutTIpuNa15++WW0rxxiStokTw=
 github.com/sigstore/rekor v0.2.1-0.20210714185543-38d532d5c0b1/go.mod h1:cL9B3+/gp3BG+/bhkSHBA3MQZMten5xM6BhJYd5b5zU=
 github.com/sigstore/rekor v0.4.1-0.20220114213500-23f583409af3 h1:mbqXrm8YZXN/cJMGeBkgPnswtfrOxDE1f7QZdJ+POQE=
 github.com/sigstore/rekor v0.4.1-0.20220114213500-23f583409af3/go.mod h1:u9clLqaVjqV9pExVL1XkM37dGyMCOX/LMocS9nsnWDY=

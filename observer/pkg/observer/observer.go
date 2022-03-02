@@ -35,7 +35,7 @@ import (
 	vrc "github.com/stolostron/integrity-shield/observer/pkg/apis/manifestintegritystate/v1"
 	misclient "github.com/stolostron/integrity-shield/observer/pkg/client/manifestintegritystate/clientset/versioned/typed/manifestintegritystate/v1"
 	midclient "github.com/stolostron/integrity-shield/reporter/pkg/client/manifestintegritydecision/clientset/versioned/typed/manifestintegritydecision/v1"
-	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
+	"github.com/stolostron/integrity-shield/shield/pkg/config"
 	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -170,7 +170,7 @@ func (self *Observer) Run() {
 	// load requestHandlerConfig
 	namespace := os.Getenv("POD_NAMESPACE")
 	rhcm := os.Getenv("REQUEST_HANDLER_CONFIG_NAME")
-	rhconfig, err := k8smnfconfig.LoadRequestHandlerConfig(namespace, rhcm)
+	rhconfig, err := config.LoadRequestHandlerConfig(namespace, rhcm)
 	if err != nil {
 		log.Error("Failed to load RequestHandlerConfig; err: ", err.Error())
 	}
@@ -504,8 +504,8 @@ func LoadKeySecret(keySecretNamespace, keySecretName string) (string, error) {
 //
 
 type ConstraintSpec struct {
-	Match      gkmatch.Match             `json:"match,omitempty"`
-	Parameters k8smnfconfig.ParameterObj `json:"parameters,omitempty"`
+	Match      gkmatch.Match          `json:"match,omitempty"`
+	Parameters config.ParameterObject `json:"parameters,omitempty"`
 }
 
 type Kinds struct {

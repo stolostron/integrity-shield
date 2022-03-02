@@ -28,7 +28,9 @@ import (
 	log "github.com/sirupsen/logrus"
 	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
 	"github.com/stolostron/integrity-shield/shield/pkg/shield"
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+
+	// "sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+	admission "k8s.io/api/admission/v1beta1"
 )
 
 const (
@@ -74,8 +76,8 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	_, _ = bufbody.ReadFrom(r.Body)
 	body := bufbody.Bytes()
 	var inputMap map[string]interface{}
-	var request *admission.Request
-	var parameters *k8smnfconfig.ParameterObjct
+	var request *admission.AdmissionRequest
+	var parameters *k8smnfconfig.ParameterObject
 	err := json.Unmarshal(body, &inputMap)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("unmarshaling input data as map[string]interface{}: %v", err), http.StatusInternalServerError)
@@ -113,7 +115,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := shield.RequestHandler(*request, parameters)
+	result := shield.RequestHandler(request, parameters)
 	resp, err := json.Marshal(result)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("marshaling request handler result: %v", err), http.StatusInternalServerError)

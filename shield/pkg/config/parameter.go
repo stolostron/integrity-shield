@@ -23,15 +23,15 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
-type ParameterObjct struct {
-	ConstraintName              string `json:"constraintName"`
-	ManifestIntegrityConstraint `json:""`
-	ImageProfile                ImageProfile `json:"imageProfile,omitempty"`
-	Action                      *Action      `json:"action,omitempty"`
-	GetProvenance               bool         `json:"getProvenance,omitempty"`
+type ParameterObject struct {
+	ConstraintName     string `json:"constraintName"`
+	ManifestVerifyRule `json:""`
+	ImageProfile       ImageProfile `json:"imageProfile,omitempty"`
+	Action             *Action      `json:"action,omitempty"`
+	GetProvenance      bool         `json:"getProvenance,omitempty"`
 }
 
-type ManifestIntegrityConstraint struct {
+type ManifestVerifyRule struct {
 	SignatureRef                     SignatureRef                    `json:"signatureRef,omitempty"`
 	KeyConfigs                       []KeyConfig                     `json:"keyConfigs,omitempty"`
 	InScopeObjects                   k8smanifest.ObjectReferenceList `json:"objectSelector,omitempty"`
@@ -93,11 +93,11 @@ type ImageProfile struct {
 	Exclude    ImageRefList `json:"exclude,omitempty"`
 }
 
-func (p *ParameterObjct) DeepCopyInto(p2 *ParameterObjct) {
+func (p *ParameterObject) DeepCopyInto(p2 *ParameterObject) {
 	_ = copier.Copy(&p2, &p)
 }
 
-func (p *ManifestIntegrityConstraint) DeepCopyInto(p2 *ManifestIntegrityConstraint) {
+func (p *ManifestVerifyRule) DeepCopyInto(p2 *ManifestVerifyRule) {
 	_ = copier.Copy(&p2, &p)
 }
 
@@ -137,9 +137,8 @@ func (p ImageProfile) MatchWith(imageRef string) bool {
 	return matched && !excluded
 }
 
-// validate ManifestIntegrityConstraint
-
-func ValidateManifestConstraint(p *ManifestIntegrityConstraint) error {
+// validate ManifestVerifyRule
+func ValidateManifestVerifyRule(p *ManifestVerifyRule) error {
 	// TODO: fix
 	return nil
 }

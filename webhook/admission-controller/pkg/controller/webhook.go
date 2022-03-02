@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -30,6 +31,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/stolostron/integrity-shield/shield/pkg/shield"
 	acconfig "github.com/stolostron/integrity-shield/webhook/admission-controller/pkg/config"
+	admissionv1beta1 "k8s.io/api/admission/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kubeclient "k8s.io/client-go/kubernetes"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
@@ -121,7 +123,10 @@ func ProcessRequest(req admission.Request) admission.Response {
 		paramObj := GetParametersFromConstraint(constraint.Spec)
 
 		// call request handler & receive result from request handler (allow, message)
-		rhr := shield.RequestHandler(req, paramObj)
+		var reqv1 admissionv1beta1.AdmissionRequest
+		reqstr, _ := json.Marshal(req)
+		_ = json.Unmarshal([]byte(reqstr), &reqv1)
+		rhr := shield.RequestHandler(&reqv1, paramObj)
 		res.ReqHandlerResult = rhr
 		res.Profile = constraint.Name
 		results = append(results, res)
