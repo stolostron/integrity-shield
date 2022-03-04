@@ -142,11 +142,73 @@ var _ = Describe("Test: integrity shield", func() {
 				return CheckConfigMap(framework, test_namespace, expected)
 			}, timeout, 1).Should(BeNil())
 		})
+		It("Prepare for read-only-file-system test", func() {
+			var timeout int = 120
+			expected := constraint_name_readOnly
+			By("Deleting constraint")
+			cmd_err := Kubectl("delete", "-f", constraint)
+			Expect(cmd_err).To(BeNil())
+			By("Deleting configmap")
+			cmd_err = Kubectl("delete", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			Expect(cmd_err).To(BeNil())
+			By("Creating constraint for mount:false mode")
+			cmd_err = Kubectl("create", "-f", constraint_readOnly)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				err := Kubectl("get", "constraint", expected)
+				if err != nil {
+					return err
+				}
+				return nil
+			}, timeout, 1).Should(BeNil())
+		})
+		It("Request with valid signature should be allowed", func() {
+			framework := initFrameWork()
+			var timeout int = 120
+			expected := test_configmap_name_annotation
+			By("Creating test configmap in ns: " + test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				return CheckConfigMap(framework, test_namespace, expected)
+			}, timeout, 1).Should(BeNil())
+		})
+		It("Prepare for a test using public key attached to constraint", func() {
+			var timeout int = 120
+			expected := constraint_name_pem
+			By("Deleting constraint")
+			cmd_err := Kubectl("delete", "-f", constraint_readOnly)
+			Expect(cmd_err).To(BeNil())
+			By("Deleting configmap")
+			cmd_err = Kubectl("delete", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			Expect(cmd_err).To(BeNil())
+			By("Creating constraint containing PEM encoded public key")
+			cmd_err = Kubectl("create", "-f", constraint_pem)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				err := Kubectl("get", "constraint", expected)
+				if err != nil {
+					return err
+				}
+				return nil
+			}, timeout, 1).Should(BeNil())
+		})
+		It("Request with valid signature should be allowed", func() {
+			framework := initFrameWork()
+			var timeout int = 120
+			expected := test_configmap_name_annotation
+			By("Creating test configmap in ns: " + test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				return CheckConfigMap(framework, test_namespace, expected)
+			}, timeout, 1).Should(BeNil())
+		})
 		It("Prepare for detect mode test", func() {
 			var timeout int = 120
 			expected := constraint_name
 			By("Deleting constraint")
-			cmd_err := Kubectl("delete", "-f", constraint)
+			cmd_err := Kubectl("delete", "-f", constraint_pem)
 			Expect(cmd_err).To(BeNil())
 			By("Creating constraint for detection mode")
 			cmd_err = Kubectl("create", "-f", constraint_detect)

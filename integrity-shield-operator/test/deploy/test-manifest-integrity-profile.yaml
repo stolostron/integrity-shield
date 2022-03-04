@@ -16,7 +16,9 @@ spec:
       fields:
       - data.comment
     keyConfigs:
-    - keySecretName: keyring-secret
-      keySecretNamespace: integrity-shield-operator-system
+    - keySecret:
+        name: keyring-secret
+        namespace: integrity-shield-operator-system
+        mount: true
     action:
       mode: enforce
