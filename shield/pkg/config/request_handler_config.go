@@ -19,10 +19,7 @@ package config
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/ghodss/yaml"
@@ -34,11 +31,12 @@ import (
 )
 
 const k8sLogLevelEnvKey = "K8S_MANIFEST_SIGSTORE_LOG_LEVEL"
+const LogLevelEnvKey = "ISHIELD_LOG_LEVEL"
 const defaultConfigKeyInConfigMap = "config.yaml"
 const defaultPodNamespace = "integrity-shield-operator-system"
 const defaultHandlerConfigMapName = "request-handler-config"
 
-var logLevelMap = map[string]log.Level{
+var LogLevelMap = map[string]log.Level{
 	"panic": log.PanicLevel,
 	"fatal": log.FatalLevel,
 	"error": log.ErrorLevel,
@@ -49,7 +47,7 @@ var logLevelMap = map[string]log.Level{
 }
 
 type RequestHandlerConfig struct {
-	KeyPathList             []string               `json:"keyPathList,omitempty"`
+	// KeyPathList             []string               `json:"keyPathList,omitempty"`
 	RequestFilterProfile    *RequestFilterProfile  `json:"requestFilterProfile,omitempty"`
 	Log                     LogConfig              `json:"log,omitempty"`
 	DecisionReporterConfig  DecisionReporterConfig `json:"decisionReporterConfig,omitempty"`
@@ -89,7 +87,8 @@ func SetupLogger(config LogConfig) {
 		k8sLogLevelStr = logLevelStr
 	}
 	_ = os.Setenv(k8sLogLevelEnvKey, k8sLogLevelStr)
-	logLevel, ok := logLevelMap[logLevelStr]
+	_ = os.Setenv(LogLevelEnvKey, logLevelStr)
+	logLevel, ok := LogLevelMap[logLevelStr]
 	if !ok {
 		logLevel = log.InfoLevel
 	}
@@ -100,45 +99,8 @@ func SetupLogger(config LogConfig) {
 	}
 }
 
-func LoadKeySecret(keySecretNamespace, keySecretName string) (string, error) {
-	kubeconf, _ := kubeutil.GetKubeConfig()
-	clientset, err := kubeclient.NewForConfig(kubeconf)
-	if err != nil {
-		return "", err
-	}
-	secret, err := clientset.CoreV1().Secrets(keySecretNamespace).Get(context.Background(), keySecretName, metav1.GetOptions{})
-	if err != nil {
-		return "", errors.Wrap(err, fmt.Sprintf("failed to get a secret `%s` in `%s` namespace", keySecretName, keySecretNamespace))
-	}
-	keyDir := fmt.Sprintf("/tmp/%s/%s/", keySecretNamespace, keySecretName)
-	sumErr := []string{}
-	keyPath := ""
-	for fname, keyData := range secret.Data {
-		err := os.MkdirAll(keyDir, os.ModePerm)
-		if err != nil {
-			sumErr = append(sumErr, err.Error())
-			continue
-		}
-		fpath := filepath.Join(keyDir, fname)
-		err = ioutil.WriteFile(fpath, keyData, 0644)
-		if err != nil {
-			sumErr = append(sumErr, err.Error())
-			continue
-		}
-		keyPath = fpath
-		break
-	}
-	if keyPath == "" && len(sumErr) > 0 {
-		return "", errors.New(fmt.Sprintf("failed to save secret data as a file; %s", strings.Join(sumErr, "; ")))
-	}
-	if keyPath == "" {
-		return "", errors.New(fmt.Sprintf("no key files are found in the secret `%s` in `%s` namespace", keySecretName, keySecretNamespace))
-	}
-
-	return keyPath, nil
-}
-
-func LoadRequestHandlerConfig(namespace, name string) (*RequestHandlerConfig, error) {
+func LoadRequestHandlerConfig() (*RequestHandlerConfig, error) {
+	namespace := os.Getenv("POD_NAMESPACE")
 	if namespace == "" {
 		namespace = defaultPodNamespace
 	}

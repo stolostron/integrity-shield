@@ -19,6 +19,7 @@ package shield
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -30,6 +31,11 @@ import (
 	admission "k8s.io/api/admission/v1beta1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
+
+const SignatureAnnotationKeyShield = "integrityshield.io/signature"
+const AnnotationKeyDomainShield = "integrityshield.io"
+const SignatureAnnotationTypeShield = "IntegrityShield"
+const SignatureResourceLabel = "integrityshield.io/signatureResource"
 
 // Allow message
 var (
@@ -43,6 +49,14 @@ var (
 // VerifyResource checks if manifest is valid based on signature, ManifestVerifyRule and RequestFilterProfile which is included in ManifestVerifyConfig.
 // VerifyResource uses the default profile if ManifestVerifyConfig input is nil.
 func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.ManifestVerifyConfig, rule *config.ManifestVerifyRule) (allow bool, message string, err error) {
+	// log setting
+	logLevelStr := os.Getenv(config.LogLevelEnvKey)
+	logLevel, ok := config.LogLevelMap[logLevelStr]
+	if !ok {
+		logLevel = log.InfoLevel
+	}
+	log.SetLevel(logLevel)
+
 	// prepare ManifestVerifyConfig/RequestFilterProfile if nil
 	if mvconfig == nil {
 		log.Info("ManifestVerifyConfig is nil. Use default config.")
@@ -125,32 +139,35 @@ func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.Manife
 	if !allow { // signature check
 		var signatureAnnotationType string
 		annotations := resource.GetAnnotations()
-		_, found := annotations[ImageRefAnnotationKeyShield]
+		_, found := annotations[SignatureAnnotationKeyShield]
 		if found {
 			signatureAnnotationType = SignatureAnnotationTypeShield
 		}
-		vo := setVerifyOption(rule, mvconfig, signatureAnnotationType)
+		vo, err := setVerifyOption(rule, mvconfig, signatureAnnotationType)
+		if err != nil {
+			return false, err.Error(), nil
+		}
 		log.WithFields(log.Fields{
-			"namespace": resource.GetNamespace(),
-			"name":      resource.GetName(),
-			"kind":      resource.GetKind(),
+			"namespace": request.Namespace,
+			"name":      request.Name,
+			"kind":      request.Kind.Kind,
 			"operation": request.Operation,
 			"userName":  request.UserInfo.Username,
 		}).Debug("VerifyOption: ", vo)
 		// call VerifyResource with resource, verifyOption, keypath, imageRef
 		result, err := k8smanifest.VerifyResource(resource, vo)
 		log.WithFields(log.Fields{
-			"namespace": resource.GetNamespace(),
-			"name":      resource.GetName(),
-			"kind":      resource.GetKind(),
+			"namespace": request.Namespace,
+			"name":      request.Name,
+			"kind":      request.Kind.Kind,
 			"operation": request.Operation,
 			"userName":  request.UserInfo.Username,
 		}).Debug("VerifyResource result: ", result)
 		if err != nil {
 			log.WithFields(log.Fields{
-				"namespace": resource.GetNamespace(),
-				"name":      resource.GetName(),
-				"kind":      resource.GetKind(),
+				"namespace": request.Namespace,
+				"name":      request.Name,
+				"kind":      request.Kind.Kind,
 				"operation": request.Operation,
 				"userName":  request.UserInfo.Username,
 			}).Warningf("Signature verification is required for this request, but verifyResource return error ; %s", err.Error())
@@ -231,7 +248,7 @@ func mutationCheck(rawOldObject, rawObject []byte, IgnoreFields []string) (bool,
 	return true, nil
 }
 
-func setVerifyOption(constraint *config.ManifestVerifyRule, mvconfig *config.ManifestVerifyConfig, signatureAnnotationType string) *k8smanifest.VerifyResourceOption {
+func setVerifyOption(constraint *config.ManifestVerifyRule, mvconfig *config.ManifestVerifyConfig, signatureAnnotationType string) (*k8smanifest.VerifyResourceOption, error) {
 	// get verifyOption and imageRef from Parameter
 	vo := &constraint.VerifyResourceOption
 
@@ -256,19 +273,36 @@ func setVerifyOption(constraint *config.ManifestVerifyRule, mvconfig *config.Man
 
 	// set Signature type
 	if signatureAnnotationType == SignatureAnnotationTypeShield {
-		vo.AnnotationConfig.AnnotationKeyDomain = AnnotationKeyDomain
+		vo.AnnotationConfig.AnnotationKeyDomain = AnnotationKeyDomainShield
 	}
+
 	// prepare local key for verifyResource
 	if len(constraint.KeyConfigs) != 0 {
 		keyPathList := []string{}
 		for _, keyconfig := range constraint.KeyConfigs {
-			if keyconfig.KeySecretName != "" {
-				keyPath, err := config.LoadKeySecret(keyconfig.KeySecretNamespace, keyconfig.KeySecretName)
+			if keyconfig.Secret.Namespace != "" && keyconfig.Secret.Name != "" {
+				if keyconfig.Secret.Mount {
+					keyPath, err := keyconfig.LoadKeySecret()
+					if err != nil {
+						log.Errorf("Failed to load key secret: %s", err.Error())
+						return nil, fmt.Errorf("Failed to load key secret: %s", err.Error())
+					}
+					keyPathList = append(keyPathList, keyPath)
+				} else {
+					keyRef := keyconfig.ConvertToCosignKeyRef()
+					keyPathList = append(keyPathList, keyRef)
+				}
+			}
+			if keyconfig.Key.PEM != "" && keyconfig.Key.Name != "" {
+				keyPath, err := keyconfig.ConvertToLocalFilePath()
 				if err != nil {
-					log.Errorf("Failed to load key secret: %s", err.Error())
+					return nil, fmt.Errorf("Failed to get local file path: %s", err.Error())
 				}
 				keyPathList = append(keyPathList, keyPath)
 			}
+		}
+		if len(keyPathList) == 0 {
+			return nil, fmt.Errorf("KeyConfigs is not properly configured, failed to set public key.")
 		}
 		keyPathString := strings.Join(keyPathList, ",")
 		if keyPathString != "" {
@@ -277,13 +311,13 @@ func setVerifyOption(constraint *config.ManifestVerifyRule, mvconfig *config.Man
 	}
 	// merge params in common profile
 	if len(mvconfig.RequestFilterProfile.IgnoreFields) == 0 {
-		return vo
+		return vo, nil
 	}
 	fields := k8smanifest.ObjectFieldBindingList{}
 	fields = append(fields, vo.IgnoreFields...)
 	fields = append(fields, mvconfig.RequestFilterProfile.IgnoreFields...)
 	vo.IgnoreFields = fields
-	return vo
+	return vo, nil
 }
 
 func skipObjectsMatch(l k8smanifest.ObjectReferenceList, obj unstructured.Unstructured) bool {

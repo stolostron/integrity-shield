@@ -20,15 +20,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path/filepath"
 	"strconv"
-	"strings"
 	"time"
 
 	gkmatch "github.com/open-policy-agent/gatekeeper/pkg/mutation/match"
-	"github.com/pkg/errors"
 	cosign "github.com/sigstore/cosign/cmd/cosign/cli"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
 	log "github.com/sirupsen/logrus"
@@ -168,9 +164,7 @@ func (self *Observer) Init() error {
 
 func (self *Observer) Run() {
 	// load requestHandlerConfig
-	namespace := os.Getenv("POD_NAMESPACE")
-	rhcm := os.Getenv("REQUEST_HANDLER_CONFIG_NAME")
-	rhconfig, err := config.LoadRequestHandlerConfig(namespace, rhcm)
+	rhconfig, err := config.LoadRequestHandlerConfig()
 	if err != nil {
 		log.Error("Failed to load RequestHandlerConfig; err: ", err.Error())
 	}
@@ -458,45 +452,6 @@ func (self *Observer) exportResultDetail(results ObservationDetailResults) error
 		}
 	}
 	return nil
-}
-
-func LoadKeySecret(keySecretNamespace, keySecretName string) (string, error) {
-	kubeconf, _ := kubeutil.GetKubeConfig()
-	clientset, err := kubeclient.NewForConfig(kubeconf)
-	if err != nil {
-		return "", err
-	}
-	secret, err := clientset.CoreV1().Secrets(keySecretNamespace).Get(context.Background(), keySecretName, metav1.GetOptions{})
-	if err != nil {
-		return "", errors.Wrap(err, fmt.Sprintf("failed to get a secret `%s` in `%s` namespace", keySecretName, keySecretNamespace))
-	}
-	keyDir := fmt.Sprintf("/tmp/%s/%s/", keySecretNamespace, keySecretName)
-	log.Debug("keyDir", keyDir)
-	sumErr := []string{}
-	keyPath := ""
-	for fname, keyData := range secret.Data {
-		err = os.MkdirAll(keyDir, os.ModePerm)
-		if err != nil {
-			sumErr = append(sumErr, err.Error())
-			continue
-		}
-		fpath := filepath.Join(keyDir, fname)
-		err = ioutil.WriteFile(fpath, keyData, 0644)
-		if err != nil {
-			sumErr = append(sumErr, err.Error())
-			continue
-		}
-		keyPath = fpath
-		break
-	}
-	if keyPath == "" && len(sumErr) > 0 {
-		return "", errors.New(fmt.Sprintf("failed to save secret data as a file; %s", strings.Join(sumErr, "; ")))
-	}
-	if keyPath == "" {
-		return "", errors.New(fmt.Sprintf("no key files are found in the secret `%s` in `%s` namespace", keySecretName, keySecretNamespace))
-	}
-
-	return keyPath, nil
 }
 
 //

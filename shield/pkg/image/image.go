@@ -27,9 +27,9 @@ import (
 	"github.com/ghodss/yaml"
 	"github.com/pkg/errors"
 
-	ishieldconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
 	"github.com/sigstore/cosign/cmd/cosign/cli/manifest"
 	"github.com/sigstore/cosign/cmd/cosign/cli/verify"
+	ishieldconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
@@ -66,13 +66,28 @@ func VerifyImageInManifest(resource unstructured.Unstructured, profile ishieldco
 	}
 
 	keyPathList := []string{}
-	for _, keyConfig := range profile.KeyConfigs {
-		if keyConfig.KeySecretName != "" {
-			keyPath, err := ishieldconfig.LoadKeySecret(keyConfig.KeySecretNamespace, keyConfig.KeySecretName)
-			if err != nil {
-				return false, errors.Wrap(err, "failed to load a key secret for image verification")
+	if len(profile.KeyConfigs) != 0 {
+		keyPathList := []string{}
+		for _, keyconfig := range profile.KeyConfigs {
+			if keyconfig.Secret.Namespace != "" && keyconfig.Secret.Name != "" {
+				if keyconfig.Secret.Mount {
+					keyPath, err := keyconfig.LoadKeySecret()
+					if err != nil {
+						return false, fmt.Errorf("Failed to load key secret: %s", err.Error())
+					}
+					keyPathList = append(keyPathList, keyPath)
+				} else {
+					keyRef := keyconfig.ConvertToCosignKeyRef()
+					keyPathList = append(keyPathList, keyRef)
+				}
 			}
-			keyPathList = append(keyPathList, keyPath)
+			if keyconfig.Key.PEM != "" && keyconfig.Key.Name != "" {
+				keyPath, err := keyconfig.ConvertToLocalFilePath()
+				if err != nil {
+					return false, fmt.Errorf("Failed to get local file path: %s", err.Error())
+				}
+				keyPathList = append(keyPathList, keyPath)
+			}
 		}
 	}
 	if len(keyPathList) == 0 {

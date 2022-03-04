@@ -26,7 +26,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	log "github.com/sirupsen/logrus"
-	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
+	"github.com/stolostron/integrity-shield/shield/pkg/config"
 	kubeutil "github.com/stolostron/integrity-shield/shield/pkg/kubernetes"
 	kubeclient "k8s.io/client-go/kubernetes"
 
@@ -39,10 +39,6 @@ import (
 )
 
 const defaultPodNamespace = "integrity-shield-operator-system"
-const ImageRefAnnotationKeyShield = "integrityshield.io/signature"
-const AnnotationKeyDomain = "integrityshield.io"
-const SignatureAnnotationTypeShield = "IntegrityShield"
-const SignatureResourceLabel = "integrityshield.io/signatureResource"
 const (
 	EventTypeAnnotationKey       = "integrityshield.io/eventType"
 	EventResultAnnotationKey     = "integrityshield.io/eventResult"
@@ -51,11 +47,9 @@ const (
 )
 const timeFormat = "2006-01-02T15:04:05Z"
 
-func RequestHandler(req *admission.AdmissionRequest, paramObj *k8smnfconfig.ParameterObject) *ResultFromRequestHandler {
+func RequestHandler(req *admission.AdmissionRequest, paramObj *config.ParameterObject) *ResultFromRequestHandler {
 	// load request handler config
-	namespace := os.Getenv("POD_NAMESPACE")
-	rhcm := os.Getenv("REQUEST_HANDLER_CONFIG_NAME")
-	rhconfig, err := k8smnfconfig.LoadRequestHandlerConfig(namespace, rhcm)
+	rhconfig, err := config.LoadRequestHandlerConfig()
 	if err != nil {
 		log.Errorf("failed to load request handler config: %s", err.Error())
 		errMsg := "IntegrityShield failed to decide the response. Failed to load request handler config: " + err.Error()
@@ -63,12 +57,12 @@ func RequestHandler(req *admission.AdmissionRequest, paramObj *k8smnfconfig.Para
 	}
 	if rhconfig == nil {
 		log.Warning("request handler config is empty")
-		rhconfig = &k8smnfconfig.RequestHandlerConfig{}
+		rhconfig = &config.RequestHandlerConfig{}
 	}
 
 	// setup log
-	k8smnfconfig.SetupLogger(rhconfig.Log)
-	decisionReporter := k8smnfconfig.InitDecisionReporter(rhconfig.DecisionReporterConfig)
+	config.SetupLogger(rhconfig.Log)
+	decisionReporter := config.InitDecisionReporter(rhconfig.DecisionReporterConfig)
 	if paramObj.ConstraintName == "" {
 		log.Warning("ConstraintName is empty. Please set constraint name in parameter field.")
 	}
@@ -129,7 +123,7 @@ func RequestHandler(req *admission.AdmissionRequest, paramObj *k8smnfconfig.Para
 	if dryRunNs == "" {
 		dryRunNs = defaultPodNamespace
 	}
-	mvConfig := &k8smnfconfig.ManifestVerifyConfig{
+	mvConfig := &config.ManifestVerifyConfig{
 		RequestFilterProfile: rhconfig.RequestFilterProfile,
 		DryRunNamespcae:      dryRunNs,
 	}
