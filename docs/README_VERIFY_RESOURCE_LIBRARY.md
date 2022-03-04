@@ -2,9 +2,9 @@
 VerifyResource is a library which checks if admission request is valid based on signature and verification rule.
 
 # How to VerifyResource
-This is the example code to show how to call VerifyResource.
-VerifyResource recieves admission request, configuration(ManifestVerifyConfig) and verification rule(ManifestVerifyRule).
-If you use default configuration, it can be nil. 
+This sample code shows how to call VerifyResource.  
+VerifyResource receives an admission request, configuration(ManifestVerifyConfig) and verification rule(ManifestVerifyRule).  
+If you use default configuration, it can be `nil`. 
 ```
 import (
     "github.com/stolostron/integrity-shield/shield/pkg/config"
@@ -52,7 +52,7 @@ func sample(adreq *admission.Request) {
 ```
 The following snippets are examples of ManifestVerifyConfig and ManifestVerifyRule.
 
-1. ManifestVerifyRule
+1. ManifestVerifyRule("sample-manifest-verify-rule.yml")
 ```yaml
 objectSelector:
 - name: sample-cm
@@ -97,5 +97,6 @@ keyConfigs:
       -----END PGP PUBLIC KEY BLOCK-----
 ```
 
-2. ManifestVerifyConfig
-please check [here](../shield/resource/manifest-verify-config.yaml)
+2. ManifestVerifyConfig("sample-manifest-verify-config.yml")
+
+please check [here](../shield/resource/manifest-verify-config.yaml).
