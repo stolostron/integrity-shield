@@ -1,0 +1,82 @@
+{
+    "uid": "2529b894-5fca-4df9-a92b-7110f42bfa09",
+    "kind": {
+        "group": "",
+        "version": "v1",
+        "kind": "ConfigMap"
+    },
+    "resource": {
+        "group": "",
+        "version": "v1",
+        "resource": "configmaps"
+    },
+    "requestKind": {
+        "group": "",
+        "version": "v1",
+        "kind": "ConfigMap"
+    },
+    "requestResource": {
+        "group": "",
+        "version": "v1",
+        "resource": "configmaps"
+    },
+    "name": "sample-cm",
+    "namespace": "sample-ns",
+    "operation": "CREATE",
+    "userInfo": {
+        "username": "kubernetes-admin",
+        "groups": [
+            "system:masters",
+            "system:authenticated"
+        ]
+    },
+    "object": {
+        "apiVersion": "v1",
+        "data": {
+            "comment": "comment1",
+            "key1": "val1",
+            "key2": "val2"
+        },
+        "kind": "ConfigMap",
+        "metadata": {
+            "annotations": {
+                "integrityshield.io/message": "H4sIAKbCIWIAAzXLMQqAMAyF4T2nyAUc2jGrs6t7sFGCJi22CN7eori978HPRWc5q2YnvALs6olwzL7qNnEBk8aJGxMgOpsQVrZyyLAY/P8ud+gxH+FDfBE7lmwm3ugfAR7f71YHbwAAAA==",
+                "integrityshield.io/signature": "LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0KCmlRRktCQUFCQ0FBMEZpRUVRRmVCc3JTbUw2Ukh4YVJJK2s3U1hTeUFnTDhGQW1JaHdxWVdISE5wWjI1bGNrQmwKYm5SbGNuQnlhWE5sTG1OdmJRQUtDUkQ2VHRKZExJQ0F2MnE2Qi9zRzF3dFQrZGg5R1Y1VU52aE91aEJZc0R6aApXMEthYkVPd0E3NzNsbzdVckxoOFFEa2FaU3QzSFFYUDFtVVNGWk55dVJyaVArQmV1OVRQU1hQMFlvYVY3YzZjCkdvQ1FxYll4QVZocnBjbmt4OUJpQWtrWWRxcDhxVTc4ZkNWVk9vYTA5ZlRxdmY2S05Ca0dOemtMbmk1NFA1OTIKZTZNcThsT2d5dGZ3QVhBUTVKNGZYcHcwUHVtR2xpd04wNjNBNkZoSUFvTjF4Q2U3NWZTRHh2TWRmSjl1cmR4VQphZlp2TmxMcmc2QmxBV0ZlbnF0cElpYmhxT3BKbzdla2R6RGt0bTNrNURyMDJHVzZoSjBiV2UwZmZKcmNXa045CmNxWngwWFI0N0FWSk1QdWpLMzZpL2g2eVN3eW11cVJsMmJVL09hMVMyRjJLTnhZVkxNZlJ3L0xsSmlLRQo9dXE4OAotLS0tLUVORCBQR1AgU0lHTkFUVVJFLS0tLS0K"
+            },
+            "creationTimestamp": "2022-03-04T07:43:10Z",
+            "managedFields": [
+                {
+                    "apiVersion": "v1",
+                    "fieldsType": "FieldsV1",
+                    "fieldsV1": {
+                        "f:data": {
+                            ".": {},
+                            "f:comment": {},
+                            "f:key1": {},
+                            "f:key2": {}
+                        },
+                        "f:metadata": {
+                            "f:annotations": {
+                                ".": {},
+                                "f:integrityshield.io/message": {},
+                                "f:integrityshield.io/signature": {}
+                            }
+                        }
+                    },
+                    "manager": "oc",
+                    "operation": "Update",
+                    "time": "2022-03-04T07:43:10Z"
+                }
+            ],
+            "name": "sample-cm",
+            "namespace": "sample-ns",
+            "uid": "44725451-0fd5-47ec-98a1-f53f938e9b4d"
+        }
+    },
+    "oldObject": null,
+    "dryRun": false,
+    "options": {
+        "apiVersion": "meta.k8s.io/v1",
+        "kind": "CreateOptions"
+    }
+}
