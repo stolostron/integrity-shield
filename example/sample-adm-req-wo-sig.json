@@ -1,0 +1,71 @@
+{
+    "uid": "0937e29f-1757-475a-b017-42e98b19221f",
+    "kind": {
+        "group": "",
+        "version": "v1",
+        "kind": "ConfigMap"
+    },
+    "resource": {
+        "group": "",
+        "version": "v1",
+        "resource": "configmaps"
+    },
+    "requestKind": {
+        "group": "",
+        "version": "v1",
+        "kind": "ConfigMap"
+    },
+    "requestResource": {
+        "group": "",
+        "version": "v1",
+        "resource": "configmaps"
+    },
+    "name": "sample-cm",
+    "namespace": "sample-ns",
+    "operation": "CREATE",
+    "userInfo": {
+        "username": "kubernetes-admin",
+        "groups": [
+            "system:masters",
+            "system:authenticated"
+        ]
+    },
+    "object": {
+        "apiVersion": "v1",
+        "data": {
+            "comment": "comment1",
+            "key1": "val1",
+            "key2": "val2"
+        },
+        "kind": "ConfigMap",
+        "metadata": {
+            "creationTimestamp": "2022-03-07T08:44:08Z",
+            "managedFields": [
+                {
+                    "apiVersion": "v1",
+                    "fieldsType": "FieldsV1",
+                    "fieldsV1": {
+                        "f:data": {
+                            ".": {},
+                            "f:comment": {},
+                            "f:key1": {},
+                            "f:key2": {}
+                        }
+                    },
+                    "manager": "oc",
+                    "operation": "Update",
+                    "time": "2022-03-07T08:44:08Z"
+                }
+            ],
+            "name": "sample-cm",
+            "namespace": "sample-ns",
+            "uid": "cd140483-e611-489d-9195-3a04b9f9feb9"
+        }
+    },
+    "oldObject": null,
+    "dryRun": false,
+    "options": {
+        "apiVersion": "meta.k8s.io/v1",
+        "kind": "CreateOptions"
+    }
+}
