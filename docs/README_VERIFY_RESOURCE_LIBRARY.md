@@ -1,58 +1,25 @@
 # VerifyResource
 VerifyResource is a library which checks if admission request is valid based on signature and verification rule.
 
-# How to VerifyResource
-This sample code shows how to call VerifyResource.  
-VerifyResource receives an admission request, configuration(ManifestVerifyConfig) and verification rule(ManifestVerifyRule).  
+# How to use VerifyResource
+Here is a [sample code](./example/verify-resource.go) to call VerifyResource.  
+VerifyResource receives an admission request, a configuration (ManifestVerifyConfig), and a verification rule (ManifestVerifyRule). 
 If you use default configuration, it can be `nil`. 
+
+VerifyResource uses DryRun function internally. Therefore, creation permission to the DryRun namespace is required.
+You can set DryRun namespace in ManifestVerifyConfig.
+
+You can try the sample code with the following command.
 ```
-import (
-    "github.com/stolostron/integrity-shield/shield/pkg/config"
-	"github.com/stolostron/integrity-shield/shield/pkg/shield"
-	admission "k8s.io/api/admission/v1beta1"
-)
+cd docs/example
+go run verify-resource.go
 
-func sample(adreq *admission.Request) {
-	ruleBytes, err := ioutil.ReadFile("sample-manifest-verify-rule.yml")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	var rule *config.ManifestVerifyRule
-	err = yaml.Unmarshal(ruleBytes, &rule)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	defaultRuleBytes, err := ioutil.ReadFile("sample-manifest-verify-config.yml")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	var defaultRule *config.ManifestVerifyConfig
-	err = yaml.Unmarshal(defaultRuleBytes, &defaultRule)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-  
-  allow, msg, err := shield.VerifyResource(adreq, defaultRule, rule) // verifyResource accepts (adreq, nil, rule) 
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	res := fmt.Sprintf("allow: %s, reaseon: %s", allow, msg)
-	fmt.Println(res)
-	return
-}
+[VerifyResource Result] allow: true, reaseon: Singed by a valid signer: signer@enterprise.com
 ```
+
 The following snippets are examples of ManifestVerifyConfig and ManifestVerifyRule.
 
-1. ManifestVerifyRule("sample-manifest-verify-rule.yml")
+1. ManifestVerifyRule
 ```yaml
 objectSelector:
 - name: sample-cm
@@ -73,6 +40,6 @@ keyConfigs:
       -----END PGP PUBLIC KEY BLOCK-----
 ```
 
-2. ManifestVerifyConfig("sample-manifest-verify-config.yml")
+2. ManifestVerifyConfig
 
-please check [here](../shield/resource/manifest-verify-config.yaml).
+Please check [here](../shield/resource/manifest-verify-config.yaml).
