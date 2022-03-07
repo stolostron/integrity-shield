@@ -7,11 +7,9 @@ VerifyResource is a library which checks if admission request is valid based on 
 - creation permission: VerifyResource uses DryRun function internally. Therefore, `creation permission` to the DryRun namespace is required.
 
 ## Example
-Here is a [sample code](./example/verify-resource.go) to call VerifyResource.  
-
 This example uses these files in the [example dir](./example).
 
-- [verify-resource.go](./example/verify-resource.go) : example code
+- [verify-resource.go](./example/verify-resource.go) : example code to call VerifyResource
 - [sample-cm.yaml](./example/sample-cm.yaml) : sample resource
 - [sample-cm-w-sig.yaml](./example/sample-cm-w-sig.yaml) : sample resource signed by `signer@enterprise.com`
 - [sample-adm-req-wo-sig.json](./example/sample-adm-req-wo-sig.json) : admission request of sample-cm without signature
@@ -20,7 +18,6 @@ This example uses these files in the [example dir](./example).
 
 
 You can try the sample code with the following command.
-
 VerifyResource receives an `admission request` and a `ManifestVerifyRule`, then returns the validation result.
 
 1. Admission request without signature will not be accepted.
@@ -30,7 +27,7 @@ go run verify-resource.go sample-adm-req-wo-sig.json sample-rule.yaml
 
 [VerifyResource Result] allow: false, reaseon: failed to verify signature: failed to get signature: `cosign.sigstore.dev/message` is not found in the annotations
 ```
-1. Admission request with signature will be accepted.
+2. Admission request with signature will be accepted.
 ```
 go run verify-resource.go sample-adm-req-w-sig.json sample-rule.yaml
 
