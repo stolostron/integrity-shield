@@ -4,23 +4,24 @@ VerifyResource is a library which checks if admission request is valid based on 
 # How to use VerifyResource
 ## Prerequisite
 - kubectl command
-- VerifyResource uses DryRun function internally. Therefore, `creation permission` to the DryRun namespace is required.
+- creation permission: VerifyResource uses DryRun function internally. Therefore, `creation permission` to the DryRun namespace is required.
 
 ## Example
 Here is a [sample code](./example/verify-resource.go) to call VerifyResource.  
 
 This example uses these files in the [example dir](./example).
 
-- **verify-resource.go** : example code
-- **sample-cm.yaml** : sample resource
-- **sample-cm-w-sig.yaml** : sample resource signed by `signer@enterprise.com`
-- **sample-adm-req-wo-sig.json** : admission request of sample-cm without signature
-- **sample-adm-req-w-sig.json** : admission request of sample-cm signed by `signer@enterprise.com`
-- **sample-rule.yaml** : sample ManifestVerifyRule
+- [verify-resource.go](./example/verify-resource.go) : example code
+- [sample-cm.yaml](./example/sample-cm.yaml) : sample resource
+- [sample-cm-w-sig.yaml](./example/sample-cm-w-sig.yaml) : sample resource signed by `signer@enterprise.com`
+- [sample-adm-req-wo-sig.json](./example/sample-adm-req-wo-sig.json) : admission request of sample-cm without signature
+- [sample-adm-req-w-sig.json](./example/sample-adm-req-w-sig.json) : admission request of sample-cm signed by `signer@enterprise.com`
+- [sample-rule.yaml](./example/sample-rule.yaml) : sample ManifestVerifyRule
 
 
 You can try the sample code with the following command.
-VerifyResource receives an `admission request` and a `verification rule (ManifestVerifyRule)`. 
+
+VerifyResource receives an `admission request` and a `ManifestVerifyRule`, then returns the validation result.
 
 1. Admission request without signature will not be accepted.
 ```
@@ -37,9 +38,10 @@ go run verify-resource.go sample-adm-req-w-sig.json sample-rule.yaml
 ```
 
 The following snippet is a sample ManifestVerifyRule.
+
 You can define rules to verify resource such as target object (namespace/kind/name etc.), public key, allow ServiceAccount, allow change patterns etc. 
 
-1. ManifestVerifyRule
+ManifestVerifyRule
 ```yaml
 objectSelector:
 - name: sample-cm
