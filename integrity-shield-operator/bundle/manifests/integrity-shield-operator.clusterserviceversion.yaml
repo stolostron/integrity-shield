@@ -295,6 +295,7 @@ spec:
                         memory: 200Mi
                     securityContext:
                       allowPrivilegeEscalation: false
+                      runAsNonRoot: true
                 serviceAccountName: integrity-shield-operator-controller-manager
                 terminationGracePeriodSeconds: 10
       permissions:
