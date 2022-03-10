@@ -27,5 +27,5 @@ ADD bundle/manifests/integrity-shield-operator.clusterserviceversion.yaml /ishie
 RUN chgrp -R 0 /ishield-op-app && chmod -R g=u /ishield-op-app
 
 WORKDIR /ishield-op-app
-
+USER 10001
 ENTRYPOINT ["/ishield-op-app/manager"]
