@@ -49,6 +49,11 @@ var (
 // VerifyResource checks if manifest is valid based on signature, ManifestVerifyRule and RequestFilterProfile which is included in ManifestVerifyConfig.
 // VerifyResource uses the default profile if ManifestVerifyConfig input is nil.
 func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.ManifestVerifyConfig, rule *config.ManifestVerifyRule) (allow bool, message string, err error) {
+	// allow dryrun request
+	if *request.DryRun {
+		return true, "Allowed because of DryRun request", nil
+	}
+
 	// log setting
 	logLevelStr := os.Getenv(config.LogLevelEnvKey)
 	logLevel, ok := config.LogLevelMap[logLevelStr]
