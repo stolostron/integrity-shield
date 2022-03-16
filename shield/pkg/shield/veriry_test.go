@@ -44,6 +44,10 @@ var (
 	adreq_crb_sig         = "./testdata/adreq_clusterrolebinding2.json"
 	adreq_deployment      = "./testdata/adreq_deployment.json"
 	adreq_deployment_sig  = "./testdata/adreq_deployment2.json"
+	adreq_sa              = "./testdata/adreq_sa.json"
+	adreq_sa_sig          = "./testdata/adreq_sa2.json"
+	adreq_svc             = "./testdata/adreq_service.json"
+	adreq_svc_sig         = "./testdata/adreq_service2.json"
 	rule                  = "./testdata/test_rule.yaml"
 )
 
@@ -54,7 +58,8 @@ func TestVerifyResource(t *testing.T) {
 	var rule *config.ManifestVerifyRule
 	_ = yaml.Unmarshal(ruleBytes, &rule)
 
-	commonRule := config.NewManifestVerifyConfig("default")
+	// use integrity-shield-operator-system namespace for dry-run
+	commonRule := config.NewManifestVerifyConfig("integrity-shield-operator-system")
 
 	/*---- ConfigMap ----*/
 	// invalid
@@ -231,6 +236,52 @@ func TestVerifyResource(t *testing.T) {
 
 	// valid
 	adreq = loadRequest(adreq_crb_sig)
+	allow, _, err = VerifyResource(adreq, commonRule, rule)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if !allow {
+		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+	}
+
+	/*---- ServiceAccount ----*/
+	// invalid
+	adreq = loadRequest(adreq_sa)
+	allow, _, err = VerifyResource(adreq, commonRule, rule)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if allow {
+		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+	}
+
+	// valid
+	adreq = loadRequest(adreq_sa_sig)
+	allow, _, err = VerifyResource(adreq, commonRule, rule)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if !allow {
+		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+	}
+
+	/*---- Service ----*/
+	// invalid
+	adreq = loadRequest(adreq_svc)
+	allow, _, err = VerifyResource(adreq, commonRule, rule)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if allow {
+		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+	}
+
+	// valid
+	adreq = loadRequest(adreq_svc_sig)
 	allow, _, err = VerifyResource(adreq, commonRule, rule)
 	if err != nil {
 		fmt.Println(err)
