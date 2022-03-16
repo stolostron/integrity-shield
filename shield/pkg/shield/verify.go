@@ -152,22 +152,24 @@ func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.Manife
 		if err != nil {
 			return false, err.Error(), nil
 		}
+		voBytes, _ := json.Marshal(vo)
 		log.WithFields(log.Fields{
 			"namespace": request.Namespace,
 			"name":      request.Name,
 			"kind":      request.Kind.Kind,
 			"operation": request.Operation,
 			"userName":  request.UserInfo.Username,
-		}).Debug("VerifyOption: ", vo)
+		}).Debug("VerifyOption: ", string(voBytes))
 		// call VerifyResource with resource, verifyOption, keypath, imageRef
 		result, err := k8smanifest.VerifyResource(resource, vo)
+		resBytes, _ := json.Marshal(result)
 		log.WithFields(log.Fields{
 			"namespace": request.Namespace,
 			"name":      request.Name,
 			"kind":      request.Kind.Kind,
 			"operation": request.Operation,
 			"userName":  request.UserInfo.Username,
-		}).Debug("VerifyResource result: ", result)
+		}).Debug("VerifyResource result: ", string(resBytes))
 		if err != nil {
 			log.WithFields(log.Fields{
 				"namespace": request.Namespace,
