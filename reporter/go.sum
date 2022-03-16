@@ -1845,7 +1845,7 @@ github.com/sigstore/cosign v0.6.1-0.20210723014001-364cadc9e41f/go.mod h1:/mRVq8
 github.com/sigstore/cosign v1.5.2/go.mod h1:USeA+jISR3H86hfgsTn1UJYKC9mgEE7/o+dJ7sk63MY=
 github.com/sigstore/fulcio v0.0.0-20210720153316-846105495d38/go.mod h1:FZL7iVdWduaZRpXrvjmuWyr7WyXy6KXsaEVhHdITlz4=
 github.com/sigstore/fulcio v0.1.2-0.20220114150912-86a2036f9bc7/go.mod h1:ANQivY/lfOp9hN92S813LEthkm/kit96hzeIF3SNoZA=
-github.com/sigstore/k8s-manifest-sigstore v0.2.1-0.20220304050627-ed26e30c7343/go.mod h1:fWELceT4GvNZZrC12UutTIpuNa15++WW0rxxiStokTw=
+github.com/sigstore/k8s-manifest-sigstore v0.2.1-0.20220316094109-adfc287a58c0/go.mod h1:fWELceT4GvNZZrC12UutTIpuNa15++WW0rxxiStokTw=
 github.com/sigstore/rekor v0.2.1-0.20210714185543-38d532d5c0b1/go.mod h1:cL9B3+/gp3BG+/bhkSHBA3MQZMten5xM6BhJYd5b5zU=
 github.com/sigstore/rekor v0.4.1-0.20220114213500-23f583409af3/go.mod h1:u9clLqaVjqV9pExVL1XkM37dGyMCOX/LMocS9nsnWDY=
 github.com/sigstore/sigstore v0.0.0-20210713222344-1fee53516622/go.mod h1:aOSeNrlcHsfUD8Q1hwWd8KloNqBnxEZlu4k47cFg5rg=
