@@ -131,7 +131,7 @@ func RequestHandler(req *admission.AdmissionRequest, paramObj *config.ParameterO
 	// verify resource
 	allow, message, err = VerifyResource(req, mvConfig, &paramObj.ManifestVerifyRule)
 	if err != nil {
-		log.Errorf("IntegrityShield failed to decide the response. ", err.Error())
+		log.Errorf("IntegrityShield failed to decide the response. %s", err.Error())
 		return makeResultFromRequestHandler(allow, message, enforce, req)
 	}
 

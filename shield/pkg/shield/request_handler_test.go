@@ -22,10 +22,12 @@ import (
 	"testing"
 
 	"github.com/ghodss/yaml"
-	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
 	"github.com/sigstore/k8s-manifest-sigstore/pkg/k8smanifest"
+	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+
+	// "sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+	admission "k8s.io/api/admission/v1beta1"
 )
 
 const (
@@ -67,14 +69,14 @@ func TestMutationCheck(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	var adreq1 *admission.Request
+	var adreq1 *admission.AdmissionRequest
 	err = json.Unmarshal(adreq1Bytes, &adreq1)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 	var resource unstructured.Unstructured
-	objectBytes := adreq1.AdmissionRequest.Object.Raw
+	objectBytes := adreq1.Object.Raw
 	err = json.Unmarshal(objectBytes, &resource)
 	if err != nil {
 		t.Error(err)
@@ -96,14 +98,14 @@ func TestMutationCheck(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	var adreq2 *admission.Request
+	var adreq2 *admission.AdmissionRequest
 	err = json.Unmarshal(adreq2Bytes, &adreq2)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 	var resource2 unstructured.Unstructured
-	object2Bytes := adreq2.AdmissionRequest.Object.Raw
+	object2Bytes := adreq2.Object.Raw
 	err = json.Unmarshal(object2Bytes, &resource2)
 	if err != nil {
 		t.Error(err)
