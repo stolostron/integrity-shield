@@ -70,7 +70,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+		t.Errorf("verification of this test request should fail: got: %v\nwant: %v", allow, false)
 	}
 
 	// valid
@@ -81,7 +81,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if !allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+		t.Errorf("this test request should be verified successfully: got: %v\nwant: %v", allow, true)
 	}
 
 	/*---- Secret ----*/
@@ -93,7 +93,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+		t.Errorf("verification of this test request should fail: got: %v\nwant: %v", allow, false)
 	}
 
 	// valid
@@ -104,7 +104,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if !allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+		t.Errorf("this test request should be verified successfully: got: %v\nwant: %v", allow, true)
 	}
 
 	/*---- CRD ----*/
@@ -116,7 +116,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+		t.Errorf("verification of this test request should fail: got: %v\nwant: %v", allow, false)
 	}
 
 	// valid
@@ -127,7 +127,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if !allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+		t.Errorf("this test request should be verified successfully: got: %v\nwant: %v", allow, true)
 	}
 
 	/*---- Role ----*/
@@ -139,7 +139,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+		t.Errorf("verification of this test request should fail: got: %v\nwant: %v", allow, false)
 	}
 
 	// valid
@@ -150,7 +150,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if !allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+		t.Errorf("this test request should be verified successfully: got: %v\nwant: %v", allow, true)
 	}
 
 	/*---- RoleBinding ----*/
@@ -162,7 +162,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+		t.Errorf("verification of this test request should fail: got: %v\nwant: %v", allow, false)
 	}
 
 	// valid
@@ -173,7 +173,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if !allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+		t.Errorf("this test request should be verified successfully: got: %v\nwant: %v", allow, true)
 	}
 
 	/*---- Deployment ----*/
@@ -185,7 +185,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+		t.Errorf("verification of this test request should fail: got: %v\nwant: %v", allow, false)
 	}
 
 	// valid
@@ -196,7 +196,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if !allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+		t.Errorf("this test request should be verified successfully: got: %v\nwant: %v", allow, true)
 	}
 
 	/*---- ClusterRole ----*/
@@ -208,7 +208,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+		t.Errorf("verification of this test request should fail: got: %v\nwant: %v", allow, false)
 	}
 
 	// valid
@@ -219,7 +219,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if !allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+		t.Errorf("this test request should be verified successfully: got: %v\nwant: %v", allow, true)
 	}
 
 	/*---- ClusterRoleBinding ----*/
@@ -231,7 +231,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+		t.Errorf("verification of this test request should fail: got: %v\nwant: %v", allow, false)
 	}
 
 	// valid
@@ -242,7 +242,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if !allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+		t.Errorf("this test request should be verified successfully: got: %v\nwant: %v", allow, true)
 	}
 
 	/*---- ServiceAccount ----*/
@@ -254,7 +254,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+		t.Errorf("verification of this test request should fail: got: %v\nwant: %v", allow, false)
 	}
 
 	// valid
@@ -265,7 +265,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if !allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+		t.Errorf("this test request should be verified successfully: got: %v\nwant: %v", allow, true)
 	}
 
 	/*---- Service ----*/
@@ -277,7 +277,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, false)
+		t.Errorf("verification of this test request should fail: got: %v\nwant: %v", allow, false)
 	}
 
 	// valid
@@ -288,7 +288,7 @@ func TestVerifyResource(t *testing.T) {
 		return
 	}
 	if !allow {
-		t.Errorf("this test request should not be verified: got: %v\nwant: %v", allow, true)
+		t.Errorf("this test request should be verified successfully: got: %v\nwant: %v", allow, true)
 	}
 
 	return
