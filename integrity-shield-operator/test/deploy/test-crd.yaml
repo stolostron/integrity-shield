@@ -1,0 +1,33 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.stable.example.com
+  annotations:
+    integrityshield.io/message: H4sIAIq0MmIAA5VRy07DQAy85yv8Aw1CXFBuCC5cEGpR7+7WpEuzD9lOVf4eb5MQBOkBHxJlxjM7s8Hst8TiU2wAs6ezUixfUh/vpfbp5nRbHX3cN/DYi6awJkk9O3qidx+92mYVSHGPik0FEDFQA45TVNxJLfbsqKYzhmxvl0IlmVzZbDn1uYGFjcFFyhLAeLYZvuHuguSuZ+zmQy6gHBLryywDWIHTgfKx7Tvkb4Wh4lK2nBdBRkd7w07DNYwGq7GK1R/8xB0o4OQOYAbx4fV5e7f5RVhCNpLVz2FGi7H6z7m2W6bk3SxoyuhnKSDK1u4P7QO29G8VU+68w4Ugk9BHpZa4WuLS7oPGG78KC/GJ7Hcq9zRBmriEHbAvqCoK+I4CAAA=
+    integrityshield.io/signature: LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0KCmlRRktCQUFCQ0FBMEZpRUVRRmVCc3JTbUw2Ukh4YVJJK2s3U1hTeUFnTDhGQW1JeXRJb1dISE5wWjI1bGNrQmwKYm5SbGNuQnlhWE5sTG1OdmJRQUtDUkQ2VHRKZExJQ0F2NlR2Qi80ay9wWjJybDBoamxIc1FxcWVDR3g2M0tUbAo5eE5VMXVIck1HT0RncUhvSkdzK2tJbHUzalFNc3BwYi9KMm5KbUp5dkExQ1NnYk9Xa2M5S09PSmM5QjZWdCtlCnlLMW5zcWlkRno2ak1QZmZXN253WlptVEtEMFQ4R2kyK1BZQnlVOVphZ0UrYkRPZEhRek5CeEpYbG5GMG1nRi8KcDFLcVZLSGpvL1lhSnp6ZGt1SUtyUktkSTd5S3QwOXNRU3dtVTlWN0dqWm5VOEFtQ0ErQktoQVRoNDB2dVUxUgpWbzVVbWFCUWhlVU5GbkRHdGUzSC9wU3JhbUtWdStkMlVuRm1MVE85aURuQ0svRExSRXc5c2xiNVFpK1pOTjdpCjluWGxqeHJYS0hkOHhLZWV3NG02OHByQTZ6ai8wbEUraFBsSlRjSFFLajBsQ3VkbmZScGF2WSt4Nk02dQo9MU83VgotLS0tLUVORCBQR1AgU0lHTkFUVVJFLS0tLS0K
+spec:
+  group: stable.example.com
+  names:
+    kind: CronTab
+    plural: crontabs
+    shortNames:
+      - ct
+    singular: crontab
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          properties:
+            spec:
+              properties:
+                cronSpec:
+                  type: string
+                image:
+                  type: string
+                replicas:
+                  type: integer
+              type: object
+          type: object
+      served: true
+      storage: true

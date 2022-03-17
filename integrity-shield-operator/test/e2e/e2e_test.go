@@ -24,8 +24,8 @@ import (
 	. "github.com/onsi/gomega" //nolint:golint
 )
 
-var _ = Describe("Test: integrity shield", func() {
-	Describe("Test: integrity shield operator", func() {
+var _ = Describe("Test: Integrity Shield", func() {
+	Describe("Test1: Integrity Shield Operator", func() {
 		It("Operator Pod should be Running Status", func() {
 			framework := initFrameWork()
 			var timeout int = 120
@@ -36,7 +36,7 @@ var _ = Describe("Test: integrity shield", func() {
 		})
 	})
 
-	Describe("Test: ishield api and gatekeeper", func() {
+	Describe("Test2: Integrity Shield API and Gatekeeper", func() {
 		It("Gatekeeper should be running on the cluster", func() {
 			framework := initFrameWork()
 			var timeout int = 120
@@ -84,11 +84,11 @@ var _ = Describe("Test: integrity shield", func() {
 			}
 		})
 	})
-	Describe("Test: validating request by ishield api server and gatekeeper", func() {
+	Describe("Test3: RequestHandlerConfig and ManifestVerifyRule", func() {
 		It("Constraint can be created", func() {
 			var timeout int = 120
 			expected := constraint_name
-			cmd_err := Kubectl("create", "-f", constraint)
+			cmd_err := Kubectl("create", "-f", constraint_test3)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				err := Kubectl("get", "constraint", expected)
@@ -102,8 +102,8 @@ var _ = Describe("Test: integrity shield", func() {
 			time.Sleep(time.Second * 30)
 			framework := initFrameWork()
 			var timeout int = 120
-			expected := test_configmap_name_no_sign
-			cmd_err := Kubectl("apply", "-f", test_configmap_no_sign, "-n", test_namespace)
+			expected := test_cm_name_no_sign
+			cmd_err := Kubectl("apply", "-f", test_cm_no_sign, "-n", test_namespace)
 			Expect(cmd_err).NotTo(BeNil())
 			Eventually(func() error {
 				return CheckBlockEvent(framework, "Deny", test_namespace, expected)
@@ -112,9 +112,9 @@ var _ = Describe("Test: integrity shield", func() {
 		It("Request with valid signature should be allowed", func() {
 			framework := initFrameWork()
 			var timeout int = 120
-			expected := test_configmap_name_annotation
+			expected := test_cm_name_annotation
 			By("Creating test configmap in ns: " + test_namespace)
-			cmd_err := Kubectl("apply", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_cm_annotation_sign, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				return CheckConfigMap(framework, test_namespace, expected)
@@ -123,9 +123,9 @@ var _ = Describe("Test: integrity shield", func() {
 		It("Request defined in ObjectSelector can be created after validation", func() {
 			framework := initFrameWork()
 			var timeout int = 120
-			expected := test_configmap_name_inscope
+			expected := test_cm_name_inscope
 			By("Creating test configmap in ns: " + test_namespace)
-			cmd_err := Kubectl("apply", "-f", test_configmap_inscope, "-n", test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_cm_inscope, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				return CheckConfigMap(framework, test_namespace, expected)
@@ -134,9 +134,9 @@ var _ = Describe("Test: integrity shield", func() {
 		It("Request defined in SkipObjects can be created without signature", func() {
 			framework := initFrameWork()
 			var timeout int = 120
-			expected := test_configmap_name_skip
+			expected := test_cm_name_skip
 			By("Creating test configmap in ns: " + test_namespace)
-			cmd_err := Kubectl("apply", "-f", test_configmap_skip, "-n", test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_cm_skip, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				return CheckConfigMap(framework, test_namespace, expected)
@@ -144,15 +144,15 @@ var _ = Describe("Test: integrity shield", func() {
 		})
 		It("Prepare for read-only-file-system test", func() {
 			var timeout int = 120
-			expected := constraint_name_readOnly
+			expected := constraint_name_secret
 			By("Deleting constraint")
-			cmd_err := Kubectl("delete", "-f", constraint)
+			cmd_err := Kubectl("delete", "-f", constraint_test3)
 			Expect(cmd_err).To(BeNil())
 			By("Deleting configmap")
-			cmd_err = Kubectl("delete", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			cmd_err = Kubectl("delete", "-f", test_cm_annotation_sign, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			By("Creating constraint for mount:false mode")
-			cmd_err = Kubectl("create", "-f", constraint_readOnly)
+			cmd_err = Kubectl("create", "-f", constraint_test3_secret)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				err := Kubectl("get", "constraint", expected)
@@ -165,9 +165,9 @@ var _ = Describe("Test: integrity shield", func() {
 		It("Request with valid signature should be allowed", func() {
 			framework := initFrameWork()
 			var timeout int = 120
-			expected := test_configmap_name_annotation
+			expected := test_cm_name_annotation
 			By("Creating test configmap in ns: " + test_namespace)
-			cmd_err := Kubectl("apply", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_cm_annotation_sign, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				return CheckConfigMap(framework, test_namespace, expected)
@@ -175,15 +175,15 @@ var _ = Describe("Test: integrity shield", func() {
 		})
 		It("Prepare for a test using public key attached to constraint", func() {
 			var timeout int = 120
-			expected := constraint_name_pem
+			expected := constraint_name_key
 			By("Deleting constraint")
-			cmd_err := Kubectl("delete", "-f", constraint_readOnly)
+			cmd_err := Kubectl("delete", "-f", constraint_test3_secret)
 			Expect(cmd_err).To(BeNil())
 			By("Deleting configmap")
-			cmd_err = Kubectl("delete", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			cmd_err = Kubectl("delete", "-f", test_cm_annotation_sign, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			By("Creating constraint containing PEM encoded public key")
-			cmd_err = Kubectl("create", "-f", constraint_pem)
+			cmd_err = Kubectl("create", "-f", constraint_test3_key)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				err := Kubectl("get", "constraint", expected)
@@ -196,9 +196,9 @@ var _ = Describe("Test: integrity shield", func() {
 		It("Request with valid signature should be allowed", func() {
 			framework := initFrameWork()
 			var timeout int = 120
-			expected := test_configmap_name_annotation
+			expected := test_cm_name_annotation
 			By("Creating test configmap in ns: " + test_namespace)
-			cmd_err := Kubectl("apply", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_cm_annotation_sign, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				return CheckConfigMap(framework, test_namespace, expected)
@@ -208,10 +208,10 @@ var _ = Describe("Test: integrity shield", func() {
 			var timeout int = 120
 			expected := constraint_name
 			By("Deleting constraint")
-			cmd_err := Kubectl("delete", "-f", constraint_pem)
+			cmd_err := Kubectl("delete", "-f", constraint_test3_key)
 			Expect(cmd_err).To(BeNil())
-			By("Creating constraint for detection mode")
-			cmd_err = Kubectl("create", "-f", constraint_detect)
+			By("Creating constraint for inform mode")
+			cmd_err = Kubectl("create", "-f", constraint_test3_inform)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				err := Kubectl("get", "constraint", expected)
@@ -225,8 +225,8 @@ var _ = Describe("Test: integrity shield", func() {
 			time.Sleep(time.Second * 30)
 			framework := initFrameWork()
 			var timeout int = 120
-			expected := test_configmap_name_no_sign
-			cmd_err := Kubectl("apply", "-f", test_configmap_no_sign, "-n", test_namespace)
+			expected := test_cm_name_no_sign
+			cmd_err := Kubectl("apply", "-f", test_cm_no_sign, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				return CheckConfigMap(framework, test_namespace, expected)
@@ -234,7 +234,127 @@ var _ = Describe("Test: integrity shield", func() {
 		})
 	})
 
-	Describe("Test: ishield api and gatekeeper: delete", func() {
+	Describe("Test4: Default Kubernetes Resource Verification", func() {
+		It("Prepare for default k8s resource verification test", func() {
+			By("Deleting constraint")
+			cmd_err := Kubectl("delete", "-f", constraint_test3_inform)
+			Expect(cmd_err).To(BeNil())
+		})
+		It("Constraint can be created", func() {
+			var timeout int = 120
+			expected := constraint_name_test4
+			cmd_err := Kubectl("create", "-f", constraint_test4)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				err := Kubectl("get", "constraint", expected)
+				if err != nil {
+					return err
+				}
+				return nil
+			}, timeout, 1).Should(BeNil())
+		})
+		It("Secret with valid signature should be allowed", func() {
+			framework := initFrameWork()
+			var timeout int = 120
+			expected := test_secret_name
+			By("Creating test Secret in ns: " + test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_secret, "-n", test_namespace)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				return CheckSecret(framework, test_namespace, expected)
+			}, timeout, 1).Should(BeNil())
+		})
+		// It("CRD with valid signature should be allowed", func() {
+		// 	framework := initFrameWork()
+		// 	var timeout int = 120
+		// 	expected := test_crd_name
+		// 	By("Creating test CRD")
+		// 	cmd_err := Kubectl("apply", "-f", test_crd)
+		// 	Expect(cmd_err).To(BeNil())
+		// 	Eventually(func() error {
+		// 		return CheckCRD(framework, expected)
+		// 	}, timeout, 1).Should(BeNil())
+		// })
+		It("Role with valid signature should be allowed", func() {
+			framework := initFrameWork()
+			var timeout int = 120
+			expected := test_role_name
+			By("Creating test Role in ns: " + test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_role, "-n", test_namespace)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				return CheckRole(framework, test_namespace, expected)
+			}, timeout, 1).Should(BeNil())
+		})
+		It("RoleBinding with valid signature should be allowed", func() {
+			framework := initFrameWork()
+			var timeout int = 120
+			expected := test_rb_name
+			By("Creating test RoleBinding in ns: " + test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_rb, "-n", test_namespace)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				return CheckRoleBinding(framework, test_namespace, expected)
+			}, timeout, 1).Should(BeNil())
+		})
+		It("ClusterRole with valid signature should be allowed", func() {
+			framework := initFrameWork()
+			var timeout int = 120
+			expected := test_cr_name
+			By("Creating test ClusterRole")
+			cmd_err := Kubectl("apply", "-f", test_cr)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				return CheckClusterRole(framework, expected)
+			}, timeout, 1).Should(BeNil())
+		})
+		It("ClusterRoleBinding with valid signature should be allowed", func() {
+			framework := initFrameWork()
+			var timeout int = 120
+			expected := test_crb_name
+			By("Creating test ClusterRoleBinding")
+			cmd_err := Kubectl("apply", "-f", test_crb)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				return CheckClusterRoleBinding(framework, expected)
+			}, timeout, 1).Should(BeNil())
+		})
+		It("ServiceAccount with valid signature should be allowed", func() {
+			framework := initFrameWork()
+			var timeout int = 120
+			expected := test_sa_name
+			By("Creating test ServiceAccount in ns: " + test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_sa, "-n", test_namespace)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				return CheckServiceAccount(framework, test_namespace, expected)
+			}, timeout, 1).Should(BeNil())
+		})
+		It("Service with valid signature should be allowed", func() {
+			framework := initFrameWork()
+			var timeout int = 120
+			expected := test_svc_name
+			By("Creating test Service in ns: " + test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_svc, "-n", test_namespace)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				return CheckService(framework, test_namespace, expected)
+			}, timeout, 1).Should(BeNil())
+		})
+		It("Deployment with valid signature should be allowed", func() {
+			framework := initFrameWork()
+			var timeout int = 120
+			expected := test_deployment_name
+			By("Creating test Deployment in ns: " + test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_deployment, "-n", test_namespace)
+			Expect(cmd_err).To(BeNil())
+			Eventually(func() error {
+				return CheckDeployment(framework, test_namespace, expected)
+			}, timeout, 1).Should(BeNil())
+		})
+	})
+
+	Describe("Test5: Integrity Shield API and Gatekeeper: Delete", func() {
 		It("API and ishield resources should be deleted properly", func() {
 			framework := initFrameWork()
 			api_name := api_name
@@ -267,19 +387,19 @@ var _ = Describe("Test: integrity shield", func() {
 	})
 
 	// admission controller mode
-	Describe("Test: ishield api and admission controller", func() {
+	Describe("Test6: Integrity Shield API and Admission Controller", func() {
 		It("Clearing test-ns", func() {
 			By("Deleting test_configmap_skip")
-			cmd_err := Kubectl("delete", "-f", test_configmap_skip, "-n", test_namespace)
+			cmd_err := Kubectl("delete", "-f", test_cm_skip, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			By("Deleting test_configmap_inscope")
-			cmd_err = Kubectl("delete", "-f", test_configmap_inscope, "-n", test_namespace)
+			cmd_err = Kubectl("delete", "-f", test_cm_inscope, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			By("Deleting test_configmap_annotation_sign")
-			cmd_err = Kubectl("delete", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			cmd_err = Kubectl("delete", "-f", test_cm_annotation_sign, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
-			By("Deleting test_configmap_no_sign")
-			cmd_err = Kubectl("delete", "-f", test_configmap_no_sign, "-n", test_namespace)
+			By("Deleting test_cm_no_sign")
+			cmd_err = Kubectl("delete", "-f", test_cm_no_sign, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 		})
 		It("IShield should be created properly", func() {
@@ -309,11 +429,11 @@ var _ = Describe("Test: integrity shield", func() {
 			}
 		})
 	})
-	Describe("Test: validating request by admission controller", func() {
+	Describe("Test7: Validating Request based on ManifestIntegrityProfile", func() {
 		It("ManifestIntegrityProfile can be created", func() {
 			var timeout int = 120
 			expected := constraint_name
-			cmd_err := Kubectl("create", "-f", constraint_ac)
+			cmd_err := Kubectl("create", "-f", constraint_test7)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				err := Kubectl("get", "mip", expected)
@@ -327,8 +447,8 @@ var _ = Describe("Test: integrity shield", func() {
 			time.Sleep(time.Second * 30)
 			framework := initFrameWork()
 			var timeout int = 120
-			expected := test_configmap_name_no_sign
-			cmd_err := Kubectl("apply", "-f", test_configmap_no_sign, "-n", test_namespace)
+			expected := test_cm_name_no_sign
+			cmd_err := Kubectl("apply", "-f", test_cm_no_sign, "-n", test_namespace)
 			Expect(cmd_err).NotTo(BeNil())
 			Eventually(func() error {
 				return CheckBlockEvent(framework, "Deny", test_namespace, expected)
@@ -337,9 +457,9 @@ var _ = Describe("Test: integrity shield", func() {
 		It("Request with valid signature should be allowed", func() {
 			framework := initFrameWork()
 			var timeout int = 120
-			expected := test_configmap_name_annotation
+			expected := test_cm_name_annotation
 			By("Creating test configmap in ns: " + test_namespace)
-			cmd_err := Kubectl("apply", "-f", test_configmap_annotation_sign, "-n", test_namespace)
+			cmd_err := Kubectl("apply", "-f", test_cm_annotation_sign, "-n", test_namespace)
 			Expect(cmd_err).To(BeNil())
 			Eventually(func() error {
 				return CheckConfigMap(framework, test_namespace, expected)
@@ -347,7 +467,7 @@ var _ = Describe("Test: integrity shield", func() {
 		})
 	})
 
-	Describe("Test: ishield api and admission controller: delete", func() {
+	Describe("Test8: Integrity Shield API and Admission Controller: Delete", func() {
 		It("API and ishield resources should be deleted properly", func() {
 			framework := initFrameWork()
 			ac_server_name := ac_server_name

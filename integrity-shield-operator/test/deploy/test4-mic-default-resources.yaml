@@ -2,27 +2,36 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: ManifestIntegrityConstraint
 metadata:
-  name: configmap-constraint-keyconfig-pem
+  name: default-resource-constraint
 spec:
   match:
     kinds:
       - apiGroups: [""]
-        kinds: ["ConfigMap"] 
+        kinds: 
+          - Pod
+          - Secret
+          - Service
+          - ServiceAccount
+      - apiGroups:
+        - apps
+        kinds: 
+          - Deployment
+      - apiGroups:
+        - apiextensions.k8s.io
+        kinds: 
+          - CustomResourceDefinition
+      - apiGroups:
+        - rbac.authorization.k8s.io
+        kinds: 
+          - ClusterRole
+          - ClusterRoleBinding
+          - Role
+          - RoleBinding
     namespaces:
     - test-ns
+    scope: "*"
   parameters:
-    constraintName: configmap-constraint
-    objectSelector:
-    - name: test-configmap-inscope
-    - name: test-configmap-no-sign
-    - name: test-configmap-annotation
-    skipObjects:
-    - name: test-configmap-skip
-    ignoreFields:
-    - objects:
-      - kind: ConfigMap
-      fields:
-      - data.comment
+    constraintName: default-resource-constraint
     keyConfigs:
     - key:
         name: keyring

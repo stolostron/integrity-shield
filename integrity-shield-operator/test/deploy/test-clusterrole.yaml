@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # "namespace" omitted since ClusterRoles are not namespaced
+  name: secret-reader
+  annotations:
+    integrityshield.io/message: H4sIAEvzLmIAA01OPU/DQAzd8yuejrUtYkNZGWBEULEgBufiNkeTOLKdIPHruVwoYrHs5/dFU3pjtSRjDW0oHmj2TjR9k2fscLm3Q5Lb5a66pLGt8dDP5qwv0nM1sFNLTnUF3CCMNLBNFDlAhuTOLSyNkf9rDKSMURx/7Dar16OGcVT2vTK1rJXOmb5a70FTelSZJ6vxHsJHxnLgNkEO7xhPx+Mzel6435V7dYScyq5sMmsuchIFxciWe53xWuJ+baT55OiGZAhbDwvldRWX7Otnq7CwNgU+s4cdwhd57NalT+aZ8wM5QAYEWwEAAA==
+    integrityshield.io/signature: LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0KCmlRRktCQUFCQ0FBMEZpRUVRRmVCc3JTbUw2Ukh4YVJJK2s3U1hTeUFnTDhGQW1JdTgwd1dISE5wWjI1bGNrQmwKYm5SbGNuQnlhWE5sTG1OdmJRQUtDUkQ2VHRKZExJQ0F2NzMzQ0FDNUU0cTBuck9SbTExMkxjU0d6TkdVZ3lMcAptb3J4aURJdXJTQktPMGZFUEw0eEp4bVl6QXQreVdaRlJEMkdPNlhKTWNmYkwzRk9IVVVHaWl3UEdaSmxLamQ3CkRRUFJKQ3hwblBiWXdMaEsvQ3lIbHN0VFQ4bERGdHowdnEzN0ZhaE95dG5FZU5vSmMwRzl5a2hwNnNCWkQ4YnIKQklVOC8vU0JHRUlIOEZtQnkwVzZWTW1uUVY2VUxrZENVcTZ4RHhsbE1tWng4R1hOYzBtV04rdTJXSnU5SG5RVQpPUFp5emVKME95TzV4aU02MEdPZTB2Tk5EbEFlMUxhSmd4U3lScDM2QWJvWUxERElXWjYveS9xNnlidVRmSEFyCjA4azFvWHR6NnZ4NFUyRWEza2tNVFVzTXc3cHREZ0ZaRlpYaHduRCtMZHRYcGpnVDBQZnZ2ak10TTAydgo9eTByUgotLS0tLUVORCBQR1AgU0lHTkFUVVJFLS0tLS0K
+rules:
+  - apiGroups: [""]
+    #
+    # at the HTTP level, the name of the resource for accessing Secret
+    # objects is "secrets"
+    resources: ["secrets"]
+    verbs: ["get", "watch", "list"]

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+  name: nginx-deployment
+  annotations:
+    integrityshield.io/message: H4sIACO2MmIAA12PPQ7CMAyF95zCF6AQxIAyMzIwsZvUKhH5U2IhuD2JWtq0nmL7vS/PGM2dUjbBK8AY8/4txcv4XsGFog1fR56FI8YeGZUAsPggm+sLqkGBH4z/lNajo6nb9Ys3R9JVncrIaMwKZOkyWdIc0shxyPp5bcAbNJOLFpkmdZOmll0ZN9by1RSglg6e0fhy8CLfgXE4/KMr2clTd5y3q7uaaQyJG8gImvG3slVwPogfsBx6WV8BAAA=
+    integrityshield.io/signature: LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0KCmlRRktCQUFCQ0FBMEZpRUVRRmVCc3JTbUw2Ukh4YVJJK2s3U1hTeUFnTDhGQW1JeXRpTVdISE5wWjI1bGNrQmwKYm5SbGNuQnlhWE5sTG1OdmJRQUtDUkQ2VHRKZExJQ0F2M3dpQi93UHk3dWV6RW5rbFN2Q0EzYUNXK1lDN2NmMwprZExBOGpHM2xmNG1KeUU2aHh0ankyNzFybkhRS2tOR1QySDZibFgyT2NXUVBCN2MwVm1sVGc3NVE0RGl6dHpkCjJXV3pScjVtcjVMYkVlZXczVHY5UWowdkx2UlJrU1o2WjREZTBTVzB0TWcvM1FGU3o0RWdrR2VmcDlpSjVPOUEKNnh2d3dwMXVhUFhuTUFoOVlUSWU4UTR4YU9WRi84Z3g2UmgzaWdZUlM3NnNiZG45SVJQMTg1T0pVRVFiRUh4Nwp6TUZJWHRjSE5FVHZNTXhMYUlsUWVmSVB1bDVDSDFOQ2dNd3dLNjVVZm5IZ2czcGpvOERzNUxPZkwwb1FsQll4Clh2bzh6bEZUMUVoeVVZZDdxcGhVYWFjdVc2OTRPQ1BHa3Z4V1Axa2xiaTJEY0xOdnBDbUFoWlVkTllMRQo9K3BHYgotLS0tLUVORCBQR1AgU0lHTkFUVVJFLS0tLS0K
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - image: nginx:1.14.2
+          name: nginx
+          ports:
+            - containerPort: 80

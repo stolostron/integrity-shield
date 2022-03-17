@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
+kind: ClusterRoleBinding
+metadata:
+  name: read-secrets-global
+  annotations:
+    integrityshield.io/message: H4sIAFHzLmIAA42QMU/EMAyF9/yKp7u5RWyoIwxsDCfE7qamNZcmlZ0egl9P0h4sSIjR0fP3PocWeWE1SbGD9uRbWvOUVD4pl7f2fGetpJvLrTvieRKDD6tlVmgKjF7iIHEEhZDeDRQ/UmRIRJ4Yh5kijawHjJrWBTlBmQYYe+VsNVYWEGlmW8hz684F1+FhbziVgvud72bONFCmzmHLdxupuZKaMaSegrO1f2OfraYa7LDHWl3m772rE454KjPqQWRcnKJJlgtvUVpk2/vjR1y9/8SvteuX9o/lLthUWVb3P/AXGF8Iu5EBAAA=
+    integrityshield.io/signature: LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0KCmlRRktCQUFCQ0FBMEZpRUVRRmVCc3JTbUw2Ukh4YVJJK2s3U1hTeUFnTDhGQW1JdTgxSVdISE5wWjI1bGNrQmwKYm5SbGNuQnlhWE5sTG1OdmJRQUtDUkQ2VHRKZExJQ0F2K2pLQi8wUWRGUVJXS0pJNERKaTl2TGRhOXFPL1cybwp3Z255ODB6YVFxeW9FRm43R0F1VlkwYzVYS2QyR2xYVE55cWNSZkpJcUZ2ck0yNDdYYS9tZDB2S2FVdVF6Y0NTCjRpaTdEMHcyZ09ZeExvS04wVTEyVnBwS0l3bnVCMDZwZ2VtaVBBb29lUTJrOVI5OTRpemxvMEcybXowcGU4YngKT3J0amdDaEo1Z09STVNsRkxtT21mcklabnoyaW50TXJnenJ2bGdNa3ZLdjR1NUxmNFNpSWF0bExMRm8rLzhtdgozRVp1b3YvN3cxdTRpeTJXaDBHcCtzcW00bG4zSjRqbDRwcTlrYTJRQ1AyY1V6VTZ6R1Q0cHNScFdwancvOGNtCm5XRGkxYUQ5RnlDNlZTcTdtV3VtU0pFbld0NC9zSnB1OUFiUnFrYndtZ0Y2Y2IveS95RkU4Ukc5RzBBUAo9M2EvLwotLS0tLUVORCBQR1AgU0lHTkFUVVJFLS0tLS0K
+subjects:
+  - kind: Group
+    name: manager # Name is case sensitive
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: secret-reader
+  apiGroup: rbac.authorization.k8s.io

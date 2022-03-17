@@ -209,6 +209,69 @@ func CheckDeployment(framework *Framework, namespace, expected string) error {
 	return nil
 }
 
+func CheckSecret(framework *Framework, namespace, expected string) error {
+	_, err := framework.KubeClientSet.CoreV1().Secrets(namespace).Get(goctx.TODO(), expected, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func CheckService(framework *Framework, namespace, expected string) error {
+	_, err := framework.KubeClientSet.CoreV1().Services(namespace).Get(goctx.TODO(), expected, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func CheckRole(framework *Framework, namespace, expected string) error {
+	_, err := framework.KubeClientSet.RbacV1().Roles(namespace).Get(goctx.TODO(), expected, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func CheckRoleBinding(framework *Framework, namespace, expected string) error {
+	_, err := framework.KubeClientSet.RbacV1().RoleBindings(namespace).Get(goctx.TODO(), expected, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func CheckClusterRole(framework *Framework, expected string) error {
+	_, err := framework.KubeClientSet.RbacV1().ClusterRoles().Get(goctx.TODO(), expected, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func CheckClusterRoleBinding(framework *Framework, expected string) error {
+	_, err := framework.KubeClientSet.RbacV1().ClusterRoleBindings().Get(goctx.TODO(), expected, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func CheckCRD(framework *Framework, expected string) error {
+	_, err := framework.APIExtensionsClientSet.ApiextensionsV1().CustomResourceDefinitions().Get(goctx.TODO(), expected, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func CheckServiceAccount(framework *Framework, namespace, expected string) error {
+	_, err := framework.KubeClientSet.CoreV1().ServiceAccounts(namespace).Get(goctx.TODO(), expected, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func LoadConfigMap(framework *Framework, namespace, expected string) (error, *corev1.ConfigMap) {
 	cm, err := framework.KubeClientSet.CoreV1().ConfigMaps(namespace).Get(goctx.TODO(), expected, metav1.GetOptions{})
 	if err != nil {
