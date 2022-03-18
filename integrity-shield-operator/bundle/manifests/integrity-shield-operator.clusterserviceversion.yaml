@@ -20,7 +20,7 @@ metadata:
             },
             "observer": {
               "enabled": true,
-              "exportDetailResult": true,
+              "exportDetailResult": false,
               "image": "quay.io/stolostron/integrity-shield-observer",
               "imagePullPolicy": "IfNotPresent",
               "interval": "5",
@@ -32,8 +32,6 @@ metadata:
                   "memory": "256Mi"
                 }
               },
-              "resultDetailConfigKey": "config.yaml",
-              "resultDetailConfigName": "verify-resource-result",
               "selector": {
                 "app": "integrity-shield-observer"
               }
@@ -89,8 +87,8 @@ metadata:
     capabilities: Basic Install
     operators.operatorframework.io/builder: operator-sdk-v1.15.0
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
-    containerImage: quay.io/stolostron/integrity-shield-operator:0.3.2
-  name: integrity-shield-operator.v0.3.2
+    containerImage: quay.io/stolostron/integrity-shield-operator:0.3.3
+  name: integrity-shield-operator.v0.3.3
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -273,7 +271,7 @@ spec:
                       - --leader-elect
                     command:
                       - /ishield-op-app/manager
-                    image: quay.io/stolostron/integrity-shield-operator:0.3.2
+                    image: quay.io/stolostron/integrity-shield-operator:0.3.3
                     imagePullPolicy: Always
                     livenessProbe:
                       httpGet:
@@ -345,4 +343,4 @@ spec:
   maturity: alpha
   provider:
     name: Community
-  version: 0.3.2
+  version: 0.3.3

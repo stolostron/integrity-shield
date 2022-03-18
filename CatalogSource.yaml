@@ -5,7 +5,7 @@ metadata:
   namespace: openshift-marketplace # olm
 spec:
   displayName: Integrity Shield++ Operator
-  image: quay.io/stolostron/integrity-shield-operator-index:0.3.2
+  image: quay.io/stolostron/integrity-shield-operator-index:0.3.3
   publisher: IBM
   sourceType: grpc
   updateStrategy:

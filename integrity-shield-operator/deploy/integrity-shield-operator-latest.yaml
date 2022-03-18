@@ -2401,13 +2401,15 @@ spec:
         ports:
         - containerPort: 8443
           name: https
+        securityContext:
+          runAsNonRoot: true
       - args:
         - --health-probe-bind-address=:8081
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
         command:
         - /ishield-op-app/manager
-        image: quay.io/stolostron/integrity-shield-operator:0.3.2
+        image: quay.io/stolostron/integrity-shield-operator:0.3.3
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
@@ -2431,5 +2433,6 @@ spec:
             memory: 200Mi
         securityContext:
           allowPrivilegeEscalation: false
+          runAsNonRoot: true
       serviceAccountName: integrity-shield-operator-controller-manager
       terminationGracePeriodSeconds: 10

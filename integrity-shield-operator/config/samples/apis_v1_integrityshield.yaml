@@ -465,7 +465,7 @@ spec:
         memory: 256Mi
     logLevel: info
     interval: "5"
-    exportDetailResult: true
-    resultDetailConfigName: verify-resource-result
-    resultDetailConfigKey: "config.yaml"
+    exportDetailResult: false
+    # resultDetailConfigName: verify-resource-result
+    # resultDetailConfigKey: "config.yaml"
 

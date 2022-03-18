@@ -1,5 +1,5 @@
 #
-# Copyright 2021 IBM Corporation
+# Copyright 2022 IBM Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ LABEL operators.operatorframework.io.bundle.mediatype.v1=registry+v1
 LABEL operators.operatorframework.io.bundle.manifests.v1=manifests/
 LABEL operators.operatorframework.io.bundle.metadata.v1=metadata/
 LABEL operators.operatorframework.io.bundle.package.v1=integrity-shield-operator
-LABEL operators.operatorframework.io.bundle.channels.v1=alpha-0.3.2
+LABEL operators.operatorframework.io.bundle.channels.v1=alpha-0.3.3
 LABEL operators.operatorframework.io.metrics.builder=operator-sdk-v1.15.0
 LABEL operators.operatorframework.io.metrics.mediatype.v1=metrics+v1
 LABEL operators.operatorframework.io.metrics.project_layout=go.kubebuilder.io/v3
