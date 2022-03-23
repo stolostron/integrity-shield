@@ -277,6 +277,8 @@ func setVerifyOption(constraint *config.ManifestVerifyRule, mvconfig *config.Man
 	if vo.DryRunNamespace == "" {
 		vo.DryRunNamespace = config.DefaultDryRunNS
 	}
+	// set CheckMutatingResource option for multiple mutating webhooks
+	vo.CheckMutatingResource = true
 
 	// set Signature type
 	if signatureAnnotationType == SignatureAnnotationTypeShield {

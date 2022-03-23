@@ -7,7 +7,7 @@ require (
 	github.com/jinzhu/copier v0.3.2
 	github.com/pkg/errors v0.9.1
 	github.com/sigstore/cosign v1.5.2
-	github.com/sigstore/k8s-manifest-sigstore v0.2.1-0.20220316094109-adfc287a58c0
+	github.com/sigstore/k8s-manifest-sigstore v0.2.1-0.20220323082949-1c9e624d9ac9
 	github.com/sirupsen/logrus v1.8.1
 	k8s.io/api v0.23.0
 	k8s.io/apimachinery v0.23.0
