@@ -67,7 +67,6 @@ func VerifyImageInManifest(resource unstructured.Unstructured, profile ishieldco
 
 	keyPathList := []string{}
 	if len(profile.KeyConfigs) != 0 {
-		keyPathList := []string{}
 		for _, keyconfig := range profile.KeyConfigs {
 			if keyconfig.Secret.Namespace != "" && keyconfig.Secret.Name != "" {
 				if keyconfig.Secret.Mount {
