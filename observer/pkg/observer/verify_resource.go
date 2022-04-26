@@ -17,7 +17,9 @@
 package observer
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 	"time"
@@ -33,6 +35,13 @@ const AnnotationKeyDomain = "integrityshield.io"
 const ImageRefAnnotationKeyShield = "integrityshield.io/signature"
 
 func ObserveResource(resource unstructured.Unstructured, paramObj config.ParameterObject, ignoreFields k8smanifest.ObjectFieldBindingList, skipObjects k8smanifest.ObjectReferenceList, secrets []config.KeyConfig) VerifyResultDetail {
+	// prepare tmpDir
+	tmpDir, err := ioutil.TempDir("", string(resource.GetName()))
+	if err != nil {
+		return VerifyResultDetail{}
+	}
+	defer os.RemoveAll(tmpDir)
+
 	namespace := os.Getenv("POD_NAMESPACE")
 	if namespace == "" {
 		namespace = defaultPodNamespace
@@ -89,7 +98,7 @@ func ObserveResource(resource unstructured.Unstructured, paramObj config.Paramet
 				}
 			}
 			if keyconfig.Key.PEM != "" && keyconfig.Key.Name != "" {
-				keyPath, err := keyconfig.ConvertToLocalFilePath()
+				keyPath, err := keyconfig.ConvertToLocalFilePath(tmpDir)
 				if err != nil {
 					return VerifyResultDetail{
 						Time:                 time.Now().Format(timeFormat),
@@ -123,9 +132,9 @@ func ObserveResource(resource unstructured.Unstructured, paramObj config.Paramet
 		}
 	}
 
-	// log.Debug("VerifyResourceOption", vo)
 	result, err := k8smanifest.VerifyResource(resource, vo)
-	log.Debug("Verify resource result from k8smanifest: ", result)
+	resBytes, _ := json.Marshal(result)
+	log.Debug("Verify resource result from k8smanifest: ", resBytes)
 	if err != nil {
 		log.Warningf("Signature verification is required for this request, but verifyResource return error ; %s", err.Error())
 		return VerifyResultDetail{
