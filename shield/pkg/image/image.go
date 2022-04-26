@@ -116,6 +116,11 @@ func VerifyImageInManifest(resource unstructured.Unstructured, profile ishieldco
 			break
 		}
 	}
+	// remove tmp dir
+	for _, keyPath := range keyPathList {
+		ishieldconfig.ClearLocalFile(keyPath)
+	}
+
 	var retErr error
 	if !allImagesVerified {
 		retErr = errors.New(failReason)

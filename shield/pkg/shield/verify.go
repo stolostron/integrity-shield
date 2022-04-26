@@ -61,6 +61,7 @@ func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.Manife
 		logLevel = log.InfoLevel
 	}
 	log.SetLevel(logLevel)
+	log.SetLevel(log.DebugLevel)
 
 	// prepare ManifestVerifyConfig/RequestFilterProfile if nil
 	if mvconfig == nil {
@@ -162,6 +163,8 @@ func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.Manife
 		}).Debug("VerifyOption: ", string(voBytes))
 		// call VerifyResource with resource, verifyOption, keypath, imageRef
 		result, err := k8smanifest.VerifyResource(resource, vo)
+		// remove tmp dir
+		config.ClearLocalFile(vo.KeyPath)
 		resBytes, _ := json.Marshal(result)
 		log.WithFields(log.Fields{
 			"namespace": request.Namespace,
@@ -170,6 +173,7 @@ func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.Manife
 			"operation": request.Operation,
 			"userName":  request.UserInfo.Username,
 		}).Debug("VerifyResource result: ", string(resBytes))
+
 		if err != nil {
 			log.WithFields(log.Fields{
 				"namespace": request.Namespace,
