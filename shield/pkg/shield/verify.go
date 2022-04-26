@@ -159,7 +159,7 @@ func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.Manife
 		}
 		vo, err := setVerifyOption(rule, mvconfig, signatureAnnotationType, tmpDir)
 		if err != nil {
-			return false, err.Error(), nil
+			return false, err.Error(), err
 		}
 		voBytes, _ := json.Marshal(vo)
 		log.WithFields(log.Fields{
@@ -422,5 +422,12 @@ func VerifyImagesInManifest(request *admission.AdmissionRequest, imageProfile co
 			}
 		}
 	}
+	log.WithFields(log.Fields{
+		"namespace": request.Namespace,
+		"name":      request.Name,
+		"kind":      request.Kind.Kind,
+		"operation": request.Operation,
+		"userName":  request.UserInfo.Username,
+	}).Infof("Complete image verification: allow %s: %s", strconv.FormatBool(imageAllow), imageMessage)
 	return imageAllow, imageMessage
 }

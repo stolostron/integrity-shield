@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -154,6 +155,13 @@ func RequestHandler(req *admission.AdmissionRequest, paramObj *config.ParameterO
 	if rhconfig.SideEffectConfig.CreateDenyEvent {
 		_ = createOrUpdateEvent(req, r, paramObj.ConstraintName)
 	}
+	log.WithFields(log.Fields{
+		"namespace": req.Namespace,
+		"name":      req.Name,
+		"kind":      req.Kind.Kind,
+		"operation": req.Operation,
+		"userName":  req.UserInfo.Username,
+	}).Infof("Complete request validation: allow %s: %s", strconv.FormatBool(allow), message)
 	return r
 }
 
