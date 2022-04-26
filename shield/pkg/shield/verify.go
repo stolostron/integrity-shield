@@ -61,7 +61,6 @@ func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.Manife
 		logLevel = log.InfoLevel
 	}
 	log.SetLevel(logLevel)
-	log.SetLevel(log.DebugLevel)
 
 	// prepare ManifestVerifyConfig/RequestFilterProfile if nil
 	if mvconfig == nil {
