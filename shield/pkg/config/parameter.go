@@ -210,21 +210,13 @@ func (k KeyConfig) ConvertToCosignKeyRef() string {
 	return ref
 }
 
-func (k KeyConfig) ConvertToLocalFilePath() (string, error) {
-	dir, err := ioutil.TempDir("", k.Key.Name)
-	if err != nil {
-		return "", errors.New(fmt.Sprintf("failed to make temp dir for PEM public key; %s; %s", dir, err))
-	}
-	fpath := filepath.Join(dir, "key.pub")
-	err = ioutil.WriteFile(fpath, []byte(k.Key.PEM), 0644)
+func (k KeyConfig) ConvertToLocalFilePath(dir string) (string, error) {
+	key := fmt.Sprintf("%s-key.pub", k.Key.Name)
+	fpath := filepath.Join(dir, key)
+	err := ioutil.WriteFile(fpath, []byte(k.Key.PEM), 0644)
 	if err != nil {
 		return "", errors.New(fmt.Sprintf("failed to save PEM public key as a file; %s; %s", fpath, err))
 	}
 
 	return fpath, nil
-}
-
-func ClearLocalFile(fpath string) {
-	dir := strings.Replace(fpath, "key.pub", "", 1)
-	defer os.RemoveAll(dir)
 }

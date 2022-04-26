@@ -18,7 +18,9 @@ package shield
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
@@ -79,6 +81,13 @@ func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.Manife
 		"operation": request.Operation,
 		"userName":  request.UserInfo.Username,
 	}).Info("Start manifest verification.")
+
+	// prepare tmpDir
+	tmpDir, err := ioutil.TempDir("", string(request.UID))
+	if err != nil {
+		return false, "", errors.New(fmt.Sprintf("failed to make temp dir; %s; %s", tmpDir, err))
+	}
+	defer os.RemoveAll(tmpDir)
 
 	// unmarshal admission request object
 	var resource unstructured.Unstructured
@@ -148,7 +157,7 @@ func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.Manife
 		if found {
 			signatureAnnotationType = SignatureAnnotationTypeShield
 		}
-		vo, err := setVerifyOption(rule, mvconfig, signatureAnnotationType)
+		vo, err := setVerifyOption(rule, mvconfig, signatureAnnotationType, tmpDir)
 		if err != nil {
 			return false, err.Error(), nil
 		}
@@ -162,8 +171,6 @@ func VerifyResource(request *admission.AdmissionRequest, mvconfig *config.Manife
 		}).Debug("VerifyOption: ", string(voBytes))
 		// call VerifyResource with resource, verifyOption, keypath, imageRef
 		result, err := k8smanifest.VerifyResource(resource, vo)
-		// remove tmp dir
-		config.ClearLocalFile(vo.KeyPath)
 		resBytes, _ := json.Marshal(result)
 		log.WithFields(log.Fields{
 			"namespace": request.Namespace,
@@ -258,7 +265,7 @@ func mutationCheck(rawOldObject, rawObject []byte, IgnoreFields []string) (bool,
 	return true, nil
 }
 
-func setVerifyOption(constraint *config.ManifestVerifyRule, mvconfig *config.ManifestVerifyConfig, signatureAnnotationType string) (*k8smanifest.VerifyResourceOption, error) {
+func setVerifyOption(constraint *config.ManifestVerifyRule, mvconfig *config.ManifestVerifyConfig, signatureAnnotationType, tmpDir string) (*k8smanifest.VerifyResourceOption, error) {
 	// get verifyOption and imageRef from Parameter
 	vo := &constraint.VerifyResourceOption
 
@@ -304,7 +311,7 @@ func setVerifyOption(constraint *config.ManifestVerifyRule, mvconfig *config.Man
 				}
 			}
 			if keyconfig.Key.PEM != "" && keyconfig.Key.Name != "" {
-				keyPath, err := keyconfig.ConvertToLocalFilePath()
+				keyPath, err := keyconfig.ConvertToLocalFilePath(tmpDir)
 				if err != nil {
 					return nil, fmt.Errorf("Failed to get local file path: %s", err.Error())
 				}

@@ -81,7 +81,7 @@ func VerifyImageInManifest(resource unstructured.Unstructured, profile ishieldco
 				}
 			}
 			if keyconfig.Key.PEM != "" && keyconfig.Key.Name != "" {
-				keyPath, err := keyconfig.ConvertToLocalFilePath()
+				keyPath, err := keyconfig.ConvertToLocalFilePath(tmpDir)
 				if err != nil {
 					return false, fmt.Errorf("Failed to get local file path: %s", err.Error())
 				}
@@ -115,10 +115,6 @@ func VerifyImageInManifest(resource unstructured.Unstructured, profile ishieldco
 			allImagesVerified = true
 			break
 		}
-	}
-	// remove tmp dir
-	for _, keyPath := range keyPathList {
-		ishieldconfig.ClearLocalFile(keyPath)
 	}
 
 	var retErr error
