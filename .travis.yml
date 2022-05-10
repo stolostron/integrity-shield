@@ -16,7 +16,7 @@ branches:
   only:
     - master
     - /^release-[0-9]+\..*$/
-    - fix/travis-init
+    - travis-init
 
 addons:
   sonarcloud:
