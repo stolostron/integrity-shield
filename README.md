@@ -58,7 +58,7 @@ To start signing Kubernetes manifest, see this [document](docs/README_SIGNING.md
 
 ## Supported Versions
 ### Platforms
-Integrity Shield can be deployed with operator. We have verified the feasibility on the following platforms:
+Integrity Shield can be deployed with the operator. We have verified the feasibility on the following platforms:
 
 - [RedHat OpenShift 4.7.1 and 4.9.0](https://www.openshift.com)  
 - [Kuberenetes v1.19.7 and v1.21.1](https://kubernetes.io)
