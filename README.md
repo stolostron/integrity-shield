@@ -26,7 +26,7 @@ You can use [Integrity Shield Operator](https://operatorhub.io/operator/integrit
 Integrity Shield consists of two main components, API and Observer.
 Integrity Shield Operator supports the installation and management of Integrity Shield components on cluster. 
 
-Integrity Shield API receives a k8s resource from OPA/Gatekeeper, validates the resource which is included in the admission request and sends the verification result to OPA/Gatekeeper. Integrity Shield API uses verify-resource feature of k8s-manifest-sigstore internally to verify k8s manifest.
+Integrity Shield API receives a k8s resource from OPA/Gatekeeper, validates the resource which is included in the admission request and sends the verification result to OPA/Gatekeeper. Integrity Shield API uses verify-resource feature of k8s-manifest-sigstore internally to verify k8s manifests.
 
 Integrity Shield API validates resources according to ManifestIntegrityConstraint which is a custom resource based on constraint framework of OPA/Gatekeeper. 
 
