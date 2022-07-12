@@ -20,7 +20,7 @@ import (
 	"context"
 
 	gkmatch "github.com/open-policy-agent/gatekeeper/pkg/mutation/match"
-	k8smnfutil "github.com/sigstore/k8s-manifest-sigstore/pkg/util"
+	gkutil "github.com/open-policy-agent/gatekeeper/pkg/util"
 	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -260,14 +260,19 @@ func (self *Observer) checkExcludedNamespace(excludedNamespaces []string, target
 }
 
 // creating a simple namespace list considering wildcard rules
-func (self *Observer) listAllMatchedNamespaces(rule []string) []string {
+func (self *Observer) listAllMatchedNamespaces(rule []gkutil.Wildcard) []string {
 	matchedNs := []string{}
 	if rule == nil {
 		return matchedNs
 	}
 	for _, ns := range self.Namespaces {
-		excluded := k8smnfutil.MatchWithPatternArray(ns, rule)
-		if excluded {
+		matched := false
+		for _, r := range rule {
+			if r.Matches(ns) {
+				matched = true
+			}
+		}
+		if matched {
 			matchedNs = append(matchedNs, ns)
 		}
 	}

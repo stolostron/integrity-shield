@@ -32,7 +32,7 @@ import (
 	kubeclient "k8s.io/client-go/kubernetes"
 
 	// "sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-	admission "k8s.io/api/admission/v1beta1"
+	admission "k8s.io/api/admission/v1"
 
 	corev1 "k8s.io/api/core/v1"
 

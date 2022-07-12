@@ -30,7 +30,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	config "github.com/stolostron/integrity-shield/shield/pkg/config"
 	ishieldimage "github.com/stolostron/integrity-shield/shield/pkg/image"
-	admission "k8s.io/api/admission/v1beta1"
+	admission "k8s.io/api/admission/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
@@ -269,9 +269,9 @@ func setVerifyOption(constraint *config.ManifestVerifyRule, mvconfig *config.Man
 	// get verifyOption and imageRef from Parameter
 	vo := &constraint.VerifyResourceOption
 
-	// set Signature ref
+	// set ResourceBundleRef ref
 	if constraint.SignatureRef.ImageRef != "" {
-		vo.ImageRef = constraint.SignatureRef.ImageRef
+		vo.ResourceBundleRef = constraint.SignatureRef.ImageRef
 	}
 	if constraint.SignatureRef.SignatureResourceRef.Name != "" && constraint.SignatureRef.SignatureResourceRef.Namespace != "" {
 		ref := fmt.Sprintf("k8s://ConfigMap/%s/%s", constraint.SignatureRef.SignatureResourceRef.Namespace, constraint.SignatureRef.SignatureResourceRef.Name)

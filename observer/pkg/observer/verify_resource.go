@@ -53,7 +53,7 @@ func ObserveResource(resource unstructured.Unstructured, paramObj config.Paramet
 	vo.DryRunNamespace = namespace
 
 	if paramObj.SignatureRef.ImageRef != "" {
-		vo.ImageRef = paramObj.SignatureRef.ImageRef
+		vo.ResourceBundleRef = paramObj.SignatureRef.ImageRef
 	}
 	if paramObj.SignatureRef.SignatureResourceRef.Name != "" && paramObj.SignatureRef.SignatureResourceRef.Namespace != "" {
 		ref := fmt.Sprintf("k8s://ConfigMap/%s/%s", paramObj.SignatureRef.SignatureResourceRef.Namespace, paramObj.SignatureRef.SignatureResourceRef.Name)

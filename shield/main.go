@@ -29,8 +29,8 @@ import (
 	k8smnfconfig "github.com/stolostron/integrity-shield/shield/pkg/config"
 	"github.com/stolostron/integrity-shield/shield/pkg/shield"
 
+	admission "k8s.io/api/admission/v1"
 	// "sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-	admission "k8s.io/api/admission/v1beta1"
 )
 
 const (
