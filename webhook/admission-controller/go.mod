@@ -6,17 +6,31 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/jinzhu/copier v0.3.2
 	github.com/pkg/errors v0.9.1
-	github.com/sigstore/cosign v1.8.0
-	github.com/sigstore/k8s-manifest-sigstore v0.2.1-0.20220526225831-5fdcfc72af99
+	github.com/sigstore/cosign v1.9.1-0.20220615165628-e4bc4a95743b
+	github.com/sigstore/k8s-manifest-sigstore v0.3.1-0.20220620025919-87bf46f2b487
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stolostron/integrity-shield/shield v0.0.0-00010101000000-000000000000
-	k8s.io/api v0.23.5
-	k8s.io/apimachinery v0.23.5
-	k8s.io/client-go v0.23.5
-	sigs.k8s.io/controller-runtime v0.11.0-beta.0.0.20211115163949-4d10a0615b11
+	k8s.io/api v0.25.0-alpha.2
+	k8s.io/apimachinery v0.25.0-alpha.2
+	k8s.io/client-go v0.25.0-alpha.2
+	sigs.k8s.io/controller-runtime v0.12.2
 )
 
 replace (
 	github.com/stolostron/integrity-shield/shield => ../../shield
 	github.com/stolostron/integrity-shield/webhook/admission-controller => ./
+)
+
+replace (
+	// k8s.io/client-go => k8s.io/client-go v0.24.0-alpha.4
+	// github.com/googleapis/gnostic/openapiv2 => github.com/google/gnostic/openapiv2 v0.6.8
+	github.com/open-policy-agent/gatekeeper => github.com/open-policy-agent/gatekeeper v0.0.0-20220630222635-ff9f2cd29731
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc => go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.20.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp => go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.20.0
+	go.opentelemetry.io/otel => go.opentelemetry.io/otel v0.20.0
+	go.opentelemetry.io/otel/metric => go.opentelemetry.io/otel/metric v0.20.0
+	go.opentelemetry.io/otel/sdk => go.opentelemetry.io/otel/sdk v0.20.0
+	go.opentelemetry.io/otel/trace => go.opentelemetry.io/otel/trace v0.20.0
+	go.opentelemetry.io/proto/otlp => go.opentelemetry.io/proto/otlp v0.7.0
+	k8s.io/kubectl => k8s.io/kubectl v0.25.0-alpha.2
 )

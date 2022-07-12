@@ -9,3 +9,4 @@ kubeconfig_managed
 .build-harness-bootstrap
 .build-harness
 !vbh/.build-harness-bootstrap
+*/vendor/
