@@ -6,8 +6,8 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/jinzhu/copier v0.3.2
 	github.com/pkg/errors v0.9.1
-	github.com/sigstore/cosign v1.10.0
-	github.com/sigstore/k8s-manifest-sigstore v0.3.1-0.20220804041159-8df5a1870670
+	github.com/sigstore/cosign v1.10.1
+	github.com/sigstore/k8s-manifest-sigstore v0.3.1-0.20220810053329-14f7cab4fd52
 	github.com/sirupsen/logrus v1.9.0
 	github.com/stolostron/integrity-shield/shield v0.0.0-00010101000000-000000000000
 	k8s.io/api v0.25.0-alpha.2
