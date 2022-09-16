@@ -7,7 +7,7 @@ require (
 	github.com/jinzhu/copier v0.3.2
 	github.com/pkg/errors v0.9.1
 	github.com/sigstore/cosign v1.10.1
-	github.com/sigstore/k8s-manifest-sigstore v0.3.1-0.20220810053329-14f7cab4fd52
+	github.com/sigstore/k8s-manifest-sigstore v0.4.0
 	github.com/sirupsen/logrus v1.9.0
 	k8s.io/api v0.25.0-alpha.2
 	k8s.io/apimachinery v0.25.0-alpha.2
@@ -17,4 +17,7 @@ require (
 
 replace github.com/stolostron/integrity-shield/shield => ./
 
-replace k8s.io/kubectl => k8s.io/kubectl v0.25.0-alpha.2
+replace (
+	github.com/open-policy-agent/opa => github.com/open-policy-agent/opa v0.44.0
+	k8s.io/kubectl => k8s.io/kubectl v0.25.0-alpha.2
+)

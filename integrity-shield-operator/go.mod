@@ -19,6 +19,7 @@ require (
 )
 
 replace (
+	github.com/open-policy-agent/opa => github.com/open-policy-agent/opa v0.44.0
 	github.com/stolostron/integrity-shield/integrity-shield-operator => ./
 	github.com/stolostron/integrity-shield/shield => ../shield
 	github.com/stolostron/integrity-shield/webhook/admission-controller => ../webhook/admission-controller
