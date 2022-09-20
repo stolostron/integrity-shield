@@ -6,7 +6,7 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/jinzhu/copier v0.3.2
 	github.com/pkg/errors v0.9.1
-	github.com/sigstore/cosign v1.10.1
+	github.com/sigstore/cosign v1.12.0
 	github.com/sigstore/k8s-manifest-sigstore v0.4.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/stolostron/integrity-shield/shield v0.0.0-00010101000000-000000000000
