@@ -16,7 +16,7 @@ branches:
   only:
     - master
     - /^release-[0-9]+\..*$/
-    - travis*
+    - travis-fix
 
 addons:
   sonarcloud:
