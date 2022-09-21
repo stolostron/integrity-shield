@@ -311,7 +311,7 @@ setup-test-env: create-ns create-keyring-secret
 	sleep 2
 	kubectl get all -n gatekeeper-system
 	GP=$(shell kubectl get deployment -n gatekeeper-system | grep gatekeeper-controller-manager | awk '{print $$2}')
-	while [ "$$GP" != '3/3' ]; do GP=`kubectl get deployment -n gatekeeper-system | grep gatekeeper-controller-manager | awk '{print $$2}'`; echo gatekeeper is not ready $$GP; kubectl get pod --all-namespaces ; kubectl describe deployment.apps/gatekeeper-controller-manager -n gatekeeper-system ; sleep 2  ; done	
+	while [ "$$GP" != '3/3' ]; do GP=`kubectl get deployment -n gatekeeper-system | grep gatekeeper-controller-manager | awk '{print $$2}'`; echo gatekeeper is not ready $$GP; kubectl get pod --all-namespaces ; kubectl get pod -n gatekeeper-system -o yaml ; sleep 5  ; done	
 
 setup-test-env-remote: create-ns create-keyring-secret
 	@echo
