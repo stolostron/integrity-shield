@@ -307,7 +307,7 @@ setup-test-env: create-ns create-keyring-secret
 	@echo creating test namespace
 	kubectl create ns $(TEST_NS)
 	@echo deploying gatekeeper
-	kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/release-3.5/deploy/gatekeeper.yaml
+	kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/v3.7.2/deploy/gatekeeper.yaml
 	
 setup-test-env-remote: create-ns create-keyring-secret
 	@echo
@@ -320,7 +320,7 @@ delete-test-env: delete-keyring-secret
 	# $TEST_NS will be deleted in e2e test usually, so ignore not found error.
 	kubectl delete ns $(TEST_NS) --ignore-not-found=true
 	@echo deleting gatekeeper
-	kubectl delete -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/release-3.5/deploy/gatekeeper.yaml
+	kubectl delete -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/v3.7.2/deploy/gatekeeper.yaml
 
 delete-test-env-remote: delete-keyring-secret
 	@echo
