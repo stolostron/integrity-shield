@@ -309,8 +309,9 @@ setup-test-env: create-ns create-keyring-secret
 	@echo deploying gatekeeper
 	kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/v3.7.2/deploy/gatekeeper.yaml
 	sleep 2
+	kubectl get all -n gatekeeper-system
 	GP=$(shell kubectl get deployment -n gatekeeper-system | grep gatekeeper-controller-manager | awk '{print $$2}')
-	while [ "$$GP" != '3/3' ]; do GP=`kubectl get deployment -n gatekeeper-system | grep gatekeeper-controller-manager | awk '{print $$2}'`; echo gatekeeper is not ready $$GP; sleep 2  ; done	
+	while [ "$$GP" != '3/3' ]; do GP=`kubectl get deployment -n gatekeeper-system | grep gatekeeper-controller-manager | awk '{print $$2}'`; echo gatekeeper is not ready $$GP; kubectl get all -n gatekeeper-system ; sleep 2  ; done	
 
 setup-test-env-remote: create-ns create-keyring-secret
 	@echo
